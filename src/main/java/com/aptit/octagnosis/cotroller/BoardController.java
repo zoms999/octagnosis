@@ -3,10 +3,16 @@ package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.model.Board;
 import com.aptit.octagnosis.repository.BoardRepository;
+import com.aptit.octagnosis.validator.BoardValidator;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -15,6 +21,9 @@ import java.util.List;
 public class BoardController {
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardValidator boardValidator;
 
     @GetMapping("list")
     public String list(Model model){
@@ -38,7 +47,13 @@ public class BoardController {
     }
 
     @PostMapping("/form")
-    public String greetingSubmit(@ModelAttribute Board board) {
+    public String greetingSubmit(@Valid Board board, BindingResult bindingResult) {
+
+        boardValidator.validate(board, bindingResult);
+        if(bindingResult.hasErrors())
+        {
+            return "board/form";
+        }
         boardRepository.save(board);
         return "redirect:/board/list";
     }
