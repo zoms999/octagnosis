@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.ManagerMapper">
+
+    <resultMap id="managerResultMap" type="com.aptit.octagnosis.model.Manager">
+        <id property="mngrId" column="MngrId"/>
+        <result property="useYn" column="UseYn"/>
+        <!-- Add other properties similarly -->
+    </resultMap>
+
+    <select id="getManagerById" resultMap="managerResultMap">
+        SELECT *
+        FROM TB_Mngr
+        WHERE MngrId = #{mngrId}
+    </select>
+
+    <select id="getAllManagers" resultMap="managerResultMap">
+        SELECT *
+        FROM TB_Mngr
+    </select>
+
+</mapper>
