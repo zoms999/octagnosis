@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/managers")
+@RequestMapping("/api")
 public class ManagerController {
 
     @Autowired
     private ManagerMapper managerService;
 
-    @GetMapping("/{mngrId}")
+    @GetMapping("/managers/{mngrId}")
     public Manager getManagerById(@PathVariable("mngrId") Long mngrId) {
         return managerService.getManagerById(mngrId);
     }
 
-    @GetMapping("/")
+    @GetMapping("/managers")
     public List<Manager> getAllManagers() {
         return managerService.getAllManagers();
     }
