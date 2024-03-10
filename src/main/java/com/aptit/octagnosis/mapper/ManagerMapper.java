@@ -9,4 +9,6 @@ import java.util.List;
 public interface ManagerMapper {
     Manager getManagerById(Long mngrId);
     List<Manager> getAllManagers();
+
+    void updateManager(Manager manager);
 }

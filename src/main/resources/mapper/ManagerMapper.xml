@@ -19,4 +19,31 @@
         FROM TB_Mngr
     </select>
 
+    <update id="updateManager">
+        UPDATE TB_Mngr
+        SET
+            useYn = #{useYn},
+            email = #{email},
+            pw = #{pw},
+            mngrNm = #{mngrNm},
+            phone = #{phone},
+            tel = #{tel},
+            zip = #{zip},
+            addr1 = #{addr1},
+            addr2 = #{addr2},
+            addr3 = #{addr3},
+            addr4 = #{addr4},
+            authPersn = #{authPersn},
+            authRsltView = #{authRsltView},
+            authAdmin = #{authAdmin},
+            authLogView = #{authLogView},
+            authStati = #{authStati},
+            authBbs = #{authBbs},
+            authOrg = #{authOrg},
+            uptId = #{uptId},
+            uptDt = #{uptDt}
+        WHERE MngrId = #{mngrId}
+    </update>
+
+
 </mapper>
