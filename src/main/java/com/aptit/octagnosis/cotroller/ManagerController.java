@@ -26,10 +26,13 @@ public class ManagerController {
     }
 
 
-    @PutMapping("/managers/{mngrId}")
+    @PatchMapping("/managers/{mngrId}")
     public ResponseEntity<Manager> updatePost(@PathVariable("mngrId") Long mngrId, @RequestBody Manager manager) {
         manager.setMngrId(mngrId); // Set the id in case it's not provided in the request body
         managerService.updateManager(manager);
         return ResponseEntity.ok(manager);
     }
+
+
+
 }
