@@ -10,5 +10,6 @@ public interface ManagerMapper {
     Manager getManagerById(Long mngrId);
     List<Manager> getAllManagers();
 
+    void saveManager(Manager manager);
     void updateManager(Manager manager);
 }

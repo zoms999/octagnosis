@@ -45,5 +45,54 @@
         WHERE MngrId = #{mngrId}
     </update>
 
-
+    <!-- 삽입 쿼리 -->
+    <insert id="saveManager" parameterType="com.aptit.octagnosis.model.Manager">
+        INSERT INTO manager (
+            useYn,
+            email,
+            pw,
+            mngrNm,
+            phone,
+            tel,
+            zip,
+            addr1,
+            addr2,
+            addr3,
+            addr4,
+            authPersn,
+            authRsltView,
+            authAdmin,
+            authLogView,
+            authStati,
+            authBbs,
+            authOrg,
+            insId,
+            insDt,
+            uptId,
+            uptDt
+        ) VALUES (
+                     #{useYn},
+                     #{email},
+                     #{pw},
+                     #{mngrNm},
+                     #{phone},
+                     #{tel},
+                     #{zip},
+                     #{addr1},
+                     #{addr2},
+                     #{addr3},
+                     #{addr4},
+                     #{authPersn},
+                     #{authRsltView},
+                     #{authAdmin},
+                     #{authLogView},
+                     #{authStati},
+                     #{authBbs},
+                     #{authOrg},
+                     #{insId},
+                     #{insDt},
+                     #{uptId},
+                     #{uptDt}
+                 )
+    </insert>
 </mapper>

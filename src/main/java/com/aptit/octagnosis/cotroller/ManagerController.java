@@ -3,7 +3,6 @@ package com.aptit.octagnosis.cotroller;
 import com.aptit.octagnosis.mapper.ManagerMapper;
 import com.aptit.octagnosis.model.Manager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,12 +26,16 @@ public class ManagerController {
 
 
     @PatchMapping("/managers/{mngrId}")
-    public ResponseEntity<Manager> updatePost(@PathVariable("mngrId") Long mngrId, @RequestBody Manager manager) {
+    public Long  updatePost(@PathVariable("mngrId") Long mngrId, @RequestBody Manager manager) {
         manager.setMngrId(mngrId); // Set the id in case it's not provided in the request body
         managerService.updateManager(manager);
-        return ResponseEntity.ok(manager);
+        return mngrId;
     }
 
-
+    @PostMapping("/managers")
+    public Long saveManager(@RequestBody Manager manager) {
+        managerService.saveManager(manager);
+        return manager.getMngrId();
+    }
 
 }

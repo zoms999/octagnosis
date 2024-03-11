@@ -20,7 +20,7 @@ public class OctagnosisApplication {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
 						.allowedOrigins("*")  // Allow requests from any origin
-						.allowedMethods("GET", "POST", "PUT", "DELETE")
+						.allowedMethods("GET", "POST", "PUT", "DELETE","PATCH")
 						.allowedHeaders("*");
 			}
 		};
