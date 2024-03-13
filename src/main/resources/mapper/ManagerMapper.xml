@@ -47,7 +47,7 @@
 
     <!-- 삽입 쿼리 -->
     <insert id="saveManager" parameterType="com.aptit.octagnosis.model.Manager">
-        INSERT INTO manager (
+        INSERT INTO TB_Mngr (
             useYn,
             email,
             pw,
