@@ -12,4 +12,6 @@ public interface ManagerMapper {
 
     void saveManager(Manager manager);
     void updateManager(Manager manager);
+
+    Manager findByEmailAndPassword(String email, String password);
 }

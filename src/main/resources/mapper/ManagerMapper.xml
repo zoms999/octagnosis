@@ -19,6 +19,15 @@
         FROM TB_Mngr
     </select>
 
+    <!-- 로그인 확인 쿼리 -->
+    <select id="findByEmailAndPassword" parameterType="map" resultType="com.aptit.octagnosis.model.Manager">
+        SELECT *
+        FROM TB_Mngr
+        WHERE email = #{email}
+          AND pw = #{password}
+    </select>
+
+
     <update id="updateManager">
         UPDATE TB_Mngr
         SET

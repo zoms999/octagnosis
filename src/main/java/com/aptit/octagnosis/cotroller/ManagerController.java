@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -24,7 +25,6 @@ public class ManagerController {
         return managerService.getAllManagers();
     }
 
-
     @PatchMapping("/managers/{mngrId}")
     public Long  updatePost(@PathVariable("mngrId") Long mngrId, @RequestBody Manager manager) {
         manager.setMngrId(mngrId); // Set the id in case it's not provided in the request body
@@ -36,6 +36,16 @@ public class ManagerController {
     public Long saveManager(@RequestBody Manager manager) {
         managerService.saveManager(manager);
         return manager.getMngrId();
+    }
+
+    @PostMapping("/login")
+    public Long login(@RequestBody Map<String, String> params) {
+        Manager manager =  managerService.findByEmailAndPassword(params.get("email"), params.get("password"));
+        if(manager != null) {
+            return manager.getMngrId();
+        } else {
+            return null; // 로그인 실패 시 처리
+        }
     }
 
 }
