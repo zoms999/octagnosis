@@ -39,10 +39,10 @@ public class ManagerController {
     }
 
     @PostMapping("/login")
-    public Long login(@RequestBody Map<String, String> params) {
+    public Manager login(@RequestBody Map<String, String> params) {
         Manager manager =  managerService.findByEmailAndPassword(params.get("email"), params.get("password"));
         if(manager != null) {
-            return manager.getMngrId();
+            return manager;
         } else {
             return null; // 로그인 실패 시 처리
         }
