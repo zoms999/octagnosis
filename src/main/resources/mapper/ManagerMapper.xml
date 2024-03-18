@@ -27,6 +27,10 @@
           AND pw = #{password}
     </select>
 
+    <select id="checkDuplicateEmail" resultType="int" parameterType="String">
+        SELECT COUNT(*) FROM TB_Mngr WHERE email = #{email}
+    </select>
+
 
     <update id="updateManager">
         UPDATE TB_Mngr
@@ -104,4 +108,6 @@
                      #{uptDt}
                  )
     </insert>
+
+
 </mapper>

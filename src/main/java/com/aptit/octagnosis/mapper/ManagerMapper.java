@@ -14,4 +14,6 @@ public interface ManagerMapper {
     void updateManager(Manager manager);
 
     Manager findByEmailAndPassword(String email, String password);
+
+    int checkDuplicateEmail(String email);
 }

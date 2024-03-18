@@ -5,6 +5,7 @@ import com.aptit.octagnosis.model.Manager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,15 @@ public class ManagerController {
         } else {
             return null; // 로그인 실패 시 처리
         }
+    }
+
+    @PostMapping("/check-duplicate-email")
+    public Map<String, Boolean> checkDuplicateEmail(@RequestBody Map<String, String> requestData) {
+        String email = requestData.get("email");
+        boolean exists = managerService.checkDuplicateEmail(email) > 0;
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+        return response;
     }
 
 }
