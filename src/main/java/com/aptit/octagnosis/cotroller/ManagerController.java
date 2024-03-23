@@ -3,6 +3,7 @@ package com.aptit.octagnosis.cotroller;
 import com.aptit.octagnosis.mapper.ManagerMapper;
 import com.aptit.octagnosis.model.Manager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -48,7 +49,6 @@ public class ManagerController {
             return null; // 로그인 실패 시 처리
         }
     }
-
     @PostMapping("/check-duplicate-email")
     public Map<String, Boolean> checkDuplicateEmail(@RequestBody Map<String, String> requestData) {
         String email = requestData.get("email");
@@ -57,5 +57,21 @@ public class ManagerController {
         response.put("exists", exists);
         return response;
     }
+
+    @PatchMapping("/managers/chg/{mngrId}")
+    public ResponseEntity<String> updatePassword(@PathVariable("mngrId") Long mngrId, @RequestBody Map<String, String> requestBody) {
+        String currentPassword = requestBody.get("currentPassword");
+        String newPassword = requestBody.get("newPassword");
+
+        Manager manager = managerService.getManagerById(mngrId);
+
+        if (manager != null && manager.getPw().equals(currentPassword)) {
+            managerService.updatePassword(mngrId, newPassword);
+            return ResponseEntity.ok("Password updated successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Current password is incorrect");
+        }
+    }
+
 
 }
