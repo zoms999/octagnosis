@@ -19,5 +19,5 @@ public interface ManagerMapper {
 
     void updatePassword(Long mngrId, String newPassword);
 
-
+    void updateManagerAuthorization(Manager manager);
 }

@@ -115,4 +115,18 @@
         WHERE MngrId = #{mngrId}
     </update>
 
+
+    <update id="updateManagerAuthorization">
+        UPDATE TB_Mngr
+        SET
+        <!-- Only update fields that are provided -->
+        <if test="authAdmin != null">authAdmin = #{authAdmin},</if>
+        <if test="authOrg != null">authOrg = #{authOrg},</if>
+        <if test="authPersn != null">authPersn = #{authPersn},</if>
+        <if test="authBbs != null">authBbs = #{authBbs},</if>
+        <if test="authRsltView != null">authRsltView = #{authRsltView},</if>
+        <if test="authLogView != null">authLogView = #{authLogView},</if>
+        <if test="authStati != null">authStati = #{authStati}</if>
+        WHERE MngrId = #{mngrId}
+    </update>
 </mapper>

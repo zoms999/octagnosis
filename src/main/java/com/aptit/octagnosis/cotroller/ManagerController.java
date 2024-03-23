@@ -73,5 +73,41 @@ public class ManagerController {
         }
     }
 
+    //권한수정
+    @PatchMapping("/managers/auth/{mngrId}")
+    public ResponseEntity<String> updateManagerAuthorization(@PathVariable("mngrId") Long mngrId, @RequestBody Map<String, Integer> authUpdates) {
+        Manager manager = managerService.getManagerById(mngrId);
+
+        if (manager != null) {
+            // Update only the provided authorization fields
+            if (authUpdates.containsKey("authAdmin")) {
+                manager.setAuthAdmin(authUpdates.get("authAdmin"));
+            }
+            else if (authUpdates.containsKey("authOrg")) {
+                manager.setAuthOrg(authUpdates.get("authOrg"));
+            }
+            else if (authUpdates.containsKey("authPersn")) {
+                manager.setAuthPersn(authUpdates.get("authPersn"));
+            }
+            else if (authUpdates.containsKey("authBbs")) {
+                manager.setAuthBbs(authUpdates.get("authBbs"));
+            }
+            else if (authUpdates.containsKey("authRsltView")) {
+                manager.setAuthRsltView(authUpdates.get("authRsltView"));
+            }
+            else if (authUpdates.containsKey("authLogView")) {
+                manager.setAuthLogView(authUpdates.get("authLogView"));
+            }
+            else if (authUpdates.containsKey("authStati")) {
+                manager.setAuthStati(authUpdates.get("authStati"));
+            }
+            // Add other authorization fields similarly
+
+            managerService.updateManagerAuthorization(manager);
+            return ResponseEntity.ok("Authorization updated successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }
