@@ -49,7 +49,7 @@ public class ManagerController {
             return null; // 로그인 실패 시 처리
         }
     }
-    @PostMapping("/check-duplicate-email")
+    @PostMapping("/managers/check-duplicate-email")
     public Map<String, Boolean> checkDuplicateEmail(@RequestBody Map<String, String> requestData) {
         String email = requestData.get("email");
         boolean exists = managerService.checkDuplicateEmail(email) > 0;
