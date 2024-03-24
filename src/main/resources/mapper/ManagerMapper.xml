@@ -84,7 +84,7 @@
             uptId,
             uptDt
         ) VALUES (
-                     #{useYn},
+                     'Y',
                      #{email},
                      #{pw},
                      #{mngrNm},

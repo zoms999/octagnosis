@@ -110,4 +110,17 @@ public class ManagerController {
         }
     }
 
+    @PatchMapping("/managers/toggle-useyn/{mngrId}")
+    public ResponseEntity<String> toggleUseYn(@PathVariable("mngrId") Long mngrId) {
+        Manager manager = managerService.getManagerById(mngrId);
+        if (manager != null) {
+            String newUseYn = manager.getUseYn().equals("Y") ? "N" : "Y";
+            manager.setUseYn(newUseYn);
+            managerService.updateManager(manager);
+            return ResponseEntity.ok("useYn toggled successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
