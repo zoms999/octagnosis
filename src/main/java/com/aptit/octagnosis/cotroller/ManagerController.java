@@ -27,6 +27,16 @@ public class ManagerController {
         return managerService.getAllManagers();
     }
 
+    @GetMapping("/managers/allcount")
+    public Map<String, Object> getAllCountManagers() {
+        Map<String, Object> response = new HashMap<>();
+        List<Manager> managers = managerService.getAllManagers();
+        int total = managerService.getTotalManagerCount(); // 예를 들어, 총 항목 수를 가져오는 메서드
+        response.put("total", total);
+        response.put("managers", managers);
+        return response;
+    }
+
     @PatchMapping("/managers/{mngrId}")
     public Long  updatePost(@PathVariable("mngrId") Long mngrId, @RequestBody Manager manager) {
         manager.setMngrId(mngrId); // Set the id in case it's not provided in the request body

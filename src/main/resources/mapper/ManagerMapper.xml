@@ -18,7 +18,9 @@
         SELECT *
         FROM TB_Mngr
     </select>
-
+    <select id="getTotalManagerCount" resultType="int">
+        SELECT COUNT(*) FROM TB_Mngr
+    </select>
     <!-- 로그인 확인 쿼리 -->
     <select id="findByEmailAndPassword" parameterType="map" resultType="com.aptit.octagnosis.model.Manager">
         SELECT *
@@ -84,7 +86,7 @@
             uptId,
             uptDt
         ) VALUES (
-                     'Y',
+                     #{useYn},
                      #{email},
                      #{pw},
                      #{mngrNm},

@@ -9,7 +9,7 @@ import java.util.List;
 public interface ManagerMapper {
     Manager getManagerById(Long mngrId);
     List<Manager> getAllManagers();
-
+    int getTotalManagerCount();
     void saveManager(Manager manager);
     void updateManager(Manager manager);
 
