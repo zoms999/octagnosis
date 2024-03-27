@@ -54,7 +54,7 @@
             authBbs = #{authBbs},
             authOrg = #{authOrg},
             uptId = #{uptId},
-            uptDt = #{uptDt}
+            uptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
         WHERE MngrId = #{mngrId}
     </update>
 
@@ -84,7 +84,7 @@
             uptId,
             uptDt
         ) VALUES (
-                     #{useYn},
+                     'Y',
                      #{email},
                      #{pw},
                      #{mngrNm},
@@ -103,7 +103,7 @@
                      #{authBbs},
                      #{authOrg},
                      #{insId},
-                     #{insDt},
+                     DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), -- 현재 날짜와 시간을 문자열로 변환
                      #{uptId},
                      #{uptDt}
                  )

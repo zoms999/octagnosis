@@ -49,7 +49,7 @@ public class ManagerController {
             return null; // 로그인 실패 시 처리
         }
     }
-    @PostMapping("/check-duplicate-email")
+    @PostMapping("/managers/check-duplicate-email")
     public Map<String, Boolean> checkDuplicateEmail(@RequestBody Map<String, String> requestData) {
         String email = requestData.get("email");
         boolean exists = managerService.checkDuplicateEmail(email) > 0;
@@ -105,6 +105,19 @@ public class ManagerController {
 
             managerService.updateManagerAuthorization(manager);
             return ResponseEntity.ok("Authorization updated successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping("/managers/toggle-useyn/{mngrId}")
+    public ResponseEntity<String> toggleUseYn(@PathVariable("mngrId") Long mngrId) {
+        Manager manager = managerService.getManagerById(mngrId);
+        if (manager != null) {
+            String newUseYn = manager.getUseYn().equals("Y") ? "N" : "Y";
+            manager.setUseYn(newUseYn);
+            managerService.updateManager(manager);
+            return ResponseEntity.ok("useYn toggled successfully");
         } else {
             return ResponseEntity.notFound().build();
         }
