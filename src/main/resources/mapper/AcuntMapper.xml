@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.AcuntMapper">
+
+	<resultMap id="AcuntList" type="com.aptit.octagnosis.model.Acunt">
+		<id property="acuntId" column="AcuntId"/>
+		<result property="useYn" column="UseYn"/>
+		<!-- Add other properties similarly -->
+	</resultMap>
+
+	<!-- 등록 쿼리 -->
+	<insert id="CretAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
+		INSERT INTO TB_Acunt (
+		   AcuntId
+		 , UserType
+		 , UserId
+		 , Pw
+		 , UseYn
+		 , RegDt
+		 , LeaveDt
+		 , ExpirDt
+		 , TermsUse
+		 , TermsPersn
+		 , TermsEvent
+		 , InsId
+		 , InsDt
+		 , UptId
+		 , UptDt
+		) VALUES (
+			 #{acuntId}
+		 , #{userType}
+		 , #{userId}
+		 , #{pw}
+		 , #{useYn}
+		 , #{regDt}
+		 , #{leaveDt}
+		 , #{expirDt}
+		 , #{termsUse}
+		 , #{termsPersn}
+		 , #{termsEvent}
+		 , #{insId}
+		 , #{insDt}
+		 , #{uptId}
+		 , #{uptDt}
+		)
+	</insert>
+
+	<!-- 수정 쿼리 -->
+	<update id="EditAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
+		UPDATE TB_Acunt SET
+			Pw = #{pw}
+						  , UseYn = #{useYn}
+						  , RegDt = #{regDt}
+						  , LeaveDt = #{leaveDt}
+						  , ExpirDt = #{expirDt}
+						  , TermsUse = #{termsUse}
+						  , TermsPersn = #{termsPersn}
+						  , TermsEvent = #{termsEvent}
+						  , UptId	= #{uptId}
+						  , UptDt	= #{uptDt}
+		WHERE
+			AcuntId = #{acuntId}
+	</update>
+
+	<select id="GetAcuntById" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
+		SELECT
+			AcuntId
+			 , UserType
+			 , UserId
+			 , Pw
+			 , UseYn
+			 , RegDt
+			 , LeaveDt
+			 , ExpirDt
+			 , TermsUse
+			 , TermsPersn
+			 , TermsEvent
+		FROM
+			TB_Acunt
+		WHERE
+			AcuntId = #{acuntId}
+	</select>
+
+	<select id="GetExistAcunt" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
+		SELECT
+			AcuntId
+			 , UserType
+			 , UserId
+			 , Pw
+			 , UseYn
+			 , RegDt
+			 , LeaveDt
+			 , ExpirDt
+			 , TermsUse
+			 , TermsPersn
+			 , TermsEvent
+		FROM
+			TB_Acunt
+		WHERE
+			(AcuntId = case when IFNULL(#{acuntId}, '') = '' then AcuntId else #{acuntId} end)
+		LIMIT 1
+
+	</select>
+
+	<select id="GetAcuntListTotCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			TB_Acunt
+		WHERE
+			(AcuntId = CASE WHEN IFNULL(#{acuntId}, 0)  = 0 THEN AcuntId ELSE #{acuntId} END)
+	</select>
+
+	<select id="GetAcuntList" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
+		SELECT
+			AcuntId
+			 , UserType
+			 , UserId
+			 , Pw
+			 , UseYn
+			 , RegDt
+			 , LeaveDt
+			 , ExpirDt
+			 , TermsUse
+			 , TermsPersn
+			 , TermsEvent
+
+		FROM
+			TB_Acunt
+		WHERE
+			(AcuntId = CASE WHEN IFNULL(#{acuntId}, 0)  = 0 THEN AcuntId ELSE #{acuntId} END)
+	</select>
+
+</mapper>

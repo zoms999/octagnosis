@@ -147,6 +147,32 @@
             OrgId = #{orgId}
 	</select>
 
+	<select id="GetExistOrg" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
+		SELECT
+			OrgId
+			 , BizNum
+			 , CorpNum
+			 , CeoNm
+			 , Zip
+			 , Addr1
+			 , Addr2
+			 , Addr3
+			 , Addr4
+			 , CompyNm
+			 , Tel1
+			 , Tel2
+			 , Fax
+			 , BizType
+			 , BizSectr
+			 , UrlCd
+		FROM
+			TB_Org
+		WHERE
+			(UrlCd = case when IFNULL(#{urlCd}, '') = '' then UrlCd else #{urlCd} end)
+		LIMIT 1
+
+	</select>
+
 	<select id="GetOrgListTotCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM
@@ -154,6 +180,7 @@
 		WHERE
 			(OrgId = CASE WHEN IFNULL(#{orgId}, 0)  = 0 THEN OrgId ELSE #{orgId} END)
 	</select>
+
 	<select id="GetOrgList" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
 		SELECT
 			OrgId

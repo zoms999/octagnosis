@@ -13,5 +13,6 @@ public interface OrgMapper {
     Org GetOrgById(Long orgId);
     int GetOrgListTotCnt(OrgParm orgParm);
     List<Org> GetOrgList(OrgParm orgParm);
-
+    
+    Org GetExistOrg(OrgParm orgParm);
 }

@@ -60,4 +60,14 @@ public class OrgController {
         
         return Rtn;
     }
+    
+    @PostMapping("/Org/ChkUrlCd")
+    public Map<String, Object>  GetOrgById(@RequestBody OrgParm org) {
+        Org Org = OrgService.GetExistOrg(org);
+        
+        Rtn.put("ExistYn", (Org == null ? "N": "Y"));
+        return Rtn;
+    }
+    
+    
 }
