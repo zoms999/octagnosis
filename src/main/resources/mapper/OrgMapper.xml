@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.OrgMapper">
+
+	<resultMap id="OrgList" type="com.aptit.octagnosis.model.Org">
+		<id property="orgId" column="OrgId"/>
+		<result property="useYn" column="UseYn"/>
+		<!-- Add other properties similarly -->
+	</resultMap>
+
+	<!-- 등록 쿼리 -->
+	<insert id="CretOrg" parameterType="com.aptit.octagnosis.model.Org">
+		INSERT INTO TB_Org (
+			OrgId
+			, BizNum
+			, CorpNum
+			, CeoNm
+			, Zip
+			, Addr1
+			, Addr2
+			, Addr3
+			, Addr4
+			, CompyNm
+			, Tel1
+			, Tel2
+			, Fax
+			, BizType
+			, BizSectr
+			, MngerNm1
+			, MngerPhone1
+			, MngerEmail1
+			, MngerNm2
+			, MngerPhone2
+			, MngerEmail2
+			, BillEmail
+			, MngerTeam1
+			, MngerPosit1
+			, MngerTeam2
+			, MngerPosit2
+			, UrlCd
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		) VALUES (
+			nextval(Org_OrgId)
+			, #{bizNum}
+			, #{corpNum}
+			, #{ceoNm}
+			, #{zip}
+			, #{addr1}
+			, #{addr2}
+			, #{addr3}
+			, #{addr4}
+			, #{compyNm}
+			, #{tel1}
+			, #{tel2}
+			, #{fax}
+			, #{bizType}
+			, #{bizSectr}
+			, #{mngerNm1}
+			, #{mngerPhone1}
+			, #{mngerEmail1}
+			, #{mngerNm2}
+			, #{mngerPhone2}
+			, #{mngerEmail2}
+			, #{billEmail}
+			, #{mngerTeam1}
+			, #{mngerPosit1}
+			, #{mngerTeam2}
+			, #{mngerPosit2}
+			, #{urlCd}
+			, #{insId}
+			, #{insDt}
+			, #{uptId}
+			, #{uptDt}
+		)
+	</insert>
+
+	<!-- 수정 쿼리 -->
+	<update id="EditOrg" parameterType="com.aptit.octagnosis.model.Org">
+		UPDATE TB_Org SET
+			BizNum	= #{bizNum}
+			, CorpNum	= #{corpNum}
+			, CeoNm	= #{ceoNm}
+			, Zip	= #{zip}
+			, Addr1	= #{addr1}
+			, Addr2	= #{addr2}
+			, Addr3	= #{addr3}
+			, Addr4	= #{addr4}
+			, CompyNm	= #{compyNm}
+			, Tel1	= #{tel1}
+			, Tel2	= #{tel2}
+			, Fax	= #{fax}
+			, BizType	= #{bizType}
+			, BizSectr	= #{bizSectr}
+			, MngerNm1	= #{mngerNm1}
+			, MngerPhone1	= #{mngerPhone1}
+			, MngerEmail1	= #{mngerEmail1}
+			, MngerNm2	= #{mngerNm2}
+			, MngerPhone2	= #{mngerPhone2}
+			, MngerEmail2	= #{mngerEmail2}
+			, BillEmail	= #{billEmail}
+			, MngerTeam1	= #{mngerTeam1}
+			, MngerPosit1	= #{mngerPosit1}
+			, MngerTeam2	= #{mngerTeam2}
+			, MngerPosit2	= #{mngerPosit2}
+			, UrlCd	= #{urlCd}
+			, UptId	= #{uptId}
+			, UptDt	= #{uptDt}
+		WHERE
+			OrgId = #{orgId}
+	</update>
+
+	<select id="GetOrgById" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
+		SELECT
+			OrgId
+			 , BizNum
+			 , CorpNum
+			 , CeoNm
+			 , Zip
+			 , Addr1
+			 , Addr2
+			 , Addr3
+			 , Addr4
+			 , CompyNm
+			 , Tel1
+			 , Tel2
+			 , Fax
+			 , BizType
+			 , BizSectr
+			 , MngerNm1
+			 , MngerPhone1
+			 , MngerEmail1
+			 , MngerNm2
+			 , MngerPhone2
+			 , MngerEmail2
+			 , BillEmail
+			 , MngerTeam1
+			 , MngerPosit1
+			 , MngerTeam2
+			 , MngerPosit2
+			 , UrlCd
+		FROM
+			TB_Org
+		WHERE
+            OrgId = #{orgId}
+	</select>
+
+	<select id="GetExistOrg" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
+		SELECT
+			OrgId
+			 , BizNum
+			 , CorpNum
+			 , CeoNm
+			 , Zip
+			 , Addr1
+			 , Addr2
+			 , Addr3
+			 , Addr4
+			 , CompyNm
+			 , Tel1
+			 , Tel2
+			 , Fax
+			 , BizType
+			 , BizSectr
+			 , UrlCd
+		FROM
+			TB_Org
+		WHERE
+			(UrlCd = case when IFNULL(#{urlCd}, '') = '' then UrlCd else #{urlCd} end)
+		LIMIT 1
+
+	</select>
+
+	<select id="GetOrgListTotCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			TB_Org
+		WHERE
+			(OrgId = CASE WHEN IFNULL(#{orgId}, 0)  = 0 THEN OrgId ELSE #{orgId} END)
+	</select>
+
+	<select id="GetOrgList" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
+		SELECT
+			OrgId
+			 , BizNum
+			 , CorpNum
+			 , CeoNm
+			 , Zip
+			 , Addr1
+			 , Addr2
+			 , Addr3
+			 , Addr4
+			 , CompyNm
+			 , Tel1
+			 , Tel2
+			 , Fax
+			 , BizType
+			 , BizSectr
+			 , MngerNm1
+			 , MngerPhone1
+			 , MngerEmail1
+			 , MngerNm2
+			 , MngerPhone2
+			 , MngerEmail2
+			 , BillEmail
+			 , MngerTeam1
+			 , MngerPosit1
+			 , MngerTeam2
+			 , MngerPosit2
+			 , UrlCd
+		FROM
+			TB_Org
+		WHERE
+			(OrgId = CASE WHEN IFNULL(#{orgId}, 0)  = 0 THEN OrgId ELSE #{orgId} END)
+	</select>
+
+</mapper>

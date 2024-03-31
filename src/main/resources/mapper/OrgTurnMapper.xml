@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.orgTurn//DTD Mapper 3.0//EN" "http://mybatis.orgTurn/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.OrgTurnMapper">
+
+	<resultMap id="OrgTurnList" type="com.aptit.octagnosis.model.OrgTurn">
+		<id property="turnId" column="TurnId"/>
+		<result property="useYn" column="UseYn"/>
+		<!-- Add other properties similarly -->
+	</resultMap>
+
+	<!-- 등록 쿼리 -->
+	<insert id="CretOrgTurn" parameterType="com.aptit.octagnosis.model.OrgTurn">
+		INSERT INTO TB_OrgTurn (
+			OrgId
+			, TurnId
+			, UseYn
+			, TurnNum
+			, TurnReqCnt
+			, TurnUseCnt
+			, TurnConnCd
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		) VALUES (
+			#{orgId}
+			, nextval(OrgTurn_TurnId)
+			, #{useYn}
+			, #{turnNum}
+			, #{turnReqCnt}
+			, #{turnUseCnt}
+			, #{turnConnCd}
+			, #{insId}
+			, #{insDt}
+			, #{uptId}
+			, #{uptDt}
+		)
+	</insert>
+
+	<!-- 수정 쿼리 -->
+	<update id="EditOrgTurn" parameterType="com.aptit.octagnosis.model.OrgTurn">
+		UPDATE TB_OrgTurn SET
+			UseYn	=	#{useYn}
+			, TurnNum	=	#{turnNum}
+			, TurnReqCnt	=	#{turnReqCnt}
+			, TurnUseCnt	=	#{turnUseCnt}
+			, TurnConnCd	=	#{turnConnCd}
+			, UptId	=	#{uptId}
+			, UptDt	=	#{uptDt}
+		WHERE
+			OrgId = #{orgId}
+			AND TurnId = #{turnId}
+	</update>
+
+	<select id="GetOrgTurn" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
+		SELECT
+			OrgId
+			, TurnId
+			, UseYn
+			, TurnNum
+			, TurnReqCnt
+			, TurnUseCnt
+			, TurnConnCd
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		FROM
+			TB_OrgTurn
+		WHERE
+			OrgId = #{orgId}
+			AND TurnId = #{turnId}
+	</select>
+
+	<select id="GetExistTurnConnCd" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurnParm">
+		SELECT
+			OrgId
+			, TurnId
+			, UseYn
+			, TurnNum
+			, TurnReqCnt
+			, TurnUseCnt
+			, TurnConnCd
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		FROM
+			TB_OrgTurn
+		WHERE
+			TurnConnCd = #{turnConnCd}
+		LIMIT 1
+	</select>
+
+
+	<select id="GetOrgTurnListTotCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		TB_OrgTurn
+		WHERE
+		OrgId = #{orgId}
+	</select>
+
+	<select id="GetOrgTurnList" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
+		SELECT
+		OrgId
+		, TurnId
+		, UseYn
+		, TurnNum
+		, TurnReqCnt
+		, TurnUseCnt
+		, TurnConnCd
+		FROM
+		TB_OrgTurn
+		WHERE
+		OrgId = #{orgId}
+	</select>
+
+</mapper>
