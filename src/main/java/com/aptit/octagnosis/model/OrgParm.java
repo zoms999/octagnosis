@@ -10,7 +10,6 @@ public class OrgParm {
     
     private Paging paging;
     
-    
     private String urlCd;
     private String actionReasn;
 }

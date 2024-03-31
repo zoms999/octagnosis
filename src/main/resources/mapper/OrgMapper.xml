@@ -8,7 +8,8 @@
 		<!-- Add other properties similarly -->
 	</resultMap>
 
-	<!-- 등록 쿼리 -->
+	<!-- 등록 ********************************************************-->
+
 	<insert id="CretOrg" parameterType="com.aptit.octagnosis.model.Org">
 		INSERT INTO TB_Org (
 			OrgId
@@ -43,7 +44,7 @@
 			, UptId
 			, UptDt
 		) VALUES (
-			nextval(Org_OrgId)
+			 #{orgId}
 			, #{bizNum}
 			, #{corpNum}
 			, #{ceoNm}
@@ -71,13 +72,14 @@
 			, #{mngerPosit2}
 			, #{urlCd}
 			, #{insId}
-			, #{insDt}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 			, #{uptId}
 			, #{uptDt}
 		)
 	</insert>
 
-	<!-- 수정 쿼리 -->
+	<!-- 수정 ********************************************************-->
+
 	<update id="EditOrg" parameterType="com.aptit.octagnosis.model.Org">
 		UPDATE TB_Org SET
 			BizNum	= #{bizNum}
@@ -111,6 +113,14 @@
 		WHERE
 			OrgId = #{orgId}
 	</update>
+
+	<!-- 삭제 ********************************************************-->
+
+	<!-- 조회 ********************************************************-->
+
+	<select id="GetOrgId" resultType="long">
+		SELECT nextval(Org_OrgId)
+	</select>
 
 	<select id="GetOrgById" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
 		SELECT
@@ -177,43 +187,42 @@
 		SELECT COUNT(*)
 		FROM
 			TB_Org
-		WHERE
-			(OrgId = CASE WHEN IFNULL(#{orgId}, 0)  = 0 THEN OrgId ELSE #{orgId} END)
+		WHERE 1=1
+		  AND (
+				(IFNULL(#{srchStr}, '') = '' OR CeoNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+				OR (IFNULL(#{srchStr}, '') = '' OR CompyNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+				OR (IFNULL(#{srchStr}, '') = '' OR MngerNm1 LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+			)
 	</select>
 
-	<select id="GetOrgList" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
+	<select id="GetOrgList" parameterType="map" resultType="hashmap">
 		SELECT
-			OrgId
-			 , BizNum
-			 , CorpNum
-			 , CeoNm
-			 , Zip
-			 , Addr1
-			 , Addr2
-			 , Addr3
-			 , Addr4
-			 , CompyNm
-			 , Tel1
-			 , Tel2
-			 , Fax
-			 , BizType
-			 , BizSectr
-			 , MngerNm1
-			 , MngerPhone1
-			 , MngerEmail1
-			 , MngerNm2
-			 , MngerPhone2
-			 , MngerEmail2
-			 , BillEmail
-			 , MngerTeam1
-			 , MngerPosit1
-			 , MngerTeam2
-			 , MngerPosit2
-			 , UrlCd
+			A.OrgId
+			 , A.BizNum
+			 , A.CorpNum
+			 , A.CeoNm
+			 , A.CompyNm
+			 , A.Tel1
+			 , A.Tel2
+			 , A.MngerNm1
+			 , B.TurnId
+			 , B.TurnNum
+			 , B.TurnReqCnt
+			 , B.TurnUseCnt
+			 , B.InsDt
 		FROM
-			TB_Org
-		WHERE
-			(OrgId = CASE WHEN IFNULL(#{orgId}, 0)  = 0 THEN OrgId ELSE #{orgId} END)
+			TB_Org AS A
+			JOIN TB_OrgTurn AS B ON B.OrgId = (
+					SELECT AA.OrgId FROM TB_OrgTurn AS AA
+					WHERE A.OrgId = AA.OrgId ORDER BY AA.TurnNum DESC LIMIT 1
+			)
+		WHERE 1=1
+		  AND (
+				(IFNULL(#{srchStr}, '') = '' OR A.CeoNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+				OR (IFNULL(#{srchStr}, '') = '' OR A.CompyNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+				OR (IFNULL(#{srchStr}, '') = '' OR A.MngerNm1 LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+			)
+		LIMIT 0,  100
 	</select>
 
 </mapper>

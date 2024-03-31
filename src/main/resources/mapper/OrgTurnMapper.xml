@@ -8,7 +8,8 @@
 		<!-- Add other properties similarly -->
 	</resultMap>
 
-	<!-- 등록 쿼리 -->
+	<!-- 등록 ********************************************************-->
+
 	<insert id="CretOrgTurn" parameterType="com.aptit.octagnosis.model.OrgTurn">
 		INSERT INTO TB_OrgTurn (
 			OrgId
@@ -31,13 +32,14 @@
 			, #{turnUseCnt}
 			, #{turnConnCd}
 			, #{insId}
-			, #{insDt}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 			, #{uptId}
 			, #{uptDt}
 		)
 	</insert>
 
-	<!-- 수정 쿼리 -->
+	<!-- 수정 ********************************************************-->
+
 	<update id="EditOrgTurn" parameterType="com.aptit.octagnosis.model.OrgTurn">
 		UPDATE TB_OrgTurn SET
 			UseYn	=	#{useYn}
@@ -46,11 +48,15 @@
 			, TurnUseCnt	=	#{turnUseCnt}
 			, TurnConnCd	=	#{turnConnCd}
 			, UptId	=	#{uptId}
-			, UptDt	=	#{uptDt}
+			, UptDt	=	DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 		WHERE
 			OrgId = #{orgId}
 			AND TurnId = #{turnId}
 	</update>
+
+	<!-- 삭제 ********************************************************-->
+
+	<!-- 조회 ********************************************************-->
 
 	<select id="GetOrgTurn" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
 		SELECT
@@ -71,6 +77,26 @@
 			OrgId = #{orgId}
 			AND TurnId = #{turnId}
 	</select>
+
+	<select id="GetOrgMaxTurn" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
+		SELECT
+			OrgId
+			, TurnId
+			, UseYn
+			, TurnNum
+			, TurnReqCnt
+			, TurnUseCnt
+			, TurnConnCd
+			, InsDt
+		FROM
+			TB_OrgTurn
+		WHERE
+			OrgId = #{orgId}
+		ORDER BY
+			TurnNum DESC
+		LIMIT 1
+	</select>
+
 
 	<select id="GetExistTurnConnCd" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurnParm">
 		SELECT
@@ -115,5 +141,8 @@
 		WHERE
 		OrgId = #{orgId}
 	</select>
+
+	<!-- 기타 ********************************************************-->
+
 
 </mapper>

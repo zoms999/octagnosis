@@ -7,6 +7,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Component
 public class CommonLib {
     
@@ -24,4 +27,27 @@ public class CommonLib {
         
         return headers;
     }
+    
+    // 현재시간을 문자열로 추출
+    public String getDateStr(String type) {
+        String Pattern = "";
+        switch (type)
+        {
+            case "YMD":
+                Pattern = "yyyymmdd";
+                break;
+            case "YMDHMS":
+                Pattern = "yyyyMMddHHmmss";
+                break;
+            default:
+                Pattern = "yyyymmdd";
+                break;
+        }
+        
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Pattern);
+        return now.format(formatter);
+    }
 }
+
+

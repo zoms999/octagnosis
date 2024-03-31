@@ -11,4 +11,6 @@ public interface OrgTurnMapper {
     int CretOrgTurn(OrgTurn orgTurn);
     int EditOrgTurn(OrgTurn orgTurn);
     OrgTurn GetExistTurnConnCd(OrgTurnParm orgTurn);
+    OrgTurn GetOrgMaxTurn(OrgTurnParm orgTurn);
+    
 }
