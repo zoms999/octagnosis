@@ -10,5 +10,4 @@ public class Paging {
     private int limit;
     private String sort;
     private String order;
-
 }

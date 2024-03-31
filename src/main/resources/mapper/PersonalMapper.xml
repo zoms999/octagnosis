@@ -3,14 +3,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aptit.octagnosis.mapper.PersonalMapper">
 
-    <select id="getPersonalList" resultType="Personal" parameterType="map">
+    <select id="getPersonalList2" resultType="Personal" parameterType="map">
         SELECT * FROM TB_Persn
         ORDER BY PersnId DESC
             LIMIT #{start, jdbcType=INTEGER}, #{limit, jdbcType=INTEGER}
     </select>
 
-    <select id="getPersonalCount" resultType="int">
+    <select id="getPersonalCount2" resultType="int">
         SELECT COUNT(*) FROM TB_Persn
+    </select>
+
+
+    <select id="getPersonalCount" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM
+            TB_Persn
+        WHERE
+            (persnId = CASE WHEN IFNULL(#{persnId}, 0)  = 0 THEN persnId ELSE #{persnId} END)
+    </select>
+
+    <select id="getPersonalList" parameterType="map" resultType="Personal">
+        SELECT * FROM TB_Persn
+        WHERE
+        (persnId = CASE WHEN IFNULL(#{persnId}, 0)  = 0 THEN persnId ELSE #{persnId} END)
+        ORDER BY PersnId DESC
     </select>
 
 </mapper>
