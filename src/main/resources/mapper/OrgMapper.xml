@@ -205,14 +205,14 @@
 			 , A.Tel1
 			 , A.Tel2
 			 , A.MngerNm1
-			 , B.TurnId
-			 , B.TurnNum
-			 , B.TurnReqCnt
-			 , B.TurnUseCnt
-			 , B.InsDt
+			 , IFNULL(B.TurnId, 0) AS TurnId
+			 , IFNULL(B.TurnNum, 0) AS TurnNum
+			 , IFNULL(B.TurnReqCnt, 0) AS TurnReqCnt
+			 , IFNULL(B.TurnUseCnt, 0) AS TurnUseCnt
+			 , IFNULL(B.InsDt, '') AS InsDt
 		FROM
 			TB_Org AS A
-			JOIN TB_OrgTurn AS B ON B.OrgId = (
+			LEFT OUTER JOIN TB_OrgTurn AS B ON B.OrgId = (
 					SELECT AA.OrgId FROM TB_OrgTurn AS AA
 					WHERE A.OrgId = AA.OrgId ORDER BY AA.TurnNum DESC LIMIT 1
 			)
@@ -222,7 +222,9 @@
 				OR (IFNULL(#{srchStr}, '') = '' OR A.CompyNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
 				OR (IFNULL(#{srchStr}, '') = '' OR A.MngerNm1 LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
 			)
-		LIMIT 0,  100
+		ORDER BY
+			A.OrgId DESC
+		LIMIT #{paging.startRow}, #{paging.limit}
 	</select>
 
 </mapper>
