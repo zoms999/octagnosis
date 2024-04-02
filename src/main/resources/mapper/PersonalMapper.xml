@@ -18,15 +18,23 @@
         SELECT COUNT(*)
         FROM
             TB_Persn
-        WHERE
-            (persnId = CASE WHEN IFNULL(#{persnId}, 0)  = 0 THEN persnId ELSE #{persnId} END)
+        WHERE 1=1
+          AND (
+                (IFNULL(#{srchStr}, '') = '' OR PersnNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+                OR (IFNULL(#{srchStr}, '') = '' OR Phone LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+            )
     </select>
 
     <select id="getPersonalList" parameterType="map" resultType="Personal">
         SELECT * FROM TB_Persn
-        WHERE
-        (persnId = CASE WHEN IFNULL(#{persnId}, 0)  = 0 THEN persnId ELSE #{persnId} END)
-        ORDER BY PersnId DESC
+        WHERE 1=1
+          AND (
+                (IFNULL(#{srchStr}, '') = '' OR PersnNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+                OR (IFNULL(#{srchStr}, '') = '' OR Phone LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+            )
+        ORDER BY
+            PersnId DESC
+            LIMIT #{paging.startRow}, #{paging.limit}
     </select>
 
 </mapper>

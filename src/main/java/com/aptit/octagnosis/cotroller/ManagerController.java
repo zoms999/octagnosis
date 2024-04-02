@@ -2,6 +2,7 @@ package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.mapper.ManagerMapper;
 import com.aptit.octagnosis.model.Manager;
+import com.aptit.octagnosis.req.ManagerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,15 @@ public class ManagerController {
     @GetMapping("/managers")
     public List<Manager> getAllManagers() {
         return managerService.getAllManagers();
+    }
+
+    @PostMapping("/managers/managersList")
+    public Map<String, Object> getManagerlList(@RequestBody ManagerRequest request) {
+
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("ManagerTotCnt", managerService.getManagerCount(request));
+        Rtn.put("ManagerList" , managerService.getManagerList(request));
+        return Rtn;
     }
 
     @GetMapping("/managers/allcount")

@@ -33,6 +33,28 @@
         SELECT COUNT(*) FROM TB_Mngr WHERE email = #{email}
     </select>
 
+    <select id="getManagerCount" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM
+            TB_Mngr
+        WHERE 1=1
+          AND (
+                (IFNULL(#{srchStr}, '') = '' OR mngrNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+                OR (IFNULL(#{srchStr}, '') = '' OR phone LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+            )
+    </select>
+
+    <select id="getManagerList" parameterType="map" resultType="Manager">
+        SELECT * FROM TB_Mngr
+        WHERE 1=1
+          AND (
+                (IFNULL(#{srchStr}, '') = '' OR mngrNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+                OR (IFNULL(#{srchStr}, '') = '' OR phone LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+            )
+        ORDER BY
+            MngrId DESC
+            LIMIT #{paging.startRow}, #{paging.limit}
+    </select>
 
     <update id="updateManager">
         UPDATE TB_Mngr

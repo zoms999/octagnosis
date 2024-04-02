@@ -1,6 +1,8 @@
 package com.aptit.octagnosis.mapper;
 
 import com.aptit.octagnosis.model.Manager;
+import com.aptit.octagnosis.model.Org;
+import com.aptit.octagnosis.req.ManagerRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,6 +12,10 @@ public interface ManagerMapper {
     Manager getManagerById(Long mngrId);
     List<Manager> getAllManagers();
     int getTotalManagerCount();
+
+    int getManagerCount(ManagerRequest request);
+    List<Org> getManagerList(ManagerRequest request);
+
     void saveManager(Manager manager);
     void updateManager(Manager manager);
 
