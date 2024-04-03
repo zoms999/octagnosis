@@ -224,7 +224,7 @@
 			)
 		ORDER BY
 			A.OrgId DESC
-		LIMIT #{paging.startRow}, #{paging.limit}
+		LIMIT #{paging.startRow}, #{paging.rowCntInPage}
 	</select>
 
 </mapper>
