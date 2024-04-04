@@ -53,7 +53,7 @@
             )
         ORDER BY
             MngrId DESC
-            LIMIT #{paging.startRow}, #{paging.limit}
+            LIMIT #{paging.startRow}, #{paging.rowCntInPage}
     </select>
 
     <update id="updateManager">
