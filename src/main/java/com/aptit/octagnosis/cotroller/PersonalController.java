@@ -1,6 +1,7 @@
 package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.mapper.PersonalMapper;
+import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Personal;
 import com.aptit.octagnosis.req.PersonalRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,4 +68,51 @@ public class PersonalController {
         Rtn.put("Personal", personalMapper.selectPersnByUserIdAndType(persnId));
         return Rtn;
     }
+
+
+    @PatchMapping("/personal/chgpw/{persnId}")
+    public ResponseEntity<String> updatePassword(@PathVariable("persnId") Long persnId, @RequestBody Map<String, String> requestBody) {
+        try {
+            String currentPassword = requestBody.get("currentPassword");
+            String newPassword = requestBody.get("newPassword");
+
+            Acunt acunt = personalMapper.getAccountlById(persnId);
+
+            if (acunt != null && acunt.getPw().equals(currentPassword)) {
+                personalMapper.accountUpdatePassword(persnId, newPassword);
+                return ResponseEntity.ok("Password updated successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Current password is incorrect");
+            }
+        } catch (Exception e) {
+            // Log the exception for debugging purposes
+            e.printStackTrace();
+            // Return an internal server error response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal server error occurred");
+        }
+    }
+
+    @PatchMapping("/personal/chgpww/{persnId}")
+    public ResponseEntity<String> updatePassword1(@PathVariable("persnId") Long persnId, @RequestBody Map<String, String> requestBody) {
+        try {
+            String currentPassword = requestBody.get("currentPassword");
+            String newPassword = requestBody.get("newPassword");
+
+            Acunt acunt = personalMapper.getAccountlById(persnId);
+
+            if (acunt != null && acunt.getPw().equals(currentPassword)) {
+                personalMapper.accountUpdatePassword(persnId, newPassword);
+                return ResponseEntity.ok("Password updated successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Current password is incorrect");
+            }
+        } catch (Exception e) {
+            // Log the exception for debugging purposes
+            e.printStackTrace();
+            // Return an internal server error response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal server error occurred");
+        }
+    }
+
+
 }

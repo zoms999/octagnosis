@@ -139,4 +139,16 @@
         WHERE
             A.UserType = 'C00102' AND B.PersnId = #{PersnId}
     </select>
+
+    <select id="getAccountlById" resultType="Acunt">
+        SELECT *
+        FROM TB_Acunt
+        WHERE UserId = #{persnId}
+    </select>
+
+    <update id="accountUpdatePassword">
+        UPDATE TB_Acunt
+        SET Pw = #{newPassword}
+        WHERE UserId = #{persnId}
+    </update>
 </mapper>
