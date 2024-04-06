@@ -11,5 +11,6 @@ public class OrgParm {
     private Paging paging;
     
     private String urlCd;
+    private String urlCdNew;
     private String actionReasn;
 }

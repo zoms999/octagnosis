@@ -116,6 +116,10 @@ public class OrgController {
     
     @PostMapping("/Org/ChkUrlCd")
     public Map<String, Object>  GetOrgById(@RequestBody OrgParm org) {
+        // 수정시에는 UrlCdNew에 값이 들어옴
+        if (org.getUrlCd() == null || org.getUrlCd().isEmpty()) {
+            org.setUrlCd(org.getUrlCdNew());
+        }
         Org Org = OrgService.GetExistOrg(org);
         
         Rtn.put("ExistYn", (Org == null ? "N": "Y"));
