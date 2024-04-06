@@ -34,7 +34,7 @@
             )
         ORDER BY
             PersnId DESC
-            LIMIT #{paging.startRow}, #{paging.limit}
+            LIMIT #{paging.startRow}, #{paging.rowCntInPage}
     </select>
 
 </mapper>
