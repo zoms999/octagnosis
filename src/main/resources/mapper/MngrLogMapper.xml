@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.MngrLogMapper">
+
+	<!-- 등록 ********************************************************-->
+
+	<insert id="CretMngrLog" parameterType="com.aptit.octagnosis.model.MngrLog">
+		INSERT INTO TB_MngrLog (
+			LogId
+			, MngrId
+			, ActinDt
+			, ActinReasn
+			, ActinType
+			, ActinRslt
+			, ActinFunc
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		) VALUES (
+			#{logId}
+			, #{mngrId}
+			, #{actinDt}
+			, #{actinReasn}
+			, #{actinType}
+			, #{actinRslt}
+			, #{actinFunc}
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, #{uptId}
+			, #{uptDt}
+		)
+	</insert>
+
+	<!-- 수정 ********************************************************-->
+
+	<!-- 삭제 ********************************************************-->
+
+	<!-- 조회 ********************************************************-->
+
+	<select id="GetLogId" resultType="long">
+		SELECT nextval(MngrLog_LogId)
+	</select>
+
+	<select id="GetMngrLogById" parameterType="map" resultType="com.aptit.octagnosis.model.MngrLog">
+		SELECT
+			LogId
+			 , MngrId
+			 , ActinDt
+			 , ActinReasn
+			 , ActinType
+			 , ActinRslt
+			 , ActinFunc
+			 , InsId
+			 , InsDt
+			 , UptId
+			 , UptDt
+		FROM
+			TB_MngrLog
+		WHERE
+			LogId = #{logId}
+	</select>
+
+	<select id="GetMngrLogListTotCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			TB_MngrLog
+		WHERE 1=1
+	</select>
+
+	<select id="GetMngrLogList" parameterType="map" resultType="hashmap">
+		SELECT
+			LogId
+			 , MngrId
+			 , ActinDt
+			 , ActinReasn
+			 , ActinType
+			 , ActinRslt
+			 , ActinFunc
+			 , InsId
+			 , InsDt
+			 , UptId
+			 , UptDt
+		FROM
+			TB_MngrLog AS A
+		WHERE 1=1
+		  AND (IFNULL(#{actinType}, '') = '' OR A.ActinType = IFNULL(#{ActinType})
+		ORDER BY
+			A.LogId DESC
+		LIMIT #{paging.startRow}, #{paging.rowCntInPage}
+	</select>
+
+</mapper>
