@@ -6,10 +6,7 @@ import com.aptit.octagnosis.req.PersonalRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,5 +52,19 @@ public class PersonalController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving personal list");
         }
+    }
+
+    //Edit
+    @GetMapping("/personal/getUser/{persnId}")
+    public Personal getManagerById(@PathVariable("persnId") Long persnId) {
+        return personalMapper.getPersonalById(persnId);
+    }
+
+    @PostMapping("/personal/getPersnByPersnIdAndType")
+    public Map<String, Object> getPersnByPersnIdAndType(@RequestBody Map<String, String> requestData) {
+        String persnId = requestData.get("persnId");
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Personal", personalMapper.selectPersnByUserIdAndType(persnId));
+        return Rtn;
     }
 }

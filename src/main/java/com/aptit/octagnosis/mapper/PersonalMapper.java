@@ -16,4 +16,8 @@ public interface PersonalMapper {
 
     int getPersonalCount(PersonalRequest request);
     List<Org> getPersonalList(PersonalRequest request);
+
+    Personal getPersonalById(Long persnId);
+
+    Map<String, Object> selectPersnByUserIdAndType(String persnId);
 }

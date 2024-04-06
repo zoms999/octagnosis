@@ -37,4 +37,106 @@
             LIMIT #{paging.startRow}, #{paging.rowCntInPage}
     </select>
 
+
+    <select id="getPersonalById" resultType="Personal">
+        SELECT *
+        FROM TB_Persn
+        WHERE PersnId = #{persnId}
+    </select>
+
+
+    <resultMap id="accountResultMap" type="java.util.Map">
+        <result column="AcuntId" property="acuntId"/>
+        <result column="UserType" property="userType"/>
+        <result column="UserId" property="userId"/>
+        <result column="Pw" property="pw"/>
+        <result column="UseYn" property="useYn"/>
+        <result column="RegDt" property="regDt"/>
+        <result column="LeaveDt" property="leaveDt"/>
+        <result column="ExpirDt" property="expirDt"/>
+        <result column="TermsUse" property="termsUse"/>
+        <result column="TermsPersn" property="termsPersn"/>
+        <result column="TermsEvent" property="termsEvent"/>
+        <result column="InsId" property="insId"/>
+        <result column="InsDt" property="insDt"/>
+        <result column="UptId" property="uptId"/>
+        <result column="UptDt" property="uptDt"/>
+    </resultMap>
+
+    <resultMap id="persnResultMap" type="java.util.Map">
+        <result column="PersnId" property="persnId"/>
+        <result column="PersnNm" property="persnNm"/>
+        <result column="BirthYear" property="birthYear"/>
+        <result column="BirthMonth" property="birthMonth"/>
+        <result column="BirthDay" property="birthDay"/>
+        <result column="Sex" property="sex"/>
+        <result column="Phone" property="phone"/>
+        <result column="Tel" property="tel"/>
+        <result column="Email" property="email"/>
+        <result column="Zip" property="zip"/>
+        <result column="Addr1" property="addr1"/>
+        <result column="Addr2" property="addr2"/>
+        <result column="Addr3" property="addr3"/>
+        <result column="Addr4" property="addr4"/>
+        <result column="Educt" property="educt"/>
+        <result column="Job" property="job"/>
+        <result column="ScholNm" property="scholNm"/>
+        <result column="ScholMajor" property="scholMajor"/>
+        <result column="ScholGrade" property="scholGrade"/>
+        <result column="JobNm" property="jobNm"/>
+        <result column="JobDuty" property="jobDuty"/>
+        <result column="InsId" property="insId"/>
+        <result column="InsDt" property="insDt"/>
+        <result column="UptId" property="uptId"/>
+        <result column="UptDt" property="uptDt"/>
+    </resultMap>
+
+    <select id="selectPersnByUserIdAndType" parameterType="map" resultType="hashmap">
+        SELECT
+            A.AcuntId,
+            A.UserType,
+            A.UserId,
+            A.Pw,
+            A.UseYn,
+            A.RegDt,
+            A.LeaveDt,
+            A.ExpirDt,
+            A.TermsUse,
+            A.TermsPersn,
+            A.TermsEvent,
+            A.InsId,
+            A.InsDt,
+            A.UptId,
+            A.UptDt,
+            B.PersnId,
+            B.PersnNm,
+            B.BirthYear,
+            B.BirthMonth,
+            B.BirthDay,
+            B.Sex,
+            B.Phone,
+            B.Tel,
+            B.Email,
+            B.Zip,
+            B.Addr1,
+            B.Addr2,
+            B.Addr3,
+            B.Addr4,
+            B.Educt,
+            B.Job,
+            B.ScholNm,
+            B.ScholMajor,
+            B.ScholGrade,
+            B.JobNm,
+            B.JobDuty,
+            B.InsId AS PersnInsId,
+            B.InsDt AS PersnInsDt,
+            B.UptId AS PersnUptId,
+            B.UptDt AS PersnUptDt
+        FROM
+            TB_Acunt A
+                INNER JOIN TB_Persn B ON A.UserId = B.PersnId
+        WHERE
+            A.UserType = 'C00102' AND B.PersnId = #{PersnId}
+    </select>
 </mapper>
