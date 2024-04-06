@@ -70,13 +70,13 @@
             addr2 = #{addr2},
             addr3 = #{addr3},
             addr4 = #{addr4},
-            authPersn = #{authPersn},
+            /*authPersn = #{authPersn},
             authRsltView = #{authRsltView},
             authAdmin = #{authAdmin},
             authLogView = #{authLogView},
             authStati = #{authStati},
             authBbs = #{authBbs},
-            authOrg = #{authOrg},
+            authOrg = #{authOrg},*/
             uptId = #{uptId},
             uptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
         WHERE MngrId = #{mngrId}
