@@ -34,13 +34,13 @@ public class CommonLib {
         switch (type)
         {
             case "YMD":
-                Pattern = "yyyymmdd";
+                Pattern = "yyyyMMdd";
                 break;
             case "YMDHMS":
                 Pattern = "yyyyMMddHHmmss";
                 break;
             default:
-                Pattern = "yyyymmdd";
+                Pattern = "yyyyMMdd";
                 break;
         }
         

@@ -13,7 +13,10 @@ public interface OrgMapper {
     int CretOrg(Org org);
 
     int EditOrg(Org org);
-    
+
+    int EditUrlCd(OrgParm orgParm);
+
+
     long GetOrgId();
     Org GetOrgById(Long orgId);
     int GetOrgListTotCnt(OrgParm orgParm);

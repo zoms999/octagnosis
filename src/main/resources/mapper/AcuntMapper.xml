@@ -34,7 +34,7 @@
 		 , #{useYn}
 		 , #{regDt}
 		 , #{leaveDt}
-		 , #{expirDt}
+		 , DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 12 MONTH), '%Y%m%d')
 		 , #{termsUse}
 		 , #{termsPersn}
 		 , #{termsEvent}
@@ -66,7 +66,7 @@
 
 	<!-- 조회 ********************************************************-->
 
-	<select id="GetAcuntById" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
+	<select id="GetAcunt" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
 		SELECT
 			AcuntId
 			 , UserType
@@ -84,6 +84,26 @@
 		WHERE
 			AcuntId = #{acuntId}
 	</select>
+
+	<select id="GetAcuntByUserId" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
+		SELECT
+			AcuntId
+			 , Pw
+			 , UseYn
+			 , RegDt
+			 , LeaveDt
+			 , ExpirDt
+			 , TermsUse
+			 , TermsPersn
+			 , TermsEvent
+		FROM
+			TB_Acunt
+		WHERE
+			UserType = #{userType}
+			AND UserId = #{userId}
+	</select>
+
+
 
 	<select id="GetExistAcunt" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
 		SELECT

@@ -114,6 +114,15 @@
 			OrgId = #{orgId}
 	</update>
 
+	<update id="EditUrlCd" parameterType="com.aptit.octagnosis.model.OrgParm">
+		UPDATE TB_Org SET
+			UrlCd	= #{urlCd}
+			, UptId	= #{userId}
+			, UptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			OrgId = #{orgId}
+	</update>
+
 	<!-- 삭제 ********************************************************-->
 
 	<!-- 조회 ********************************************************-->

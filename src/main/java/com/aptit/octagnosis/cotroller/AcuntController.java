@@ -35,8 +35,8 @@ public class AcuntController {
     }
     
     @PostMapping("/Acunt/GetAcunt")
-    public Map<String, Object>  GetAcuntById(@RequestBody Acunt org) {
-        Rtn.put("Acunt" , AcuntService.GetAcuntById(org.getAcuntId()));
+    public Map<String, Object>  GetAcunt(@RequestBody Acunt org) {
+        Rtn.put("Acunt" , AcuntService.GetAcunt(org.getAcuntId()));
         return Rtn;
     }
     

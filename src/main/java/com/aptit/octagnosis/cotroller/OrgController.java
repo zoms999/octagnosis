@@ -1,6 +1,7 @@
 package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.mapper.AcuntMapper;
+import com.aptit.octagnosis.mapper.MngrLogMapper;
 import com.aptit.octagnosis.mapper.OrgMapper;
 import com.aptit.octagnosis.mapper.OrgTurnMapper;
 import com.aptit.octagnosis.model.*;
@@ -31,6 +32,9 @@ public class OrgController {
     private AcuntMapper AcuntService;
     @Autowired
     private OrgTurnMapper OrgTurnService;
+    @Autowired
+    private MngrLogMapper  MngrLogService;
+
     
     @Autowired
     private CommonLib CommonLib;
@@ -38,8 +42,9 @@ public class OrgController {
     private ObjectMapper ObjectMapper;
     
     Map<String, Object> Rtn = new HashMap<>();
-    
-    
+
+
+    // 기관등록
     @PostMapping("/Org/CretOrg")
     @Transactional
     public int  CretOrg(@RequestBody Map<String, Object> parm) {
@@ -70,18 +75,27 @@ public class OrgController {
         return Rtn;
     }
 
+    // 기관수정
     @PostMapping("/Org/UptOrg")
     public int EditOrg(@RequestBody Org org) {
         return OrgService.EditOrg(org);
         //return mngrId;
     }
 
+    // 기관조회 : 수정시
     @PostMapping("/Org/GetOrg")
-    public Map<String, Object>  GetOrgById(@RequestBody Org org) {
-        Rtn.put("Org" , OrgService.GetOrgById(org.getOrgId()));
+    public Map<String, Object> GetOrg(@RequestBody OrgParm orgParm) {
+
+        Rtn.put("Org" , OrgService.GetOrgById(orgParm.getOrgId()));
+        AcuntParm AcuntParm = new AcuntParm();
+        AcuntParm.setUserType("C00101");
+        AcuntParm.setUserId(orgParm.getOrgId());
+        Rtn.put("Acunt" , AcuntService.GetAcuntByUserId(AcuntParm));
         return Rtn;
     }
-    
+
+    // 기관목록
+
     @PostMapping("/Org/GetOrgList")
     public Map<String, Object> GetOrgList(@RequestBody OrgParm orgParm) {
         //public ResponseEntity<Map<String, Object>> GetOrgList(@RequestBody OrgParm orgParm) {
@@ -113,18 +127,36 @@ public class OrgController {
         
         return Rtn;
     }
-    
+
+    // 기관코드 유효성 검증
     @PostMapping("/Org/ChkUrlCd")
-    public Map<String, Object>  GetOrgById(@RequestBody OrgParm org) {
+    public Map<String, Object>  ChkUrlCd(@RequestBody OrgParm org) {
         // 수정시에는 UrlCdNew에 값이 들어옴
         if (org.getUrlCd() == null || org.getUrlCd().isEmpty()) {
             org.setUrlCd(org.getUrlCdNew());
         }
         Org Org = OrgService.GetExistOrg(org);
-        
+
         Rtn.put("ExistYn", (Org == null ? "N": "Y"));
         return Rtn;
     }
-    
-    
+
+    // 기관인증코드 수정
+    @PostMapping("/Org/ChangeOrgUrlCd")
+    @Transactional
+    public int  ChangeOrgUrlCd(@RequestBody OrgParm orgParm) {
+        int Rtn = 0;
+
+        // 기관인증코드 수정
+        Rtn += OrgService.EditUrlCd(orgParm);
+
+        // 기관변경이력 기록
+        Rtn += MngrLogService.CretMngrLog(orgParm.getMngrLog());
+
+        return Rtn;
+    }
+
+
+
+
 }

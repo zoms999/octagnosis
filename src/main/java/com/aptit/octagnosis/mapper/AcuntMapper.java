@@ -10,7 +10,9 @@ import java.util.List;
 public interface AcuntMapper {
     int CretAcunt(Acunt acunt);
     int EditAcunt(Acunt acunt);
-    Acunt GetAcuntById(String acuntId);
+
+    Acunt GetAcunt(String acuntId);
+    Acunt GetAcuntByUserId(AcuntParm acuntParm);
     int GetAcuntListTotCnt(AcuntParm acuntParm);
     List<Acunt> GetAcuntList(AcuntParm acuntParm);
     

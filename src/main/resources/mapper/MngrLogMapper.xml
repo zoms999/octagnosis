@@ -18,9 +18,9 @@
 			, UptId
 			, UptDt
 		) VALUES (
-			#{logId}
+			nextval(MngrLog_LogId)
 			, #{mngrId}
-			, #{actinDt}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 			, #{actinReasn}
 			, #{actinType}
 			, #{actinRslt}
