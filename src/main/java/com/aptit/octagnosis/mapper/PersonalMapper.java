@@ -24,4 +24,7 @@ public interface PersonalMapper {
     void accountUpdatePassword(Long persnId, String newPassword);
 
     Map<String, Object> selectPersnByUserIdAndType(String persnId);
+
+    void updatePersonalData(Personal personal);
+
 }

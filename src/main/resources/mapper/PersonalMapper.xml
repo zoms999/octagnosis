@@ -151,4 +151,33 @@
         SET Pw = #{newPassword}
         WHERE UserId = #{persnId}
     </update>
+
+
+    <update id="updatePersonalData" parameterType="com.aptit.octagnosis.model.Personal">
+        UPDATE TB_Persn
+        SET
+            PersnNm = #{persnNm},
+            BirthYear = #{birthYear},
+            BirthMonth = #{birthMonth},
+            BirthDay = #{birthDay},
+            Sex = #{sex},
+            Phone = #{phone},
+            Tel = #{tel},
+            Email = #{email},
+            Zip = #{zip},
+            Addr1 = #{addr1},
+            Addr2 = #{addr2},
+            Addr3 = #{addr3},
+            Addr4 = #{addr4},
+            Educt = #{educt},
+            Job = #{job},
+            ScholNm = #{scholNm},
+            ScholMajor = #{scholMajor},
+            ScholGrade = #{scholGrade},
+            JobNm = #{jobNm},
+            JobDuty = #{jobDuty},
+            UptId = #{uptId},
+            UptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+        WHERE PersnId = #{persnId}
+    </update>
 </mapper>

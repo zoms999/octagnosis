@@ -115,4 +115,14 @@ public class PersonalController {
     }
 
 
+    @PostMapping("/personal/edit/{persnId}")
+    public ResponseEntity<String> updatePersonalData(@PathVariable("persnId") Long persnId, @RequestBody Personal personal) {
+        try {
+            personalMapper.updatePersonalData(personal);
+            return ResponseEntity.ok("Personal data updated successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal server error occurred");
+        }
+    }
 }
