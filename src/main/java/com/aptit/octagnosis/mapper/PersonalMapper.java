@@ -4,6 +4,7 @@ package com.aptit.octagnosis.mapper;
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Org;
 import com.aptit.octagnosis.model.Personal;
+import com.aptit.octagnosis.modelview.PersonalAcuntView;
 import com.aptit.octagnosis.req.PersonalRequest;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -25,6 +26,8 @@ public interface PersonalMapper {
 
     Map<String, Object> selectPersnByUserIdAndType(String persnId);
 
-    void updatePersonalData(Personal personal);
+    void updatePersonalData(PersonalAcuntView personal);
+
+    void updateAccountExpirDt(Long persnId, String expirDt);
 
 }

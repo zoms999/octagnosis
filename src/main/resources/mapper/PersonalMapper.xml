@@ -180,4 +180,10 @@
             UptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
         WHERE PersnId = #{persnId}
     </update>
+
+    <update id="updateAccountExpirDt">
+        UPDATE TB_Acunt
+        SET ExpirDt = #{expirDt}
+        WHERE UserId = #{persnId}
+    </update>
 </mapper>

@@ -29,13 +29,12 @@ public class PersonalAcuntView {
     private String scholGrade;
     private String jobNm;
     private String jobDuty;
-
-
-    private String expirDt;
-
     private Long insId;
     private String insDt;
     private Long uptId;
     private String uptDt;
+
+    private String acuntId;
+    private String expirDt;
 
 }

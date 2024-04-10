@@ -3,6 +3,7 @@ package com.aptit.octagnosis.cotroller;
 import com.aptit.octagnosis.mapper.PersonalMapper;
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Personal;
+import com.aptit.octagnosis.modelview.PersonalAcuntView;
 import com.aptit.octagnosis.req.PersonalRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -116,9 +117,11 @@ public class PersonalController {
 
 
     @PostMapping("/personal/edit/{persnId}")
-    public ResponseEntity<String> updatePersonalData(@PathVariable("persnId") Long persnId, @RequestBody Personal personal) {
+    public ResponseEntity<String> updatePersonalData(@PathVariable("persnId") Long persnId
+            , @RequestBody PersonalAcuntView personalAcunt) {
         try {
-            personalMapper.updatePersonalData(personal);
+            personalMapper.updatePersonalData(personalAcunt);
+            personalMapper.updateAccountExpirDt(persnId, personalAcunt.getExpirDt());
             return ResponseEntity.ok("Personal data updated successfully");
         } catch (Exception e) {
             e.printStackTrace();
