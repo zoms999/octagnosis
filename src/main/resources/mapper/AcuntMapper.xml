@@ -46,6 +46,7 @@
 	</insert>
 
 	<!-- 수정 ********************************************************-->
+
 	<update id="EditAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
 		UPDATE TB_Acunt SET
 			Pw = #{pw}
@@ -58,6 +59,24 @@
 						  , TermsEvent = #{termsEvent}
 						  , UptId	= #{uptId}
 						  , UptDt	= #{uptDt}
+		WHERE
+			AcuntId = #{acuntId}
+	</update>
+
+	<update id="EditExpirDt" parameterType="com.aptit.octagnosis.model.AcuntParm">
+		UPDATE TB_Acunt SET
+		  ExpirDt = #{expirDt}
+		  , UptId = #{userId}
+		  , UptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			AcuntId = #{acuntId}
+	</update>
+
+	<update id="EditPw" parameterType="com.aptit.octagnosis.model.AcuntParm">
+		UPDATE TB_Acunt SET
+			Pw = #{pw}
+			, UptId = #{userId}
+			, UptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 		WHERE
 			AcuntId = #{acuntId}
 	</update>
@@ -79,6 +98,7 @@
 			 , TermsUse
 			 , TermsPersn
 			 , TermsEvent
+			 , InsDt
 		FROM
 			TB_Acunt
 		WHERE
@@ -96,6 +116,7 @@
 			 , TermsUse
 			 , TermsPersn
 			 , TermsEvent
+			 , InsDt
 		FROM
 			TB_Acunt
 		WHERE

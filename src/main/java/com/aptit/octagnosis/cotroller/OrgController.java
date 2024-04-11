@@ -35,14 +35,12 @@ public class OrgController {
     @Autowired
     private MngrLogMapper  MngrLogService;
 
-    
     @Autowired
     private CommonLib CommonLib;
     @Autowired
     private ObjectMapper ObjectMapper;
     
     Map<String, Object> Rtn = new HashMap<>();
-
 
     // 기관등록
     @PostMapping("/Org/CretOrg")
@@ -76,7 +74,7 @@ public class OrgController {
     }
 
     // 기관수정
-    @PostMapping("/Org/UptOrg")
+    @PostMapping("/Org/EditOrg")
     public int EditOrg(@RequestBody Org org) {
         return OrgService.EditOrg(org);
         //return mngrId;
@@ -142,9 +140,9 @@ public class OrgController {
     }
 
     // 기관인증코드 수정
-    @PostMapping("/Org/ChangeOrgUrlCd")
+    @PostMapping("/Org/ChgOrgUrlCd")
     @Transactional
-    public int  ChangeOrgUrlCd(@RequestBody OrgParm orgParm) {
+    public int  ChgOrgUrlCd(@RequestBody OrgParm orgParm) {
         int Rtn = 0;
 
         // 기관인증코드 수정

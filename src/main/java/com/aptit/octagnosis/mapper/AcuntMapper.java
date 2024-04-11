@@ -11,6 +11,9 @@ public interface AcuntMapper {
     int CretAcunt(Acunt acunt);
     int EditAcunt(Acunt acunt);
 
+    int EditExpirDt(AcuntParm acuntParm);
+    int EditPw(AcuntParm acuntParm);
+
     Acunt GetAcunt(String acuntId);
     Acunt GetAcuntByUserId(AcuntParm acuntParm);
     int GetAcuntListTotCnt(AcuntParm acuntParm);

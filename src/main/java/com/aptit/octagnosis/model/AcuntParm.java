@@ -7,4 +7,9 @@ public class AcuntParm {
     private String acuntId;
     private String userType;
     private long userId;
+    private String expirDt;
+    private String pw;
+
+    private MngrLog mngrLog;
+
 }

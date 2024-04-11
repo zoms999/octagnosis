@@ -107,9 +107,8 @@
 			, MngerPosit1	= #{mngerPosit1}
 			, MngerTeam2	= #{mngerTeam2}
 			, MngerPosit2	= #{mngerPosit2}
-			, UrlCd	= #{urlCd}
 			, UptId	= #{uptId}
-			, UptDt	= #{uptDt}
+			, UptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 		WHERE
 			OrgId = #{orgId}
 	</update>
