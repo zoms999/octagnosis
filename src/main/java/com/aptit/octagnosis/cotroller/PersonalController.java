@@ -128,4 +128,16 @@ public class PersonalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal server error occurred");
         }
     }
+
+    @PatchMapping("/personal/editExpir/{persnId}")
+    public ResponseEntity<String> updateAccountData(@PathVariable("persnId") Long persnId
+            , @RequestBody PersonalAcuntView personalAcunt) {
+        try {
+            personalMapper.updateAccountExpirDt(persnId, personalAcunt.getExpirDt());
+            return ResponseEntity.ok("Personal data updated successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal server error occurred");
+        }
+    }
 }
