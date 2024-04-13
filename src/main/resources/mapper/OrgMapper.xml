@@ -213,17 +213,17 @@
 			 , A.Tel1
 			 , A.Tel2
 			 , A.MngerNm1
+			 , A.InsDt
 			 , IFNULL(B.TurnId, 0) AS TurnId
 			 , IFNULL(B.TurnNum, 0) AS TurnNum
 			 , IFNULL(B.TurnReqCnt, 0) AS TurnReqCnt
 			 , IFNULL(B.TurnUseCnt, 0) AS TurnUseCnt
-			 , IFNULL(B.InsDt, '') AS InsDt
 		FROM
 			TB_Org AS A
-			LEFT OUTER JOIN TB_OrgTurn AS B ON B.OrgId = (
-					SELECT AA.OrgId FROM TB_OrgTurn AS AA
-					WHERE A.OrgId = AA.OrgId ORDER BY AA.TurnNum DESC LIMIT 1
-			)
+			LEFT OUTER JOIN (
+				SELECT * FROM TB_OrgTurn AS AA
+				WHERE AA.UseYn = 'Y'
+			)  AS B ON A.OrgId = B.OrgId
 		WHERE 1=1
 		  AND (
 				(IFNULL(#{srchStr}, '') = '' OR A.CeoNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))

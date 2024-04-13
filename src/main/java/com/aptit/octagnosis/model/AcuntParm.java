@@ -10,6 +10,6 @@ public class AcuntParm {
     private String expirDt;
     private String pw;
 
-    private MngrLog mngrLog;
+    private AcuntLog acuntLog;
 
 }

@@ -129,16 +129,16 @@
 	<select id="GetExistAcunt" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
 		SELECT
 			AcuntId
-			 , UserType
-			 , UserId
-			 , Pw
-			 , UseYn
-			 , RegDt
-			 , LeaveDt
-			 , ExpirDt
-			 , TermsUse
-			 , TermsPersn
-			 , TermsEvent
+			, UserType
+			, UserId
+			, Pw
+			, UseYn
+			, RegDt
+			, LeaveDt
+			, ExpirDt
+			, TermsUse
+			, TermsPersn
+			, TermsEvent
 		FROM
 			TB_Acunt
 		WHERE

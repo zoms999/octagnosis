@@ -9,7 +9,7 @@ public class OrgParm {
     private String srchStr;
 
     private Paging paging;
-    private MngrLog mngrLog;
+    private AcuntLog acuntLog;
 
     private String urlCd;
     private String urlCdNew;

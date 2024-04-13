@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.AcuntLoginLogMapper">
+
+	<!-- 등록 ********************************************************-->
+
+	<insert id="CretAcuntLoginLog" parameterType="com.aptit.octagnosis.model.AcuntLoginLog">
+		INSERT INTO TB_AcuntLoginLog (
+			LogId
+			, AcuntId
+			, LoginDt
+			, LoginEnv
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		) VALUES (
+			nextval(AcuntLoginLog_LogId)
+			, #{acuntId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, #{loginEnv}
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, #{uptId}
+			, #{uptDt}
+		)
+	</insert>
+
+	<!-- 수정 ********************************************************-->
+
+	<!-- 삭제 ********************************************************-->
+
+	<!-- 조회 ********************************************************-->
+
+	<select id="GetAcuntLoginLogListTotCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			TB_AcuntLoginLog AS A
+		WHERE 1=1
+		  AND (A.AcuntId = #{acuntId})
+	</select>
+
+	<select id="GetAcuntLoginLogList" parameterType="map" resultType="hashmap">
+		SELECT
+			A.LogId
+			 , A.AcuntId
+			 , A.LoginDt
+			 , A.LoginEnv
+		FROM
+			TB_AcuntLoginLog AS A
+		WHERE 1=1
+		  AND (A.AcuntId = #{acuntId})
+		ORDER BY
+			A.LogId DESC
+			LIMIT #{paging.startRow}, #{paging.rowCntInPage}
+	</select>
+
+</mapper>

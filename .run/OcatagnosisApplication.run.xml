@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="OcatagnosisApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="octagnosis" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.aptit.octagnosis.OctagnosisApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,6 +1,7 @@
 package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.mapper.AcuntMapper;
+import com.aptit.octagnosis.mapper.AcuntLogMapper;
 import com.aptit.octagnosis.mapper.MngrLogMapper;
 import com.aptit.octagnosis.mapper.OrgMapper;
 import com.aptit.octagnosis.mapper.OrgTurnMapper;
@@ -8,8 +9,6 @@ import com.aptit.octagnosis.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import com.aptit.octagnosis.common.CommonLib;
 @RestController
@@ -34,6 +32,8 @@ public class OrgController {
     private OrgTurnMapper OrgTurnService;
     @Autowired
     private MngrLogMapper  MngrLogService;
+    @Autowired
+    private AcuntLogMapper  AcuntLogService;
 
     @Autowired
     private CommonLib CommonLib;
@@ -149,7 +149,7 @@ public class OrgController {
         Rtn += OrgService.EditUrlCd(orgParm);
 
         // 기관변경이력 기록
-        Rtn += MngrLogService.CretMngrLog(orgParm.getMngrLog());
+        Rtn += AcuntLogService.CretAcuntLog(orgParm.getAcuntLog());
 
         return Rtn;
     }

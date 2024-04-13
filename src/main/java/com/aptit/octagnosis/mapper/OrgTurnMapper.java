@@ -5,12 +5,23 @@ import com.aptit.octagnosis.model.OrgTurnParm;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrgTurnMapper {
     int CretOrgTurn(OrgTurn orgTurn);
-    int EditOrgTurn(OrgTurn orgTurn);
-    OrgTurn GetExistTurnConnCd(OrgTurnParm orgTurn);
-    OrgTurn GetOrgMaxTurn(OrgTurnParm orgTurn);
-    
+
+    int EditOrgTurnUse(OrgTurnParm orgTurn);
+
+    OrgTurn GetExistTurnConnCd(OrgTurnParm orgTurnParm);
+
+    List<OrgTurn> GetOrgTurnList(OrgTurnParm orgTurnParm);
+
+
+    OrgTurn GetOrgMaxTurn(OrgTurn orgTurn);
+
+    int GetOrgTurnPersnTotCnt(OrgTurnParm orgTurnParm);
+
+    List<Map<String, String>> GetOrgTurnPersnList(OrgTurnParm orgTurnParm);
+
 }

@@ -1,7 +1,7 @@
 package com.aptit.octagnosis.cotroller;
 
-import com.aptit.octagnosis.common.CommonLib;
 import com.aptit.octagnosis.mapper.AcuntMapper;
+import com.aptit.octagnosis.mapper.AcuntLogMapper;
 import com.aptit.octagnosis.mapper.MngrLogMapper;
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.AcuntParm;
@@ -23,6 +23,8 @@ public class AcuntController {
     private AcuntMapper AcuntService;
     @Autowired
     private MngrLogMapper MngrLogService;
+    @Autowired
+    private AcuntLogMapper AcuntLogService;
 
     Map<String, Object> Rtn = new HashMap<>();
 
@@ -73,7 +75,7 @@ public class AcuntController {
         Rtn += AcuntService.EditExpirDt(acuntParm);
 
         // 기관변경이력 기록
-        Rtn += MngrLogService.CretMngrLog(acuntParm.getMngrLog());
+        Rtn += AcuntLogService.CretAcuntLog(acuntParm.getAcuntLog());
 
         return Rtn;
     }
@@ -87,7 +89,7 @@ public class AcuntController {
         Rtn += AcuntService.EditPw(acuntParm);
 
         // 기관변경이력 기록
-        Rtn += MngrLogService.CretMngrLog(acuntParm.getMngrLog());
+        Rtn += AcuntLogService.CretAcuntLog(acuntParm.getAcuntLog());
 
         return Rtn;
     }

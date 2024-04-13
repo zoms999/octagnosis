@@ -54,6 +54,17 @@
 			AND TurnId = #{turnId}
 	</update>
 
+	<update id="EditOrgTurnUse" parameterType="com.aptit.octagnosis.model.OrgTurnParm">
+		UPDATE TB_OrgTurn SET
+			UseYn	=	#{useYn}
+			, UptId	=	#{userId}
+			, UptDt	=	DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			OrgId = #{orgId}
+			AND TurnId = #{turnId}
+	</update>
+
+
 	<!-- 삭제 ********************************************************-->
 
 	<!-- 조회 ********************************************************-->
@@ -97,7 +108,6 @@
 		LIMIT 1
 	</select>
 
-
 	<select id="GetExistTurnConnCd" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurnParm">
 		SELECT
 			OrgId
@@ -118,29 +128,51 @@
 		LIMIT 1
 	</select>
 
+	<select id="GetOrgTurnList" parameterType="map" resultType="hashmap">
+		SELECT
+			TurnId
+			, UseYn
+			, TurnNum
+			, TurnReqCnt
+			, TurnUseCnt
+			, TurnConnCd
+		FROM
+			TB_OrgTurn
+		WHERE
+			OrgId = #{orgId}
+		ORDER BY
+			TurnId DESC
+	</select>
 
-	<select id="GetOrgTurnListTotCnt" parameterType="map" resultType="int">
+	<select id="GetOrgTurnPersnTotCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM
-		TB_OrgTurn
-		WHERE
-		OrgId = #{orgId}
+			TB_OrgTurnPersn
+		WHERE 1=1
+			AND OrgId = #{orgId}
+			AND TurnId = #{turnId}
+		</select>
+
+	<select id="GetOrgTurnPersnList" parameterType="map" resultType="hashmap">
+		SELECT
+			A.PersnId
+			, A.StartDt
+			, A.EndDt
+			, B.PersnNm
+			, B.Phone
+			, B.Email
+		FROM
+			TB_OrgTurnPersn  A
+			INNER JOIN TB_Persn B ON A.PersnId = B.PersnId
+		WHERE 1=1
+			AND OrgId = #{orgId}
+			AND TurnId = #{turnId}
+		ORDER BY
+			A.PersnId DESC
+		LIMIT #{paging.startRow}, #{paging.rowCntInPage}
 	</select>
 
-	<select id="GetOrgTurnList" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
-		SELECT
-		OrgId
-		, TurnId
-		, UseYn
-		, TurnNum
-		, TurnReqCnt
-		, TurnUseCnt
-		, TurnConnCd
-		FROM
-		TB_OrgTurn
-		WHERE
-		OrgId = #{orgId}
-	</select>
+
 
 	<!-- 기타 ********************************************************-->
 
