@@ -10,6 +10,7 @@ public class PersonalAcuntView {
     @Id
     private Long persnId;
     private String persnNm;
+    private String birthDate;
     private Integer birthYear;
     private Integer birthMonth;
     private Integer birthDay;

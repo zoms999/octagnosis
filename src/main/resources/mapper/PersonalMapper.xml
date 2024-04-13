@@ -66,6 +66,7 @@
     <resultMap id="persnResultMap" type="java.util.Map">
         <result column="PersnId" property="persnId"/>
         <result column="PersnNm" property="persnNm"/>
+        <result column="BirthDate" property="birthDate"/>
         <result column="BirthYear" property="birthYear"/>
         <result column="BirthMonth" property="birthMonth"/>
         <result column="BirthDay" property="birthDay"/>
@@ -110,6 +111,7 @@
             A.UptDt,
             B.PersnId,
             B.PersnNm,
+            B.BirthDate,
             B.BirthYear,
             B.BirthMonth,
             B.BirthDay,
@@ -157,6 +159,7 @@
         UPDATE TB_Persn
         SET
             PersnNm = #{persnNm},
+            BirthDate = #{birthDate},
             BirthYear = #{birthYear},
             BirthMonth = #{birthMonth},
             BirthDay = #{birthDay},
