@@ -49,16 +49,14 @@
 
 	<update id="EditAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
 		UPDATE TB_Acunt SET
-			Pw = #{pw}
-						  , UseYn = #{useYn}
-						  , RegDt = #{regDt}
-						  , LeaveDt = #{leaveDt}
-						  , ExpirDt = #{expirDt}
-						  , TermsUse = #{termsUse}
-						  , TermsPersn = #{termsPersn}
-						  , TermsEvent = #{termsEvent}
-						  , UptId	= #{uptId}
-						  , UptDt	= #{uptDt}
+			UseYn = #{useYn}
+		  , RegDt = #{regDt}
+		  , LeaveDt = #{leaveDt}
+		  , TermsUse = #{termsUse}
+		  , TermsPersn = #{termsPersn}
+		  , TermsEvent = #{termsEvent}
+		  , UptId	= #{uptId}
+		  , UptDt	= #{uptDt}
 		WHERE
 			AcuntId = #{acuntId}
 	</update>

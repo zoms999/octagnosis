@@ -213,17 +213,19 @@
 			 , A.Tel1
 			 , A.Tel2
 			 , A.MngerNm1
-			 , A.InsDt
-			 , IFNULL(B.TurnId, 0) AS TurnId
-			 , IFNULL(B.TurnNum, 0) AS TurnNum
-			 , IFNULL(B.TurnReqCnt, 0) AS TurnReqCnt
-			 , IFNULL(B.TurnUseCnt, 0) AS TurnUseCnt
+			 , B.RegDt
+			 , B.ExpirDt
+			 , IFNULL(C.TurnId, 0) AS TurnId
+			 , IFNULL(C.TurnNum, 0) AS TurnNum
+			 , IFNULL(C.TurnReqCnt, 0) AS TurnReqCnt
+			 , IFNULL(C.TurnUseCnt, 0) AS TurnUseCnt
 		FROM
 			TB_Org AS A
+			INNER JOIN TB_Acunt AS B ON A.OrgId = B.UserId AND B.UserType = 'C00101'
 			LEFT OUTER JOIN (
 				SELECT * FROM TB_OrgTurn AS AA
 				WHERE AA.UseYn = 'Y'
-			)  AS B ON A.OrgId = B.OrgId
+			)  AS C ON A.OrgId = C.OrgId
 		WHERE 1=1
 		  AND (
 				(IFNULL(#{srchStr}, '') = '' OR A.CeoNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
