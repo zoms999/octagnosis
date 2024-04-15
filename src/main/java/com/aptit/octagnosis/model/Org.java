@@ -13,10 +13,10 @@ public class Org {
     private String corpNum;
     private String ceoNm;
     private String zip;
-    private String addr1;
-    private String addr2;
-    private String addr3;
-    private String addr4;
+    private String roadAddr1;
+    private String roadAddr2;
+    private String stretAddr1;
+    private String stretAddr2;
     private String compyNm;
     private String tel1;
     private String tel2;

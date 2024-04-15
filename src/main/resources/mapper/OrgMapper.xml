@@ -17,10 +17,10 @@
 			, CorpNum
 			, CeoNm
 			, Zip
-			, Addr1
-			, Addr2
-			, Addr3
-			, Addr4
+			, RoadAddr1
+			, RoadAddr2
+			, StretAddr1
+			, StretAddr2
 			, CompyNm
 			, Tel1
 			, Tel2
@@ -49,10 +49,10 @@
 			, #{corpNum}
 			, #{ceoNm}
 			, #{zip}
-			, #{addr1}
-			, #{addr2}
-			, #{addr3}
-			, #{addr4}
+			, #{roadAddr1}
+			, #{roadAddr2}
+			, #{stretAddr1}
+			, #{stretAddr2}
 			, #{compyNm}
 			, #{tel1}
 			, #{tel2}
@@ -86,10 +86,10 @@
 			, CorpNum	= #{corpNum}
 			, CeoNm	= #{ceoNm}
 			, Zip	= #{zip}
-			, Addr1	= #{addr1}
-			, Addr2	= #{addr2}
-			, Addr3	= #{addr3}
-			, Addr4	= #{addr4}
+			, RoadAddr1	= #{roadAddr1}
+			, RoadAddr2	= #{roadAddr2}
+			, StretAddr1	= #{stretAddr1}
+			, StretAddr2	= #{stretAddr2}
 			, CompyNm	= #{compyNm}
 			, Tel1	= #{tel1}
 			, Tel2	= #{tel2}
@@ -137,10 +137,10 @@
 			 , CorpNum
 			 , CeoNm
 			 , Zip
-			 , Addr1
-			 , Addr2
-			 , Addr3
-			 , Addr4
+			 , RoadAddr1
+			 , RoadAddr2
+			 , StretAddr1
+			 , StretAddr2
 			 , CompyNm
 			 , Tel1
 			 , Tel2
@@ -172,10 +172,10 @@
 			 , CorpNum
 			 , CeoNm
 			 , Zip
-			 , Addr1
-			 , Addr2
-			 , Addr3
-			 , Addr4
+			 , RoadAddr1
+			 , RoadAddr2
+			 , StretAddr1
+			 , StretAddr2
 			 , CompyNm
 			 , Tel1
 			 , Tel2

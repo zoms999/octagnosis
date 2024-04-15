@@ -19,10 +19,10 @@ public class Personal {
     private String tel;
     private String email;
     private String zip;
-    private String addr1;
-    private String addr2;
-    private String addr3;
-    private String addr4;
+    private String roadAddr1;
+    private String roadAddr2;
+    private String stretAddr1;
+    private String stretAddr2;
     private String educt;
     private String job;
     private String scholNm;
