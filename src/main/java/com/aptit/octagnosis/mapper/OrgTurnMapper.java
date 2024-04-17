@@ -9,19 +9,19 @@ import java.util.Map;
 
 @Mapper
 public interface OrgTurnMapper {
-    int CretOrgTurn(OrgTurn orgTurn);
+    int cretOrgTurn(OrgTurn orgTurn);
 
-    int EditOrgTurnUse(OrgTurnParm orgTurn);
+    int editOrgTurnUse(OrgTurnParm orgTurn);
 
-    OrgTurn GetExistTurnConnCd(OrgTurnParm orgTurnParm);
+    OrgTurn getExistTurnConnCd(OrgTurnParm orgTurnParm);
 
-    List<OrgTurn> GetOrgTurnList(OrgTurnParm orgTurnParm);
+    List<OrgTurn> getOrgTurnList(OrgTurnParm orgTurnParm);
 
 
-    OrgTurn GetOrgMaxTurn(OrgTurn orgTurn);
+    OrgTurn getOrgMaxTurn(OrgTurn orgTurn);
 
-    int GetOrgTurnPersnTotCnt(OrgTurnParm orgTurnParm);
+    int getOrgTurnPersnTotCnt(OrgTurnParm orgTurnParm);
 
-    List<Map<String, String>> GetOrgTurnPersnList(OrgTurnParm orgTurnParm);
+    List<Map<String, String>> getOrgTurnPersnList(OrgTurnParm orgTurnParm);
 
 }

@@ -33,9 +33,9 @@ public class AcuntLogController {
 
     Map<String, Object> Rtn = new HashMap<>();
 
-    @PostMapping("/MngrLog/CretAcuntLog")
+    @PostMapping("/MngrLog/cretAcuntLog")
     @Transactional
-    public int CretAcuntLog(@RequestBody Map<String, Object> parm) {
+    public int cretAcuntLog(@RequestBody Map<String, Object> parm) {
 
         int Rtn = 0;
 
@@ -43,27 +43,27 @@ public class AcuntLogController {
         AcuntLog AcuntLog = ObjectMapper.convertValue(parm.get("AcuntLog"), AcuntLog.class);
 
         AcuntLog.setActinDt(CommonLib.getDateStr("YMDHMS"));
-        AcuntLog.setLogId(AcuntLogService.GetLogId());
+        AcuntLog.setLogId(AcuntLogService.getLogId());
 
-        Rtn = AcuntLogService.CretAcuntLog(AcuntLog);
+        Rtn = AcuntLogService.cretAcuntLog(AcuntLog);
 
         return Rtn;
     }
 
     // 계정로그 목록
-    @PostMapping("/AcuntLog/GetAcuntLogList")
-    public Map<String, Object> GetAcuntLogList(@RequestBody AcuntLogParm acuntLogParm) {
-        Rtn.put("TotCnt", AcuntLogService.GetAcuntLogListTotCnt(acuntLogParm));
-        Rtn.put("List", AcuntLogService.GetAcuntLogList(acuntLogParm));
+    @PostMapping("/AcuntLog/getAcuntLogList")
+    public Map<String, Object> getAcuntLogList(@RequestBody AcuntLogParm acuntLogParm) {
+        Rtn.put("TotCnt", AcuntLogService.getAcuntLogListTotCnt(acuntLogParm));
+        Rtn.put("List", AcuntLogService.getAcuntLogList(acuntLogParm));
         return Rtn;
 
     }
 
     // 계정 Login 로그 목록
-    @PostMapping("/AcuntLoginLog/GetAcuntLoginLogList")
-    public Map<String, Object> GetAcuntLoginLogList(@RequestBody AcuntLoginLogParm acuntLoginLogParm) {
-        Rtn.put("TotCnt", AcuntLoginLogService.GetAcuntLoginLogListTotCnt(acuntLoginLogParm));
-        Rtn.put("List", AcuntLoginLogService.GetAcuntLoginLogList(acuntLoginLogParm));
+    @PostMapping("/AcuntLoginLog/getAcuntLoginLogList")
+    public Map<String, Object> getAcuntLoginLogList(@RequestBody AcuntLoginLogParm acuntLoginLogParm) {
+        Rtn.put("TotCnt", AcuntLoginLogService.getAcuntLoginLogListTotCnt(acuntLoginLogParm));
+        Rtn.put("List", AcuntLoginLogService.getAcuntLoginLogList(acuntLoginLogParm));
         return Rtn;
 
     }

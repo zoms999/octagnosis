@@ -10,7 +10,7 @@
 
 	<!-- 등록 ********************************************************-->
 
-	<insert id="CretOrgTurn" parameterType="com.aptit.octagnosis.model.OrgTurn">
+	<insert id="cretOrgTurn" parameterType="com.aptit.octagnosis.model.OrgTurn">
 		INSERT INTO TB_OrgTurn (
 			OrgId
 			, TurnId
@@ -40,7 +40,7 @@
 
 	<!-- 수정 ********************************************************-->
 
-	<update id="EditOrgTurn" parameterType="com.aptit.octagnosis.model.OrgTurn">
+	<update id="editOrgTurn" parameterType="com.aptit.octagnosis.model.OrgTurn">
 		UPDATE TB_OrgTurn SET
 			UseYn	=	#{useYn}
 			, TurnNum	=	#{turnNum}
@@ -54,7 +54,7 @@
 			AND TurnId = #{turnId}
 	</update>
 
-	<update id="EditOrgTurnUse" parameterType="com.aptit.octagnosis.model.OrgTurnParm">
+	<update id="editOrgTurnUse" parameterType="com.aptit.octagnosis.model.OrgTurnParm">
 		UPDATE TB_OrgTurn SET
 			UseYn	=	#{useYn}
 			, UptId	=	#{userId}
@@ -69,7 +69,7 @@
 
 	<!-- 조회 ********************************************************-->
 
-	<select id="GetOrgTurn" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
+	<select id="getOrgTurn" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
 		SELECT
 			OrgId
 			, TurnId
@@ -89,7 +89,7 @@
 			AND TurnId = #{turnId}
 	</select>
 
-	<select id="GetOrgMaxTurn" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
+	<select id="getOrgMaxTurn" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
 		SELECT
 			OrgId
 			, TurnId
@@ -108,7 +108,7 @@
 		LIMIT 1
 	</select>
 
-	<select id="GetExistTurnConnCd" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurnParm">
+	<select id="getExistTurnConnCd" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurnParm">
 		SELECT
 			OrgId
 			, TurnId
@@ -128,7 +128,7 @@
 		LIMIT 1
 	</select>
 
-	<select id="GetOrgTurnList" parameterType="map" resultType="hashmap">
+	<select id="getOrgTurnList" parameterType="map" resultType="hashmap">
 		SELECT
 			TurnId
 			, UseYn
@@ -144,7 +144,7 @@
 			TurnId DESC
 	</select>
 
-	<select id="GetOrgTurnPersnTotCnt" parameterType="map" resultType="int">
+	<select id="getOrgTurnPersnTotCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM
 			TB_OrgTurnPersn
@@ -153,7 +153,7 @@
 			AND TurnId = #{turnId}
 		</select>
 
-	<select id="GetOrgTurnPersnList" parameterType="map" resultType="hashmap">
+	<select id="getOrgTurnPersnList" parameterType="map" resultType="hashmap">
 		SELECT
 			A.PersnId
 			, A.StartDt

@@ -8,16 +8,21 @@ import java.util.List;
 
 @Mapper
 public interface AcuntMapper {
-    int CretAcunt(Acunt acunt);
-    int EditAcunt(Acunt acunt);
+    int cretAcunt(Acunt acunt);
 
-    int EditExpirDt(AcuntParm acuntParm);
-    int EditPw(AcuntParm acuntParm);
+    int editAcunt(Acunt acunt);
 
-    Acunt GetAcunt(String acuntId);
-    Acunt GetAcuntByUserId(AcuntParm acuntParm);
-    int GetAcuntListTotCnt(AcuntParm acuntParm);
-    List<Acunt> GetAcuntList(AcuntParm acuntParm);
-    
-    Acunt GetExistAcunt(AcuntParm acuntParm);
+    int editExpirDt(AcuntParm acuntParm);
+
+    int editPw(AcuntParm acuntParm);
+
+    Acunt getAcunt(String acuntId);
+
+    Acunt getAcuntByUserId(AcuntParm acuntParm);
+
+    int getAcuntListTotCnt(AcuntParm acuntParm);
+
+    List<Acunt> getAcuntList(AcuntParm acuntParm);
+
+    Acunt getExistAcunt(AcuntParm acuntParm);
 }

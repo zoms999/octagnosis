@@ -4,7 +4,7 @@
 
 	<!-- 등록 ********************************************************-->
 
-	<insert id="CretMngrLog" parameterType="com.aptit.octagnosis.model.MngrLog">
+	<insert id="cretMngrLog" parameterType="com.aptit.octagnosis.model.MngrLog">
 		INSERT INTO TB_MngrLog (
 			LogId
 			, MngrId
@@ -38,11 +38,11 @@
 
 	<!-- 조회 ********************************************************-->
 
-	<select id="GetLogId" resultType="long">
+	<select id="getLogId" resultType="long">
 		SELECT nextval(MngrLog_LogId)
 	</select>
 
-	<select id="GetMngrLogById" parameterType="map" resultType="com.aptit.octagnosis.model.MngrLog">
+	<select id="getMngrLogById" parameterType="map" resultType="com.aptit.octagnosis.model.MngrLog">
 		SELECT
 			LogId
 			 , MngrId
@@ -61,14 +61,14 @@
 			LogId = #{logId}
 	</select>
 
-	<select id="GetMngrLogListTotCnt" parameterType="map" resultType="int">
+	<select id="getMngrLogListTotCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM
 			TB_MngrLog
 		WHERE 1=1
 	</select>
 
-	<select id="GetMngrLogList" parameterType="map" resultType="hashmap">
+	<select id="getMngrLogList" parameterType="map" resultType="hashmap">
 		SELECT
 			LogId
 			 , MngrId

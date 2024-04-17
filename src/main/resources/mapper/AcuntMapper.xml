@@ -9,7 +9,7 @@
 	</resultMap>
 
 	<!-- 등록 ********************************************************-->
-	<insert id="CretAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
+	<insert id="cretAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
 		INSERT INTO TB_Acunt (
 		   AcuntId
 		 , UserType
@@ -47,7 +47,7 @@
 
 	<!-- 수정 ********************************************************-->
 
-	<update id="EditAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
+	<update id="editAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
 		UPDATE TB_Acunt SET
 			UseYn = #{useYn}
 		  , RegDt = #{regDt}
@@ -61,7 +61,7 @@
 			AcuntId = #{acuntId}
 	</update>
 
-	<update id="EditExpirDt" parameterType="com.aptit.octagnosis.model.AcuntParm">
+	<update id="editExpirDt" parameterType="com.aptit.octagnosis.model.AcuntParm">
 		UPDATE TB_Acunt SET
 		  ExpirDt = #{expirDt}
 		  , UptId = #{userId}
@@ -70,7 +70,7 @@
 			AcuntId = #{acuntId}
 	</update>
 
-	<update id="EditPw" parameterType="com.aptit.octagnosis.model.AcuntParm">
+	<update id="editPw" parameterType="com.aptit.octagnosis.model.AcuntParm">
 		UPDATE TB_Acunt SET
 			Pw = #{pw}
 			, UptId = #{userId}
@@ -83,7 +83,7 @@
 
 	<!-- 조회 ********************************************************-->
 
-	<select id="GetAcunt" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
+	<select id="getAcunt" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
 		SELECT
 			AcuntId
 			 , UserType
@@ -103,7 +103,7 @@
 			AcuntId = #{acuntId}
 	</select>
 
-	<select id="GetAcuntByUserId" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
+	<select id="getAcuntByUserId" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
 		SELECT
 			AcuntId
 			 , Pw
@@ -124,7 +124,7 @@
 
 
 
-	<select id="GetExistAcunt" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
+	<select id="getExistAcunt" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
 		SELECT
 			AcuntId
 			, UserType
@@ -145,7 +145,7 @@
 
 	</select>
 
-	<select id="GetAcuntListTotCnt" parameterType="map" resultType="int">
+	<select id="getAcuntListTotCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM
 			TB_Acunt
@@ -153,7 +153,7 @@
 			(AcuntId = CASE WHEN IFNULL(#{acuntId}, 0)  = 0 THEN AcuntId ELSE #{acuntId} END)
 	</select>
 
-	<select id="GetAcuntList" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
+	<select id="getAcuntList" parameterType="map" resultType="com.aptit.octagnosis.model.Acunt">
 		SELECT
 			AcuntId
 			 , UserType

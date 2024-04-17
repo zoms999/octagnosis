@@ -20,10 +20,10 @@ public class OrgTurnController {
     private OrgTurnMapper OrgTurnService;
 
 
-    @PostMapping("/OrgTurn/CretOrgTurn")
-    public int CretOrgTurn(@RequestBody OrgTurn orgTurn) {
+    @PostMapping("/OrgTurn/cretOrgTurn")
+    public int cretOrgTurn(@RequestBody OrgTurn orgTurn) {
 
-        OrgTurn OrgTurn = OrgTurnService.GetOrgMaxTurn(orgTurn);
+        OrgTurn OrgTurn = OrgTurnService.getOrgMaxTurn(orgTurn);
 
         if (OrgTurn == null) {
             orgTurn.setTurnNum(1l);
@@ -31,38 +31,38 @@ public class OrgTurnController {
             orgTurn.setTurnNum(OrgTurn.getTurnNum() + 1);
         }
 
-        return OrgTurnService.CretOrgTurn(orgTurn);
+        return OrgTurnService.cretOrgTurn(orgTurn);
     }
 
-    @PostMapping("/OrgTurn/EditOrgTurnUse")
-    public int EditOrgTurn(@RequestBody OrgTurnParm orgTurnParm) {
-        return OrgTurnService.EditOrgTurnUse(orgTurnParm);
+    @PostMapping("/OrgTurn/editOrgTurnUse")
+    public int editOrgTurnUse(@RequestBody OrgTurnParm orgTurnParm) {
+        return OrgTurnService.editOrgTurnUse(orgTurnParm);
         //return mngrId;
     }
 
-    @PostMapping("/OrgTurn/ChkTurnConnCd")
-    public Map<String, Object> GetOrgTurnExistYn(@RequestBody OrgTurnParm orgTurnParm) {
+    @PostMapping("/OrgTurn/chkTurnConnCd")
+    public Map<String, Object> chkTurnConnCd(@RequestBody OrgTurnParm orgTurnParm) {
         Map<String, Object> Rtn = new HashMap<>();
-        OrgTurn OrgTurn = OrgTurnService.GetExistTurnConnCd(orgTurnParm);
+        OrgTurn OrgTurn = OrgTurnService.getExistTurnConnCd(orgTurnParm);
 
         Rtn.put("ExistYn", (OrgTurn == null ? "N" : "Y"));
         return Rtn;
     }
 
     // 기관회차정보
-    @PostMapping("/OrgTurn/GetOrgTurnList")
-    public Map<String, Object> GetOrgTurnList(@RequestBody OrgTurnParm orgTurnParm) {
+    @PostMapping("/OrgTurn/getOrgTurnList")
+    public Map<String, Object> getOrgTurnList(@RequestBody OrgTurnParm orgTurnParm) {
         Map<String, Object> Rtn = new HashMap<>();
-        Rtn.put("OrgTurnList", OrgTurnService.GetOrgTurnList(orgTurnParm));
+        Rtn.put("OrgTurnList", OrgTurnService.getOrgTurnList(orgTurnParm));
         return Rtn;
     }
 
     // 기관회차 개인정보
-    @PostMapping("/OrgTurn/GetOrgTurnPersnList")
-    public Map<String, Object> GetOrgTurnPersnList(@RequestBody OrgTurnParm orgTurnParm) {
+    @PostMapping("/OrgTurn/getOrgTurnPersnList")
+    public Map<String, Object> getOrgTurnPersnList(@RequestBody OrgTurnParm orgTurnParm) {
         Map<String, Object> Rtn = new HashMap<>();
-        Rtn.put("TotCnt", OrgTurnService.GetOrgTurnPersnTotCnt(orgTurnParm));
-        Rtn.put("List", OrgTurnService.GetOrgTurnPersnList(orgTurnParm));
+        Rtn.put("TotCnt", OrgTurnService.getOrgTurnPersnTotCnt(orgTurnParm));
+        Rtn.put("List", OrgTurnService.getOrgTurnPersnList(orgTurnParm));
         return Rtn;
 
     }

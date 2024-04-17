@@ -10,16 +10,20 @@ import java.util.Map;
 @Mapper
 public interface OrgMapper {
 
-    int CretOrg(Org org);
+    int cretOrg(Org org);
 
-    int EditOrg(Org org);
+    int editOrg(Org org);
 
-    int EditUrlCd(OrgParm orgParm);
+    int editUrlCd(OrgParm orgParm);
 
 
-    long GetOrgId();
-    Org GetOrgById(Long orgId);
-    int GetOrgListTotCnt(OrgParm orgParm);
-    List<Map<String, String>> GetOrgList(OrgParm orgParm);
-    Org GetExistOrg(OrgParm orgParm);
+    long getOrgId();
+
+    Org getOrgById(Long orgId);
+
+    int getOrgListTotCnt(OrgParm orgParm);
+
+    List<Map<String, String>> getOrgList(OrgParm orgParm);
+
+    Org getExistOrg(OrgParm orgParm);
 }

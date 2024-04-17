@@ -19,8 +19,8 @@ public class PersonalAcuntView {
     private String tel;
     private String email;
     private String zip;
-    private String roadAddr1;
-    private String roadAddr2;
+    private String lotNumAddr1;
+    private String lotNumAddr2;
     private String stretAddr1;
     private String stretAddr2;
     private String educt;

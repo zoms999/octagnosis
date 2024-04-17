@@ -4,7 +4,7 @@
 
 	<!-- 등록 ********************************************************-->
 
-	<insert id="CretAcuntLoginLog" parameterType="com.aptit.octagnosis.model.AcuntLoginLog">
+	<insert id="cretAcuntLoginLog" parameterType="com.aptit.octagnosis.model.AcuntLoginLog">
 		INSERT INTO TB_AcuntLoginLog (
 			LogId
 			, AcuntId
@@ -32,7 +32,7 @@
 
 	<!-- 조회 ********************************************************-->
 
-	<select id="GetAcuntLoginLogListTotCnt" parameterType="map" resultType="int">
+	<select id="getAcuntLoginLogListTotCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM
 			TB_AcuntLoginLog AS A
@@ -40,7 +40,7 @@
 		  AND (A.AcuntId = #{acuntId})
 	</select>
 
-	<select id="GetAcuntLoginLogList" parameterType="map" resultType="hashmap">
+	<select id="getAcuntLoginLogList" parameterType="map" resultType="hashmap">
 		SELECT
 			A.LogId
 			 , A.AcuntId

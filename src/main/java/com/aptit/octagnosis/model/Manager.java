@@ -16,8 +16,8 @@ public class Manager {
     private String phone;
     private String tel;
     private String zip;
-    private String roadAddr1;
-    private String roadAddr2;
+    private String lotNumAddr1;
+    private String lotNumAddr2;
     private String stretAddr1;
     private String stretAddr2;
     private int authPersn;

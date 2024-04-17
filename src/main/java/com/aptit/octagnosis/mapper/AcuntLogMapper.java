@@ -10,13 +10,13 @@ import java.util.Map;
 
 @Mapper
 public interface AcuntLogMapper {
-    int CretAcuntLog(AcuntLog acuntLog);
+    int cretAcuntLog(AcuntLog acuntLog);
 
-    long GetLogId();
+    long getLogId();
 
-    int GetAcuntLogListTotCnt(AcuntLogParm acuntLogParm);
+    int getAcuntLogListTotCnt(AcuntLogParm acuntLogParm);
 
-    List<Map<String, String>> GetAcuntLogList(AcuntLogParm cuntLogParm);
+    List<Map<String, String>> getAcuntLogList(AcuntLogParm cuntLogParm);
 
 
 }

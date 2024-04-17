@@ -10,11 +10,11 @@ import java.util.Map;
 
 @Mapper
 public interface AcuntLoginLogMapper {
-    int CretAcuntLoginLog(AcuntLoginLog acuntLoginLog);
+    int cretAcuntLoginLog(AcuntLoginLog acuntLoginLog);
 
-    int GetAcuntLoginLogListTotCnt(AcuntLoginLogParm acuntLoginLogParm);
+    int getAcuntLoginLogListTotCnt(AcuntLoginLogParm acuntLoginLogParm);
 
-    List<Map<String, String>> GetAcuntLoginLogList(AcuntLoginLogParm acuntLoginLogParm);
+    List<Map<String, String>> getAcuntLoginLogList(AcuntLoginLogParm acuntLoginLogParm);
 
 
 }

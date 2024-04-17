@@ -10,15 +10,15 @@
 
 	<!-- 등록 ********************************************************-->
 
-	<insert id="CretOrg" parameterType="com.aptit.octagnosis.model.Org">
+	<insert id="cretOrg" parameterType="com.aptit.octagnosis.model.Org">
 		INSERT INTO TB_Org (
 			OrgId
 			, BizNum
 			, CorpNum
 			, CeoNm
 			, Zip
-			, RoadAddr1
-			, RoadAddr2
+			, LotNumAddr1
+			, LotNumAddr2
 			, StretAddr1
 			, StretAddr2
 			, CompyNm
@@ -49,8 +49,8 @@
 			, #{corpNum}
 			, #{ceoNm}
 			, #{zip}
-			, #{roadAddr1}
-			, #{roadAddr2}
+			, #{lotNumAddr1}
+			, #{lotNumAddr2}
 			, #{stretAddr1}
 			, #{stretAddr2}
 			, #{compyNm}
@@ -80,14 +80,14 @@
 
 	<!-- 수정 ********************************************************-->
 
-	<update id="EditOrg" parameterType="com.aptit.octagnosis.model.Org">
+	<update id="editOrg" parameterType="com.aptit.octagnosis.model.Org">
 		UPDATE TB_Org SET
 			BizNum	= #{bizNum}
 			, CorpNum	= #{corpNum}
 			, CeoNm	= #{ceoNm}
 			, Zip	= #{zip}
-			, RoadAddr1	= #{roadAddr1}
-			, RoadAddr2	= #{roadAddr2}
+			, LotNumAddr1	= #{lotNumAddr1}
+			, LotNumAddr2	= #{lotNumAddr2}
 			, StretAddr1	= #{stretAddr1}
 			, StretAddr2	= #{stretAddr2}
 			, CompyNm	= #{compyNm}
@@ -113,7 +113,7 @@
 			OrgId = #{orgId}
 	</update>
 
-	<update id="EditUrlCd" parameterType="com.aptit.octagnosis.model.OrgParm">
+	<update id="editUrlCd" parameterType="com.aptit.octagnosis.model.OrgParm">
 		UPDATE TB_Org SET
 			UrlCd	= #{urlCd}
 			, UptId	= #{userId}
@@ -126,19 +126,19 @@
 
 	<!-- 조회 ********************************************************-->
 
-	<select id="GetOrgId" resultType="long">
+	<select id="getOrgId" resultType="long">
 		SELECT nextval(Org_OrgId)
 	</select>
 
-	<select id="GetOrgById" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
+	<select id="getOrgById" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
 		SELECT
 			OrgId
 			 , BizNum
 			 , CorpNum
 			 , CeoNm
 			 , Zip
-			 , RoadAddr1
-			 , RoadAddr2
+			 , LotNumAddr1
+			 , LotNumAddr2
 			 , StretAddr1
 			 , StretAddr2
 			 , CompyNm
@@ -165,15 +165,15 @@
             OrgId = #{orgId}
 	</select>
 
-	<select id="GetExistOrg" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
+	<select id="getExistOrg" parameterType="map" resultType="com.aptit.octagnosis.model.Org">
 		SELECT
 			OrgId
 			 , BizNum
 			 , CorpNum
 			 , CeoNm
 			 , Zip
-			 , RoadAddr1
-			 , RoadAddr2
+			 , LotNumAddr1
+			 , LotNumAddr2
 			 , StretAddr1
 			 , StretAddr2
 			 , CompyNm
@@ -191,7 +191,7 @@
 
 	</select>
 
-	<select id="GetOrgListTotCnt" parameterType="map" resultType="int">
+	<select id="getOrgListTotCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM
 			TB_Org
@@ -203,7 +203,7 @@
 			)
 	</select>
 
-	<select id="GetOrgList" parameterType="map" resultType="hashmap">
+	<select id="getOrgList" parameterType="map" resultType="hashmap">
 		SELECT
 			A.OrgId
 			 , A.BizNum
