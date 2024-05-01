@@ -1,7 +1,9 @@
 package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.mapper.ManagerMapper;
+import com.aptit.octagnosis.mapper.MngrLogMapper;
 import com.aptit.octagnosis.model.Manager;
+import com.aptit.octagnosis.model.MngrLog;
 import com.aptit.octagnosis.req.ManagerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ public class ManagerController {
 
     @Autowired
     private ManagerMapper managerService;
+    
+    @Autowired
+    private MngrLogMapper mngrLogMapper;
 
     @GetMapping("/managers/{mngrId}")
     public Manager getManagerById(@PathVariable("mngrId") Long mngrId) {
@@ -80,17 +85,24 @@ public class ManagerController {
 
     @PatchMapping("/managers/chg/{mngrId}")
     public ResponseEntity<String> updatePassword(@PathVariable("mngrId") Long mngrId, @RequestBody Map<String, String> requestBody) {
-        String currentPassword = requestBody.get("currentPassword");
-        String newPassword = requestBody.get("newPassword");
+        String pw = requestBody.get("pw");
+        String actinReasn = requestBody.get("actinReasn");
+        String insId = requestBody.get("insId");
 
-        Manager manager = managerService.getManagerById(mngrId);
-
-        if (manager != null && manager.getPw().equals(currentPassword)) {
-            managerService.updatePassword(mngrId, newPassword);
-            return ResponseEntity.ok("Password updated successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Current password is incorrect");
-        }
+        // 비밀번호 변경
+        managerService.updatePassword(mngrId, pw);
+        
+        // 매니저 변경이력 기록
+        MngrLog mngrLog = new MngrLog();
+        mngrLog.setMngrId(mngrId);
+        mngrLog.setActinType("C00301");
+        mngrLog.setActinReasn(actinReasn);
+        mngrLog.setActinRslt("");
+        mngrLog.setActinFunc("비밀번호 변경");
+        mngrLog.setInsId(Long.parseLong(insId));
+        mngrLogMapper.cretMngrLog(mngrLog);
+        
+        return ResponseEntity.ok("Password updated successfully");
     }
 
     //권한수정

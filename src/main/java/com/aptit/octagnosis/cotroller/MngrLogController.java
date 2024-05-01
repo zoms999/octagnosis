@@ -2,7 +2,9 @@ package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.common.CommonLib;
 import com.aptit.octagnosis.mapper.MngrLogMapper;
+import com.aptit.octagnosis.model.AcuntLogParm;
 import com.aptit.octagnosis.model.MngrLog;
+import com.aptit.octagnosis.model.MngrLogParm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -19,12 +22,13 @@ public class MngrLogController {
 
     @Autowired
     private MngrLogMapper MngrLogService;
-
     @Autowired
     private CommonLib CommonLib;
     @Autowired
     private ObjectMapper ObjectMapper;
-
+    
+    Map<String, Object> Rtn = new HashMap<>();
+    
     @PostMapping("/MngrLog/cretMngrLog")
     @Transactional
     public int cretMngrLog(@RequestBody Map<String, Object> parm) {
@@ -41,6 +45,15 @@ public class MngrLogController {
 
         return Rtn;
     }
-
+    
+    // 계정로그 목록
+    @PostMapping("/MngrLog/getMngrLogList")
+    public Map<String, Object> getMngrLogList(@RequestBody MngrLogParm mngrLogParm) {
+        Rtn.put("TotCnt", MngrLogService.getMngrLogListTotCnt(mngrLogParm));
+        Rtn.put("List", MngrLogService.getMngrLogList(mngrLogParm));
+        return Rtn;
+        
+    }
+    
 
 }

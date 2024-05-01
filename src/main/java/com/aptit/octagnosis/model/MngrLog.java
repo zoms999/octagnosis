@@ -11,8 +11,8 @@ public class MngrLog {
     private Long logId;
     private Long mngrId;
     private String actinDt;
-    private String actinReasn;
     private String actinType;
+    private String actinReasn;
     private String actinRslt;
     private String actinFunc;
     private Long insId;

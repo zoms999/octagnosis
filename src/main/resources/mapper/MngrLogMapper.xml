@@ -9,8 +9,8 @@
 			LogId
 			, MngrId
 			, ActinDt
+		    , ActinType
 			, ActinReasn
-			, ActinType
 			, ActinRslt
 			, ActinFunc
 			, InsId
@@ -21,8 +21,8 @@
 			nextval(MngrLog_LogId)
 			, #{mngrId}
 			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
-			, #{actinReasn}
 			, #{actinType}
+			, #{actinReasn}
 			, #{actinRslt}
 			, #{actinFunc}
 			, #{insId}
@@ -64,27 +64,32 @@
 	<select id="getMngrLogListTotCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM
-			TB_MngrLog
+			TB_MngrLog AS A
+			INNER JOIN TB_Mngr AS B ON A.InsId = B.MngrId
 		WHERE 1=1
+			AND (A.MngrId = #{mngrId})
+		    AND (IFNULL(#{actinType}, '') = '' OR A.ActinType = #{actinType})
 	</select>
 
 	<select id="getMngrLogList" parameterType="map" resultType="hashmap">
 		SELECT
-			LogId
-			 , MngrId
-			 , ActinDt
-			 , ActinReasn
-			 , ActinType
-			 , ActinRslt
-			 , ActinFunc
-			 , InsId
-			 , InsDt
-			 , UptId
-			 , UptDt
+			A.LogId
+			 , A.MngrId
+			 , A.ActinDt
+			 , A.ActinReasn
+			 , A.ActinType
+			 , A.ActinRslt
+			 , A.ActinFunc
+			 , A.InsId
+			 , A.InsDt
+			 , B.MngrNm
+			 , fnGetCdNm(A.ActinType)   AS ActinTypeNm
 		FROM
 			TB_MngrLog AS A
+			INNER JOIN TB_Mngr AS B ON A.InsId = B.MngrId
 		WHERE 1=1
-		  AND (IFNULL(#{actinType}, '') = '' OR A.ActinType = IFNULL(#{ActinType})
+			AND (A.MngrId = #{mngrId})
+			AND (IFNULL(#{actinType}, '') = '' OR A.ActinType = #{actinType})
 		ORDER BY
 			A.LogId DESC
 		LIMIT #{paging.startRow}, #{paging.rowCntInPage}

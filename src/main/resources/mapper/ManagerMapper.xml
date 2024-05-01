@@ -58,9 +58,8 @@
             LIMIT #{paging.startRow}, #{paging.rowCntInPage}
     </select>
 
-    <update id="updateManager">
-        UPDATE TB_Mngr
-        SET
+    <update id="updateManager" parameterType="com.aptit.octagnosis.model.Manager">
+        UPDATE TB_Mngr SET
             useYn = #{useYn},
             email = #{email},
             pw = #{pw},
@@ -72,13 +71,6 @@
             lotNumAddr2 = #{lotNumAddr2},
             stretAddr1 = #{stretAddr1},
             stretAddr2 = #{stretAddr2},
-            /*authPersn = #{authPersn},
-            authRsltView = #{authRsltView},
-            authAdmin = #{authAdmin},
-            authLogView = #{authLogView},
-            authStati = #{authStati},
-            authBbs = #{authBbs},
-            authOrg = #{authOrg},*/
             uptId = #{uptId},
             uptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
         WHERE MngrId = #{mngrId}

@@ -9,8 +9,8 @@
 			LogId
 			, AcuntId
 			, ActinDt
-			, ActinReasn
 			, ActinType
+			, ActinReasn
 			, ActinRslt
 			, ActinFunc
 			, InsId
@@ -21,8 +21,8 @@
 			nextval(AcuntLog_LogId)
 			, #{acuntId}
 			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
-			, #{actinReasn}
 			, #{actinType}
+			, #{actinReasn}
 			, #{actinRslt}
 			, #{actinFunc}
 			, #{insId}
