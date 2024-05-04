@@ -9,7 +9,28 @@
     </resultMap>
 
     <select id="getManagerById" resultMap="managerResultMap">
-        SELECT *
+        SELECT
+            MngrId
+             , UseYn
+             , Email
+             , Pw
+             , MngrNm
+             , Phone
+             , Tel
+             , Zip
+             , AddrStret
+             , AddrLotNum
+             , Addr2
+             , Addr3
+             , AuthPersn
+             , AuthRsltView
+             , AuthAdmin
+             , AuthLogView
+             , AuthStati
+             , AuthBbs
+             , AuthOrg
+             , InsId
+             , InsDt
         FROM TB_Mngr
         WHERE MngrId = #{mngrId}
     </select>
@@ -67,10 +88,10 @@
             phone = #{phone},
             tel = #{tel},
             zip = #{zip},
-            lotNumAddr1 = #{lotNumAddr1},
-            lotNumAddr2 = #{lotNumAddr2},
-            stretAddr1 = #{stretAddr1},
-            stretAddr2 = #{stretAddr2},
+            addrStret = #{addrStret},
+            addrLotNum = #{addrLotNum},
+            addr2 = #{addr2},
+            addr3 = #{addr3},
             uptId = #{uptId},
             uptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
         WHERE MngrId = #{mngrId}
@@ -86,10 +107,10 @@
             phone,
             tel,
             zip,
-            lotNumAddr1,
-            lotNumAddr2,
-            stretAddr1,
-            stretAddr2,
+            addrStret,
+            addrLotNum,
+            addr2,
+            addr3,
             authPersn,
             authRsltView,
             authAdmin,
@@ -109,10 +130,10 @@
              #{phone},
              #{tel},
              #{zip},
-             #{lotNumAddr1},
-             #{lotNumAddr2},
-             #{stretAddr1},
-             #{stretAddr2},
+             #{addrStret},
+             #{addrLotNum},
+             #{addr2},
+             #{addr3},
              #{authPersn},
              #{authRsltView},
              #{authAdmin},

@@ -19,10 +19,10 @@ public class PersonalAcuntView {
     private String tel;
     private String email;
     private String zip;
-    private String lotNumAddr1;
-    private String lotNumAddr2;
-    private String stretAddr1;
-    private String stretAddr2;
+    private String addrStret;
+    private String addrLotNum;
+    private String addr2;
+    private String addr3;
     private String educt;
     private String job;
     private String scholNm;

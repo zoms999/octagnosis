@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.CompyMapper">
+
+	<!-- 등록 ********************************************************-->
+	<insert id="cretCompy" parameterType="com.aptit.octagnosis.model.Compy">
+		INSERT INTO TB_Compy (
+			BizNum
+			, CompyNm
+			, Tel1
+			, Tel2
+			, Fax
+			, CorpNum
+			, CeoNm
+			, Zip
+			, AddrStret
+			, AddrLotNum
+			, Addr2
+			, Addr3
+			, BillEmail
+			, EmailTo
+			, OnlineNum
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		) VALUES (
+			#{bizNum}
+			, #{compyNm}
+			, #{tel1}
+			, #{tel2}
+			, #{fax}
+			, #{corpNum}
+			, #{ceoNm}
+			, #{zip}
+			, #{addrStret}
+			, #{addrLotNum}
+			, #{addr2}
+			, #{addr3}
+			, #{billEmail}
+			, #{emailTo}
+			, #{onlineNum}
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, #{uptId}
+			, #{uptDt}
+		)
+	</insert>
+
+	<!-- 수정 ********************************************************-->
+
+	<update id="editCompy" parameterType="com.aptit.octagnosis.model.Compy">
+		UPDATE TB_Compy SET
+			BizNum = #{bizNum}
+			, CompyNm = #{compyNm}
+			, Tel1 = #{tel1}
+			, Tel2 = #{tel2}
+			, Fax = #{fax}
+			, CorpNum = #{corpNum}
+			, CeoNm = #{ceoNm}
+			, Zip = #{zip}
+			, AddrStret = #{addrStret}
+			, AddrLotNum = #{addrLotNum}
+			, Addr2 = #{addr2}
+			, Addr3 = #{addr3}
+			, BillEmail = #{billEmail}
+			, EmailTo = #{emailTo}
+			, OnlineNum = #{onlineNum}
+			, UptId = #{uptId}
+			, UptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			BizNum = #{bizNum}
+	</update>
+
+	<!-- 삭제 ********************************************************-->
+
+	<!-- 조회 ********************************************************-->
+
+	<select id="getCompy" parameterType="map" resultType="com.aptit.octagnosis.model.Compy">
+		SELECT
+			BizNum
+			, CompyNm
+			, Tel1
+			, Tel2
+			, Fax
+			, CorpNum
+			, CeoNm
+			, Zip
+			, AddrStret
+			, AddrLotNum
+			, Addr2
+			, Addr3
+			, BillEmail
+			, EmailTo
+			, OnlineNum
+		FROM
+			TB_Compy
+		WHERE
+			BizNum = #{bizNum}
+	</select>
+
+	<!-- 기타 ********************************************************-->
+
+</mapper>

@@ -14,7 +14,7 @@ public interface ManagerMapper {
     int getTotalManagerCount();
 
     int getManagerCount(ManagerRequest request);
-    List<Org> getManagerList(ManagerRequest request);
+    List<Manager> getManagerList(ManagerRequest request);
 
     void saveManager(Manager manager);
     void updateManager(Manager manager);

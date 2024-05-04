@@ -75,10 +75,10 @@
         <result column="Tel" property="tel"/>
         <result column="Email" property="email"/>
         <result column="Zip" property="zip"/>
-        <result column="LotNumAddr1" property="lotNumAddr1"/>
-        <result column="LotNumAddr2" property="lotNumAddr2"/>
-        <result column="StretAddr1" property="stretAddr1"/>
-        <result column="StretAddr2" property="stretAddr2"/>
+        <result column="AddrStret" property="addrStret"/>
+        <result column="AddrLotNum" property="addrLotNum"/>
+        <result column="Addr2" property="addr2"/>
+        <result column="Addr3" property="addr3"/>
         <result column="Educt" property="educt"/>
         <result column="Job" property="job"/>
         <result column="ScholNm" property="scholNm"/>
@@ -120,10 +120,10 @@
             B.Tel,
             B.Email,
             B.Zip,
-            B.LotNumAddr1,
-            B.LotNumAddr2,
-            B.StretAddr1,
-            B.StretAddr2,
+            B.AddrStret,
+            B.AddrLotNum,
+            B.Addr2,
+            B.Addr3,
             B.Educt,
             B.Job,
             B.ScholNm,
@@ -168,10 +168,10 @@
             Tel = #{tel},
             Email = #{email},
             Zip = #{zip},
-            LotNumAddr1 = #{lotNumAddr1},
-            LotNumAddr2 = #{lotNumAddr2},
-            StretAddr1 = #{stretAddr1},
-            StretAddr2 = #{stretAddr2},
+            AddrStret = #{addrStret},
+            AddrLotNum = #{addrLotNum},
+            Addr2 = #{addr2},
+            Addr3 = #{addr3},
             Educt = #{educt},
             Job = #{job},
             ScholNm = #{scholNm},
