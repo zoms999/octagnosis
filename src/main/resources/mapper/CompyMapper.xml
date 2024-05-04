@@ -51,8 +51,7 @@
 
 	<update id="editCompy" parameterType="com.aptit.octagnosis.model.Compy">
 		UPDATE TB_Compy SET
-			BizNum = #{bizNum}
-			, CompyNm = #{compyNm}
+			CompyNm = #{compyNm}
 			, Tel1 = #{tel1}
 			, Tel2 = #{tel2}
 			, Fax = #{fax}
@@ -76,7 +75,7 @@
 
 	<!-- 조회 ********************************************************-->
 
-	<select id="getCompy" parameterType="map" resultType="com.aptit.octagnosis.model.Compy">
+	<select id="getCompy"  resultType="com.aptit.octagnosis.model.Compy">
 		SELECT
 			BizNum
 			, CompyNm
@@ -95,8 +94,8 @@
 			, OnlineNum
 		FROM
 			TB_Compy
-		WHERE
-			BizNum = #{bizNum}
+		LIMIT  1
+
 	</select>
 
 	<!-- 기타 ********************************************************-->

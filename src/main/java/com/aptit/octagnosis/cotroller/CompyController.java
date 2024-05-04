@@ -40,8 +40,8 @@ public class CompyController {
     }
     
     @PostMapping("/Compy/getCompy")
-    public Map<String, Object> getCompy(@RequestBody Compy compy) {
-        Rtn.put("Compy", CompyService.getCompy(compy.getBizNum()));
+    public Map<String, Object> getCompy() {
+        Rtn.put("Compy", CompyService.getCompy());
         return Rtn;
     }
     

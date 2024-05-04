@@ -7,9 +7,9 @@ import java.util.List;
 
 @Mapper
 public interface CompyMapper {
-    int cretCompy(Compy acunt);
+    int cretCompy(Compy compy);
 
-    int editCompy(Compy acunt);
+    int editCompy(Compy compy);
     
-    Compy getCompy(String bizNum);
+    Compy getCompy();
 }
