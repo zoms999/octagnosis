@@ -4,17 +4,15 @@
 <mapper namespace="com.aptit.octagnosis.mapper.MemberMapper">
 
     <insert id="registerPersonal" parameterType="com.aptit.octagnosis.model.Personal" useGeneratedKeys="true" keyProperty="persnId">
-
-INSERT INTO TB_Persn (persnnm, birthdate, birthyear, birthmonth, birthday, sex, phone, tel,
-                              email, zip, addrstret, addrlotnum, addr2, addr3, educt, job, scholnm, scholmajor, scholgrade,
-                              jobnm, jobduty, insid, insdt )
+        INSERT INTO TB_Persn (persnnm, birthdate, birthyear, birthmonth, birthday, sex, phone, tel,
+        email, zip, addrstret, addrlotnum, addr2, addr3, educt, eductstus, job, scholnm, scholmajor, scholgrade,
+        jobnm, jobduty, insid, insdt )
         VALUES ( #{persnNm}, #{birthDate}, #{birthYear}, #{birthMonth}, #{birthDay}, #{sex}, #{phone}, #{tel},
-                #{email}, #{zip}, #{addrStret}, #{addrLotNum}, #{addr2}, #{addr3}, #{educt}, #{job}, #{scholNm},
-                #{scholMajor}, #{scholGrade}, #{jobNm}, #{jobDuty}, #{insId}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'))
+        #{email}, #{zip}, #{addrStret}, #{addrLotNum}, #{addr2}, #{addr3}, #{educt},#{eductStus}, #{job}, #{scholNm},
+        #{scholMajor}, #{scholGrade}, #{jobNm}, #{jobDuty}, #{insId}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'))
         <selectKey keyProperty="persnId" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID() AS persnId
         </selectKey>
-
     </insert>
 
 </mapper>

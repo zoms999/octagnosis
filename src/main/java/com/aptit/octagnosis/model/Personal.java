@@ -24,10 +24,11 @@ public class Personal {
     private String addr2;
     private String addr3;
     private String educt;
-    private String job;
+    private String eductStus;
     private String scholNm;
     private String scholMajor;
     private String scholGrade;
+    private String job;
     private String jobNm;
     private String jobDuty;
     private Long insId;
