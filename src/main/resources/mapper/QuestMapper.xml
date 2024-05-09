@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.QuestMapper">
+
+
+	<!-- 등록 ********************************************************-->
+
+	<insert id="cretTest" parameterType="com.aptit.octagnosis.model.Test">
+		INSERT INTO TB_Test (
+			testId
+			, testNm
+			, seq
+			, insId
+			, insDt
+			, uptId
+			, uptDt
+		) VALUES (
+			nextval(Test_TestId)
+			, #{testNm}
+			, #{seq}
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, null
+			, null
+		)
+	</insert>
+
+	<insert id="cretQuestPage" parameterType="com.aptit.octagnosis.model.QuestPage">
+		INSERT INTO TB_QuestPage (
+			testId
+			, questPageId
+			, questPageNm
+			, questPageSeq
+			, questPageType
+			, insId
+			, insDt
+			, uptId
+			, uptDt
+		) VALUES (
+			#{testId}
+			, nextval(QuestPage_QuestPageId)
+			, #{questPageNm}
+			, #{questPageSeq}
+			, #{questPageType}
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, null
+			, null
+		)
+	</insert>
+
+	<!-- 수정 ********************************************************-->
+
+	<update id="editTest" parameterType="com.aptit.octagnosis.model.Test">
+		UPDATE TB_Test SET
+			testNm = #{testNm}
+			, seq = #{seq}
+			, uptId	= #{uptId}
+			, uptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			TestId = #{testId}
+	</update>
+
+	<update id="editQuestPage" parameterType="com.aptit.octagnosis.model.QuestPage">
+		UPDATE TB_QuestPage SET
+			questPageNm = #{questPageNm}
+			, questPageSeq = #{questPageSeq}
+			, questPageType = #{questPageType}
+			, uptId	= #{uptId}
+			, uptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			QuestPageId = #{questPageId}
+	</update>
+
+	<!-- 삭제 ********************************************************-->
+
+	<update id="delTest" parameterType="com.aptit.octagnosis.model.QuestParm">
+		DELETE FROM TB_Test
+		WHERE
+			TestId = #{testId}
+	</update>
+
+	<update id="delQuestPage" parameterType="com.aptit.octagnosis.model.QuestParm">
+		DELETE FROM TB_QuestPage
+		WHERE
+			TestId = #{testId}
+			AND QuestPageId = #{questPageId}
+	</update>
+
+	<!-- 조회 ********************************************************-->
+
+	<select id="getTest" parameterType="map" resultType="com.aptit.octagnosis.model.Test">
+		SELECT
+			testId
+			 , testNm
+			 , seq
+		FROM
+			TB_Test
+		WHERE
+			TestId = #{testId}
+	</select>
+
+	<select id="getTestList" parameterType="map" resultType="hashmap">
+		SELECT
+			testId
+			 , testNm
+			 , seq
+		FROM
+			TB_Test
+		ORDER BY
+			Seq
+	</select>
+
+	<select id="getQuestPage" parameterType="map" resultType="com.aptit.octagnosis.model.QuestPage">
+		SELECT
+			testId
+			 , questPageId
+			 , questPageNm
+			 , questPageSeq
+			 , questPageType
+		FROM
+			TB_QuestPage
+		WHERE
+			TestId = #{testId}
+			AND QuestPageId = #{questPageId}
+	</select>
+
+	<select id="getQuestPageList" parameterType="map" resultType="hashmap">
+		SELECT
+			A.testId
+			 , A.questPageId
+			 , A.questPageNm
+			 , A.questPageSeq
+			 , A.questPageType
+			 , fnGetCdNm(A.questPageType)   AS questPageTypeNm
+		FROM
+			TB_QuestPage A
+		WHERE
+			A.testId = #{testId}
+		ORDER BY
+			A.questPageSeq
+
+	</select>
+
+	<!-- 기타 ********************************************************-->
+
+</mapper>

@@ -166,7 +166,6 @@
 			 , TermsUse
 			 , TermsPersn
 			 , TermsEvent
-
 		FROM
 			TB_Acunt
 		WHERE
