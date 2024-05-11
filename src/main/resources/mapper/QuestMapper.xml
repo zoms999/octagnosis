@@ -49,6 +49,48 @@
 		)
 	</insert>
 
+	<insert id="cretQuest" parameterType="com.aptit.octagnosis.model.Quest">
+		INSERT INTO TB_Quest (
+			testId
+			, questPageId
+			, questId
+			, questNo
+			, questCont1
+			, questCont2
+			, questCont3
+			, questType
+			, questAttrCd1
+			, questAttrCd2
+			, waitSec
+			, itemColCnt
+			, imgColCnt
+			, useYn
+			, insId
+			, insDt
+			, uptId
+			, uptDt
+		) VALUES (
+			 #{testId}
+			 , #{questPageId}
+			 , nextval(Quest_QuestId)
+			 , #{questNo}
+			 , #{questCont1}
+			 , #{questCont2}
+			 , #{questCont3}
+			 , #{questType}
+			 , #{questAttrCd1}
+			 , #{questAttrCd2}
+			 , #{waitSec}
+			 , #{itemColCnt}
+			 , #{imgColCnt}
+			 , #{useYn}
+			 , #{insId}
+			 , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			 , null
+			 , null
+		)
+	</insert>
+
 	<!-- 수정 ********************************************************-->
 
 	<update id="editTest" parameterType="com.aptit.octagnosis.model.Test">
@@ -70,6 +112,26 @@
 			, uptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 		WHERE
 			QuestPageId = #{questPageId}
+	</update>
+
+	<update id="editQuest" parameterType="com.aptit.octagnosis.model.Quest">
+		UPDATE TB_Quest SET
+			questPageId =  #{questPageId}
+			, questNo =  #{questNo}
+			, questCont1 =  #{questCont1}
+			, questCont2 =  #{questCont2}
+			, questCont3 =  #{questCont3}
+			, questType =  #{questType}
+			, questAttrCd1 =  #{questAttrCd1}
+			, questAttrCd2 =  #{questAttrCd2}
+			, waitSec =  #{waitSec}
+			, itemColCnt =  #{itemColCnt}
+			, imgColCnt =  #{imgColCnt}
+			, useYn =  #{useYn}
+			, uptId	= #{uptId}
+			, uptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			QuestId = #{questId}
 	</update>
 
 	<!-- 삭제 ********************************************************-->
@@ -125,7 +187,8 @@
 			AND QuestPageId = #{questPageId}
 	</select>
 
-	<select id="getQuestPageList" parameterType="map" resultType="hashmap">
+
+	<select id="getQuestPageList" parameterType="map" resultType="com.aptit.octagnosis.model.QuestPageV1">
 		SELECT
 			A.testId
 			 , A.questPageId
@@ -139,8 +202,75 @@
 			A.testId = #{testId}
 		ORDER BY
 			A.questPageSeq
+	</select>
+
+	<select id="getQuestAttrList" resultType="hashmap">
+		SELECT
+			A.questType
+			 , A.questAttrCd
+			 , A.questAttrNm
+			 , A.totScore
+			 , A.cutLine
+			 , A.seq
+			 , fnGetCdNm(A.questType)   AS questTypeNm
+		FROM
+			TB_QuestAttr A
+		ORDER BY
+			A.questType, A.seq
 
 	</select>
+
+	<select id="getQuestList" parameterType="map" resultType="com.aptit.octagnosis.model.QuestV1">
+		SELECT
+			testId
+			 , questPageId
+			 , questId
+			 , questNo
+			 , questCont1
+			 , questCont2
+			 , questCont3
+			 , questType
+			 , questAttrCd1
+			 , questAttrCd2
+			 , waitSec
+			 , itemColCnt
+			 , imgColCnt
+			 , useYn
+			 , fnGetCdNm(questType)   AS questTypeNm
+			 , fnGetQuestAttrNm(questAttrCd1) AS questAttrCd1Nm
+			 , fnGetQuestAttrNm(questAttrCd2) AS questAttrCd2Nm
+		FROM
+			TB_Quest
+		WHERE
+			TestId = #{testId}
+		  	AND QuestPageId = #{questPageId}
+	</select>
+
+	<select id="getQuest" parameterType="map" resultType="com.aptit.octagnosis.model.Quest">
+		SELECT
+			testId
+			 , questPageId
+			 , questId
+			 , questNo
+			 , questCont1
+			 , questCont2
+			 , questCont3
+			 , questType
+			 , questAttrCd1
+			 , questAttrCd2
+			 , waitSec
+			 , itemColCnt
+			 , imgColCnt
+			 , useYn
+		FROM
+			TB_Quest
+		WHERE
+			TestId = #{testId}
+		  AND QuestPageId = #{questPageId}
+		  AND QuestId = #{questId}
+	</select>
+
+
 
 	<!-- 기타 ********************************************************-->
 

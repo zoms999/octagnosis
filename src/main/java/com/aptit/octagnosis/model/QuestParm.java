@@ -9,5 +9,7 @@ public class QuestParm {
     private String procType;
     private long testId;
     private long questPageId;
+    private long oldQuestPageId;
+    private long questId;
 
 }

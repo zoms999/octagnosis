@@ -26,8 +26,6 @@ public class CompyController {
     private CompyMapper CompyService;
     
     
-    Map<String, Object> Rtn = new HashMap<>();
-    
     @PostMapping("/Compy/cretCompy")
     public int cretCompy(@RequestBody Compy compy) {
         
@@ -41,6 +39,8 @@ public class CompyController {
     
     @PostMapping("/Compy/getCompy")
     public Map<String, Object> getCompy() {
+        Map<String, Object> Rtn = new HashMap<>();
+
         Rtn.put("Compy", CompyService.getCompy());
         return Rtn;
     }

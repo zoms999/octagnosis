@@ -31,8 +31,6 @@ public class AcuntLogController {
     @Autowired
     private ObjectMapper ObjectMapper;
 
-    Map<String, Object> Rtn = new HashMap<>();
-
     @PostMapping("/MngrLog/cretAcuntLog")
     @Transactional
     public int cretAcuntLog(@RequestBody Map<String, Object> parm) {
@@ -53,6 +51,8 @@ public class AcuntLogController {
     // 계정로그 목록
     @PostMapping("/AcuntLog/getAcuntLogList")
     public Map<String, Object> getAcuntLogList(@RequestBody AcuntLogParm acuntLogParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+
         Rtn.put("TotCnt", AcuntLogService.getAcuntLogListTotCnt(acuntLogParm));
         Rtn.put("List", AcuntLogService.getAcuntLogList(acuntLogParm));
         return Rtn;
@@ -62,6 +62,8 @@ public class AcuntLogController {
     // 계정 Login 로그 목록
     @PostMapping("/AcuntLoginLog/getAcuntLoginLogList")
     public Map<String, Object> getAcuntLoginLogList(@RequestBody AcuntLoginLogParm acuntLoginLogParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        
         Rtn.put("TotCnt", AcuntLoginLogService.getAcuntLoginLogListTotCnt(acuntLoginLogParm));
         Rtn.put("List", AcuntLoginLogService.getAcuntLoginLogList(acuntLoginLogParm));
         return Rtn;

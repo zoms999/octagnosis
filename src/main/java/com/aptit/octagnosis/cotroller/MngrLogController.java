@@ -27,8 +27,6 @@ public class MngrLogController {
     @Autowired
     private ObjectMapper ObjectMapper;
     
-    Map<String, Object> Rtn = new HashMap<>();
-    
     @PostMapping("/MngrLog/cretMngrLog")
     @Transactional
     public int cretMngrLog(@RequestBody Map<String, Object> parm) {
@@ -49,11 +47,11 @@ public class MngrLogController {
     // 계정로그 목록
     @PostMapping("/MngrLog/getMngrLogList")
     public Map<String, Object> getMngrLogList(@RequestBody MngrLogParm mngrLogParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+
         Rtn.put("TotCnt", MngrLogService.getMngrLogListTotCnt(mngrLogParm));
         Rtn.put("List", MngrLogService.getMngrLogList(mngrLogParm));
         return Rtn;
-        
     }
-    
 
 }

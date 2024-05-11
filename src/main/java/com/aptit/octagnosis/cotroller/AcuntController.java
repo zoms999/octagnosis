@@ -26,8 +26,6 @@ public class AcuntController {
     @Autowired
     private AcuntLogMapper AcuntLogService;
 
-    Map<String, Object> Rtn = new HashMap<>();
-
     @PostMapping("/Acunt/cretAcunt")
     public int cretAcunt(@RequestBody Acunt org) {
 
@@ -42,6 +40,8 @@ public class AcuntController {
 
     @PostMapping("/Acunt/getAcunt")
     public Map<String, Object> getAcunt(@RequestBody Acunt org) {
+        Map<String, Object> Rtn = new HashMap<>();
+
         Rtn.put("Acunt", AcuntService.getAcunt(org.getAcuntId()));
         return Rtn;
     }
@@ -62,6 +62,8 @@ public class AcuntController {
     @PostMapping("/Acunt/chkAcuntId")
     public Map<String, Object> chkAcuntId(@RequestBody AcuntParm org) {
         Acunt Acunt = AcuntService.getExistAcunt(org);
+        
+        Map<String, Object> Rtn = new HashMap<>();
 
         Rtn.put("ExistYn", (Acunt == null ? "N" : "Y"));
         return Rtn;

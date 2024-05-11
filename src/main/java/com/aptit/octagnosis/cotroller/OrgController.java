@@ -34,8 +34,6 @@ public class OrgController {
     @Autowired
     private ObjectMapper ObjectMapper;
 
-    Map<String, Object> Rtn = new HashMap<>();
-
     // 기관등록
     @PostMapping("/Org/cretOrg")
     @Transactional
@@ -77,7 +75,8 @@ public class OrgController {
     // 기관조회 : 수정시
     @PostMapping("/Org/getOrg")
     public Map<String, Object> getOrg(@RequestBody OrgParm orgParm) {
-
+        Map<String, Object> Rtn = new HashMap<>();
+        
         Rtn.put("Org", OrgService.getOrgById(orgParm.getOrgId()));
         AcuntParm AcuntParm = new AcuntParm();
         AcuntParm.setUserType("C00101");
@@ -128,6 +127,8 @@ public class OrgController {
             org.setUrlCd(org.getUrlCdNew());
         }
         Org Org = OrgService.getExistOrg(org);
+        
+        Map<String, Object> Rtn = new HashMap<>();
 
         Rtn.put("ExistYn", (Org == null ? "N" : "Y"));
         return Rtn;
