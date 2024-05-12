@@ -1,4 +1,4 @@
-package com.aptit.octagnosis.modelview;
+package com.aptit.octagnosis.model;
 
 import jakarta.persistence.Id;
 import lombok.Data;

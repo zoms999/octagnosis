@@ -2,7 +2,6 @@ package com.aptit.octagnosis.mapper;
 
 
 import com.aptit.octagnosis.model.Acunt;
-import com.aptit.octagnosis.model.Org;
 import com.aptit.octagnosis.model.Personal;
 import com.aptit.octagnosis.modelview.PersonalAcuntView;
 import com.aptit.octagnosis.req.PersonalRequest;
@@ -17,7 +16,7 @@ public interface PersonalMapper {
     int getPersonalCount2(Map<String, Object> params);
 
     int getPersonalCount(PersonalRequest request);
-    List<Org> getPersonalList(PersonalRequest request);
+    List<PersonalAcuntView> getPersonalList(PersonalRequest request);
 
     Personal getPersonalById(Long persnId);
 
