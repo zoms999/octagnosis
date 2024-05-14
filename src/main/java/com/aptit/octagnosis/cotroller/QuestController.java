@@ -6,18 +6,22 @@ import com.aptit.octagnosis.mapper.AcuntMapper;
 import com.aptit.octagnosis.mapper.MngrLogMapper;
 import com.aptit.octagnosis.mapper.QuestMapper;
 import com.aptit.octagnosis.model.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Part;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -30,6 +34,9 @@ public class QuestController {
     private CommonLib CommonLib;
     @Autowired
     private ObjectMapper ObjectMapper;
+    
+    @Value("${app.quest.itemImgPath}")
+    private String ItemImgPath;
     
     // Test 관련  ************************************************
     
@@ -99,7 +106,7 @@ public class QuestController {
         Rtn.put("QuestPageList", QuestPageV1List);
         return Rtn;
     }
-
+    
     // Quest 관련  *******************************************
     
     @PostMapping("/Quest/Quest/getQuest")
@@ -109,8 +116,8 @@ public class QuestController {
         Rtn.put("Quest", QuestService.getQuest(parm));
         Rtn.put("QuestPageList", QuestService.getQuestPageList(parm));
         Rtn.put("QuestAttrList", QuestService.getQuestAttrList());
-        Rtn.put("QuestItemList", QuestService.getQuestPageList(parm));
-        Rtn.put("QuestImgList", QuestService.getQuestPageList(parm));
+        Rtn.put("QuestItemList", QuestService.getQuestItemList(parm));
+        Rtn.put("QuestImgList", QuestService.getQuestImgList(parm));
         return Rtn;
     }
     
@@ -142,7 +149,131 @@ public class QuestController {
         Rtn.put("OldQuestList", QuestService.getQuestList(parm));
         return Rtn;
     }
-
     
+    // QuestItem 관련  *******************************************
+    
+    @PostMapping("/Quest/Quest/saveQuestItem")
+    public int saveQuestItem(@RequestParam(value = "files", required = false) MultipartFile file
+        , @RequestParam("QuestItem") String QuestItemJson
+        , @RequestParam("QuestParm") String QuestParmJson) throws JsonProcessingException {
+        
+        QuestItem QuestItem = ObjectMapper.readValue(QuestItemJson, QuestItem.class);
+        QuestParm QuestParm = ObjectMapper.readValue(QuestParmJson, QuestParm.class);
+
+        long QuestId = QuestItem.getQuestId();
+        long ItemId = 0;
+        if (QuestParm.getProcType().equals("C")) {
+            ItemId = QuestService.getQuestItemId();
+            QuestItem.setItemId(ItemId);
+        } else {
+            ItemId = QuestItem.getItemId();
+        }
+        
+        if (file != null && !file.isEmpty()) {
+            try {
+                
+                // 파일 저장 경로가 없으면 생성
+                File dir = new File(ItemImgPath);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                
+                // 파일 저장
+                String attachFileNm = file.getOriginalFilename();
+                String fileNm =   "QuestItem_" + QuestId + "_" + ItemId + attachFileNm.substring(attachFileNm.lastIndexOf("."));
+                String filePath = ItemImgPath + fileNm;
+                File dest = new File(filePath);
+                file.transferTo(dest);
+                
+                QuestItem.setImgNm(fileNm);
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (QuestParm.getProcType().equals("C")) {
+            return QuestService.cretQuestItem(QuestItem);
+        } else {
+            return QuestService.editQuestItem(QuestItem);
+        }
+    }
+    
+    @PostMapping("/Quest/Quest/delQuestItem")
+    public int delQuestItem(@RequestBody QuestParm parm) {
+        return QuestService.delQuestItem(parm);
+    }
+    
+    
+    @PostMapping("/Quest/Quest/getQuestItemList")
+    public Map<String, Object> getQuestItemList(@RequestBody  QuestParm parm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        
+        Rtn.put("QuestItemList", QuestService.getQuestItemList(parm));
+        return Rtn;
+    }
+    
+    // QuestImg 관련  *******************************************
+    
+    @PostMapping("/Quest/Quest/saveQuestImg")
+    public int saveQuestImg(@RequestParam(value = "files", required = false) MultipartFile file
+        , @RequestParam("QuestImg") String QuestImgJson
+        , @RequestParam("QuestParm") String QuestParmJson) throws JsonProcessingException {
+        
+        QuestImg QuestImg = ObjectMapper.readValue(QuestImgJson, QuestImg.class);
+        QuestParm QuestParm = ObjectMapper.readValue(QuestParmJson, QuestParm.class);
+        
+        long QuestId = QuestImg.getQuestId();
+        long ImgId = 0;
+        if (QuestParm.getProcType().equals("C")) {
+            ImgId = QuestService.getQuestImgId();
+            QuestImg.setImgId(ImgId);
+        } else {
+            ImgId = QuestImg.getImgId();
+        }
+        
+        if (file != null && !file.isEmpty()) {
+            try {
+                
+                // 파일 저장 경로가 없으면 생성
+                File dir = new File(ItemImgPath);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                
+                // 파일 저장
+                String attachFileNm = file.getOriginalFilename();
+                String fileNm =   "QuestImg_" + QuestId + "_" + ImgId + attachFileNm.substring(attachFileNm.lastIndexOf("."));
+                String filePath = ItemImgPath + fileNm;
+                File dest = new File(filePath);
+                file.transferTo(dest);
+                
+                QuestImg.setImgNm(fileNm);
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        if (QuestParm.getProcType().equals("C")) {
+            return QuestService.cretQuestImg(QuestImg);
+        } else {
+            return QuestService.editQuestImg(QuestImg);
+        }
+    }
+    
+    @PostMapping("/Quest/Quest/delQuestImg")
+    public int delQuestImg(@RequestBody QuestParm parm) {
+        return QuestService.delQuestImg(parm);
+    }
+    
+    
+    @PostMapping("/Quest/Quest/getQuestImgList")
+    public Map<String, Object> getQuestImgList(@RequestBody  QuestParm parm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        
+        Rtn.put("QuestImgList", QuestService.getQuestImgList(parm));
+        return Rtn;
+    }
     
 }

@@ -20,18 +20,30 @@ public interface QuestMapper {
     int delQuestPage(QuestParm parm);
     QuestPage getQuestPage(QuestParm parm);
     ArrayList<QuestPageV1> getQuestPageList(QuestParm parm);
-
     
     List<Map<String, String>> getQuestAttrList();
+
     int cretQuest(Quest quest);
     int editQuest(Quest quest);
     Quest getQuest(QuestParm parm);
-    
     List<QuestV1> getQuestList(QuestParm parm);
     
     
+    int cretQuestItem(QuestItem questItem);
+    int editQuestItem(QuestItem questItem);
+    int delQuestItem(QuestParm questParm);
     
-    //int getAcuntLogListTotCnt(AcuntLogParm acuntLogParm);
+    long getQuestItemId();
+    List<QuestItem> getQuestItemList(QuestParm parm);
     
 
+    int cretQuestImg(QuestImg questItem);
+    int editQuestImg(QuestImg questItem);
+    int delQuestImg(QuestParm questParm);
+    
+    long getQuestImgId();
+    List<QuestImg> getQuestImgList(QuestParm parm);
+    
+    
+    
 }

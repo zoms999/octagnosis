@@ -91,6 +91,60 @@
 		)
 	</insert>
 
+	<insert id="cretQuestItem" parameterType="com.aptit.octagnosis.model.QuestItem">
+		INSERT INTO TB_QuestItem (
+			questId
+			, itemId
+			, itemType
+			, conts
+			, imgNm
+			, seq
+			, weigt
+			, insId
+			, insDt
+			, uptId
+			, uptDt
+		) VALUES (
+			#{questId}
+			, #{itemId}
+			, #{itemType}
+			, #{conts}
+			, #{imgNm}
+			, #{seq}
+			, #{weigt}
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, null
+			, null
+		)
+	</insert>
+
+	<insert id="cretQuestImg" parameterType="com.aptit.octagnosis.model.QuestImg">
+		INSERT INTO TB_QuestImg (
+								  questId
+								, imgId
+								, imgType
+								, conts
+								, imgNm
+								, seq
+								, insId
+								, insDt
+								, uptId
+								, uptDt
+		) VALUES (
+					 #{questId}
+				 , #{imgId}
+				 , #{imgType}
+				 , #{conts}
+				 , #{imgNm}
+				 , #{seq}
+				 , #{insId}
+				 , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+				 , null
+				 , null
+				 )
+	</insert>
+
 	<!-- 수정 ********************************************************-->
 
 	<update id="editTest" parameterType="com.aptit.octagnosis.model.Test">
@@ -134,6 +188,33 @@
 			QuestId = #{questId}
 	</update>
 
+	<update id="editQuestItem" parameterType="com.aptit.octagnosis.model.QuestItem">
+		UPDATE TB_QuestItem SET
+			itemType =  #{itemType}
+			, conts =  #{conts}
+			, imgNm =  #{imgNm}
+			, seq =  #{seq}
+			, weigt =  #{weigt}
+			, uptId	= #{uptId}
+			, uptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			QuestId = #{questId}
+			AND ItemId = #{itemId}
+	</update>
+
+	<update id="editQuestImg" parameterType="com.aptit.octagnosis.model.QuestImg">
+		UPDATE TB_QuestImg SET
+			imgType =  #{imgType}
+							 , conts =  #{conts}
+							 , imgNm =  #{imgNm}
+							 , seq =  #{seq}
+							 , uptId	= #{uptId}
+							 , uptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			QuestId = #{questId}
+		  AND ItemId = #{imgId}
+	</update>
+
 	<!-- 삭제 ********************************************************-->
 
 	<update id="delTest" parameterType="com.aptit.octagnosis.model.QuestParm">
@@ -148,6 +229,22 @@
 			TestId = #{testId}
 			AND QuestPageId = #{questPageId}
 	</update>
+
+	<update id="delQuestItem" parameterType="com.aptit.octagnosis.model.QuestParm">
+		DELETE FROM TB_QuestItem
+		WHERE
+			questId = #{questId}
+		  AND itemId = #{itemId}
+	</update>
+
+	<update id="delQuestImg" parameterType="com.aptit.octagnosis.model.QuestParm">
+		DELETE FROM TB_QuestImg
+		WHERE
+			questId = #{questId}
+		  AND imgId = #{imgId}
+	</update>
+
+
 
 	<!-- 조회 ********************************************************-->
 
@@ -266,9 +363,82 @@
 			TB_Quest
 		WHERE
 			TestId = #{testId}
-		  AND QuestPageId = #{questPageId}
-		  AND QuestId = #{questId}
+			AND QuestPageId = #{questPageId}
+			AND QuestId = #{questId}
 	</select>
+
+	<select id="getQuestItemId" resultType="long">
+		SELECT nextval(QuestItem_ItemId)
+	</select>
+
+	<select id="getQuestItem" parameterType="map" resultType="com.aptit.octagnosis.model.QuestItem">
+		SELECT
+			questId
+			, itemId
+			, itemType
+			, conts
+			, imgNm
+			, seq
+			, weigt
+		FROM
+			TB_QuestItem
+		WHERE
+			QuestId = #{questId}
+			AND ItemId = #{itemId}
+	</select>
+
+	<select id="getQuestItemList" parameterType="map" resultType="com.aptit.octagnosis.model.QuestItem">
+		SELECT
+			questId
+			 , itemId
+			 , itemType
+			 , conts
+			 , imgNm
+			 , seq
+			 , weigt
+		FROM
+			TB_QuestItem
+		WHERE
+			QuestId = #{questId}
+		ORDER BY
+			seq
+	</select>
+
+	<select id="getQuestImgId" resultType="long">
+		SELECT nextval(QuestImg_ImgId)
+	</select>
+
+	<select id="getQuestImg" parameterType="map" resultType="com.aptit.octagnosis.model.QuestImg">
+		SELECT
+			questId
+			 , imgId
+			 , imgType
+			 , conts
+			 , imgNm
+			 , seq
+		FROM
+			TB_QuestImg
+		WHERE
+			QuestId = #{questId}
+		  AND ItemId = #{imgId}
+	</select>
+
+	<select id="getQuestImgList" parameterType="map" resultType="com.aptit.octagnosis.model.QuestImg">
+		SELECT
+			questId
+			 , imgId
+			 , imgType
+			 , conts
+			 , imgNm
+			 , seq
+		FROM
+			TB_QuestImg
+		WHERE
+			QuestId = #{questId}
+		ORDER BY
+			seq
+	</select>
+
 
 
 
