@@ -212,7 +212,7 @@
 							 , uptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 		WHERE
 			QuestId = #{questId}
-		  AND ItemId = #{imgId}
+		  AND ImgId = #{imgId}
 	</update>
 
 	<!-- 삭제 ********************************************************-->

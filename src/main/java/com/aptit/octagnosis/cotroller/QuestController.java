@@ -38,6 +38,9 @@ public class QuestController {
     @Value("${app.quest.itemImgPath}")
     private String ItemImgPath;
     
+    @Value("${app.quest.imgImgPath}")
+    private String ImgImgPath;
+    
     // Test 관련  ************************************************
     
     @PostMapping("/Quest/Test/saveTest")
@@ -236,7 +239,7 @@ public class QuestController {
             try {
                 
                 // 파일 저장 경로가 없으면 생성
-                File dir = new File(ItemImgPath);
+                File dir = new File(ImgImgPath);
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
@@ -244,7 +247,7 @@ public class QuestController {
                 // 파일 저장
                 String attachFileNm = file.getOriginalFilename();
                 String fileNm =   "QuestImg_" + QuestId + "_" + ImgId + attachFileNm.substring(attachFileNm.lastIndexOf("."));
-                String filePath = ItemImgPath + fileNm;
+                String filePath = ImgImgPath + fileNm;
                 File dest = new File(filePath);
                 file.transferTo(dest);
                 

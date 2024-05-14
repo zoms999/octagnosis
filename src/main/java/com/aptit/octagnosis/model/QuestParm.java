@@ -12,5 +12,5 @@ public class QuestParm {
     private long oldQuestPageId;
     private long questId;
     private long itemId;
-
+    private long imgId;
 }
