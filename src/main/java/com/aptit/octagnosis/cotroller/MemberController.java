@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -25,6 +27,15 @@ public class MemberController {
 
     @Autowired
     private AcuntMapper AcuntService;
+
+    @PostMapping("/member/check-id")
+    public Map<String, Boolean> checkIdDuplicate(@RequestBody Map<String, String> request) {
+        String acuntId = request.get("acuntId");
+        boolean isDuplicate = memberService.isAcountIdDuplicate(acuntId);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isDuplicate", isDuplicate);
+        return response;
+    }
 
     @PostMapping("/member/register")
     public ResponseEntity<String> register(@RequestBody RegistrationRequest request) {
