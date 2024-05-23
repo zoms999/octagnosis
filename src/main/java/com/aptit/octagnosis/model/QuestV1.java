@@ -29,5 +29,9 @@ public class QuestV1 {
     private String questTypeNm;
     private String questAttrCd1Nm;
     private String questAttrCd2Nm;
+
+    private int itemCnt;
+    private int imgCnt;
+    
     
 }

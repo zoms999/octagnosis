@@ -35,6 +35,7 @@ public interface QuestMapper {
     
     long getQuestItemId();
     List<QuestItem> getQuestItemList(QuestParm parm);
+    List<QuestItem> getQuestItemAllList(QuestParm parm);
     
 
     int cretQuestImg(QuestImg questItem);
@@ -43,6 +44,7 @@ public interface QuestMapper {
     
     long getQuestImgId();
     List<QuestImg> getQuestImgList(QuestParm parm);
+    List<QuestImg> getQuestImgAllList(QuestParm parm);
     
     
     

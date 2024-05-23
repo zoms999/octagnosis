@@ -261,11 +261,12 @@
 
 	<select id="getTestList" parameterType="map" resultType="hashmap">
 		SELECT
-			testId
-			 , testNm
-			 , seq
+			A.testId
+			, A.testNm
+			, A.seq
+			, (SELECT COUNT(*) FROM TB_QuestPage WHERE testId = A.testId) as questPageCnt
 		FROM
-			TB_Test
+			TB_Test A
 		ORDER BY
 			Seq
 	</select>
@@ -319,28 +320,30 @@
 
 	<select id="getQuestList" parameterType="map" resultType="com.aptit.octagnosis.model.QuestV1">
 		SELECT
-			testId
-			 , questPageId
-			 , questId
-			 , questNo
-			 , questCont1
-			 , questCont2
-			 , questCont3
-			 , questType
-			 , questAttrCd1
-			 , questAttrCd2
-			 , waitSec
-			 , itemColCnt
-			 , imgColCnt
-			 , useYn
+			A.testId
+			 , A.questPageId
+			 , A.questId
+			 , A.questNo
+			 , A.questCont1
+			 , A.questCont2
+			 , A.questCont3
+			 , A.questType
+			 , A.questAttrCd1
+			 , A.questAttrCd2
+			 , A.waitSec
+			 , A.itemColCnt
+			 , A.imgColCnt
+			 , A.useYn
 			 , fnGetCdNm(questType)   AS questTypeNm
 			 , fnGetQuestAttrNm(questAttrCd1) AS questAttrCd1Nm
 			 , fnGetQuestAttrNm(questAttrCd2) AS questAttrCd2Nm
+			 , (SELECT COUNT(*) FROM TB_QuestItem WHERE QuestId = A.QuestId) AS itemCnt
+			 , (SELECT COUNT(*) FROM TB_QuestImg WHERE QuestId = A.QuestId) AS imgCnt
 		FROM
-			TB_Quest
+			TB_Quest A
 		WHERE
-			TestId = #{testId}
-		  	AND QuestPageId = #{questPageId}
+			A.TestId = #{testId}
+		  	AND A.QuestPageId = #{questPageId}
 	</select>
 
 	<select id="getQuest" parameterType="map" resultType="com.aptit.octagnosis.model.Quest">
@@ -404,6 +407,24 @@
 			seq
 	</select>
 
+	<select id="getQuestItemAllList" parameterType="map" resultType="com.aptit.octagnosis.model.QuestItem">
+		SELECT
+			questId
+			 , itemId
+			 , itemType
+			 , conts
+			 , imgNm
+			 , seq
+			 , weigt
+		FROM
+			TB_QuestItem
+		WHERE
+			QuestId IN (SELECT QuestId FROM Tb_Quest WHERE TestId = #{testId} AND QuestPageId = #{questPageId})
+		ORDER BY
+			questId, seq
+	</select>
+
+
 	<select id="getQuestImgId" resultType="long">
 		SELECT nextval(QuestImg_ImgId)
 	</select>
@@ -439,6 +460,21 @@
 			seq
 	</select>
 
+	<select id="getQuestImgAllList" parameterType="map" resultType="com.aptit.octagnosis.model.QuestImg">
+		SELECT
+			questId
+			 , imgId
+			 , imgType
+			 , conts
+			 , imgNm
+			 , seq
+		FROM
+			TB_QuestImg
+		WHERE
+			QuestId IN (SELECT QuestId FROM Tb_Quest WHERE TestId = #{testId})
+		ORDER BY
+			questId, seq
+	</select>
 
 
 
