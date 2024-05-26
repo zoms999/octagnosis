@@ -471,7 +471,7 @@
 		FROM
 			TB_QuestImg
 		WHERE
-			QuestId IN (SELECT QuestId FROM Tb_Quest WHERE TestId = #{testId})
+			QuestId IN (SELECT QuestId FROM Tb_Quest WHERE TestId = #{testId} AND QuestPageId = #{questPageId})
 		ORDER BY
 			questId, seq
 	</select>
