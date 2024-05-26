@@ -10,4 +10,8 @@ public interface MemberMapper {
     @Select("SELECT COUNT(*) = 0 FROM TB_Acunt WHERE acuntId = #{acuntId}")
     boolean isAcountIdDuplicate(String acuntId);
     void registerPersonal(Personal personal);
+
+    //유효성 체크
+    @Select("SELECT CompyNm FROM TB_Org WHERE UrlCd = #{urlCd}")
+    String getCompyNmByUrlCd(String urlCd);
 }

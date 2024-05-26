@@ -37,6 +37,21 @@ public class MemberController {
         return response;
     }
 
+    @PostMapping("/member/validate-code")
+    public ResponseEntity<Map<String, Object>> validateOrgCode(@RequestBody Map<String, String> request) {
+        String urlCd = request.get("urlCd");
+        String compyNm = memberService.getCompyNmByUrlCd(urlCd);
+
+        Map<String, Object> response = new HashMap<>();
+        if (compyNm != null) {
+            response.put("exists", true);
+            response.put("compyNm", compyNm);
+        } else {
+            response.put("exists", false);
+        }
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/member/register")
     public ResponseEntity<String> register(@RequestBody RegistrationRequest request) {
         Acunt acunt = request.getAcunt();
