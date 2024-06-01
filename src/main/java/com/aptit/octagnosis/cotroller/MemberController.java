@@ -1,5 +1,6 @@
 package com.aptit.octagnosis.cotroller;
 
+import com.aptit.octagnosis.common.EmailSender;
 import com.aptit.octagnosis.mapper.AcuntMapper;
 import com.aptit.octagnosis.mapper.MemberMapper;
 import com.aptit.octagnosis.model.Acunt;
@@ -103,5 +104,59 @@ public class MemberController {
             e.printStackTrace();
         }
         return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/member/find-id")
+    public ResponseEntity<Map<String, Object>> findId(@RequestBody Map<String, String> request) {
+        String name = request.get("name");
+        String email = request.get("email");
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String acuntId = memberService.findAcuntIdByNameAndEmail(name, email);
+            if (acuntId != null) {
+                response.put("success", true);
+                response.put("acuntId", acuntId);
+            } else {
+                response.put("success", false);
+                response.put("message", "일치하는 아이디가 없습니다.");
+            }
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "아이디 찾기 중 오류가 발생했습니다.");
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/member/find-password")
+    public ResponseEntity<Map<String, Object>> findPassword(@RequestBody Map<String, String> request) {
+        String userId = request.get("userId");
+        String email = request.get("email");
+
+        // 여기에 비밀번호 찾기 로직을 구현합니다.
+        // userId와 email을 사용하여 데이터베이스에서 비밀번호를 찾고, 이메일로 임시 비밀번호를 전송합니다.
+        String password = memberService.findPasswordByEmailAndUserId(userId, email);
+
+        Map<String, Object> response = new HashMap<>();
+        if (password != null) {
+            // 비밀번호를 찾았을 경우 처리
+            // 이메일로 임시 비밀번호 전송 등의 로직을 추가하세요.
+            response.put("success", true);
+            String temporaryPassword = generateTemporaryPassword(); // 임시 비밀번호 생성
+            EmailSender.sendEmail(email, "임시 비밀번호 발급", "임시 비밀번호: " + temporaryPassword); // 이메일 전송
+
+        } else {
+            response.put("success", false);
+            response.put("message", "비밀번호 찾기 실패: 해당 사용자 정보가 없습니다.");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    private String generateTemporaryPassword() {
+        // 임시 비밀번호 생성 로직 구현 (예: 랜덤 문자열 생성)
+        return "Temp123!"; // 임시로 고정된 값 반환
     }
 }
