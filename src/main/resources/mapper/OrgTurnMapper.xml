@@ -108,7 +108,7 @@
 		LIMIT 1
 	</select>
 
-	<select id="getExistTurnConnCd" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurnParm">
+	<select id="getExistTurnConnCd" parameterType="map" resultType="com.aptit.octagnosis.model.OrgTurn">
 		SELECT
 			OrgId
 			, TurnId
@@ -136,6 +136,7 @@
 			, TurnReqCnt
 			, TurnUseCnt
 			, TurnConnCd
+			, insDt
 		FROM
 			TB_OrgTurn
 		WHERE

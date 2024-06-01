@@ -194,12 +194,15 @@
 	<select id="getOrgListTotCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM
-			TB_Org
+			TB_Org A
 		WHERE 1=1
 		  AND (
-				(IFNULL(#{srchStr}, '') = '' OR CeoNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
-				OR (IFNULL(#{srchStr}, '') = '' OR CompyNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
-				OR (IFNULL(#{srchStr}, '') = '' OR MngerNm1 LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+				(IFNULL(#{srchStr}, '') = '' OR A.CeoNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+				OR (IFNULL(#{srchStr}, '') = '' OR A.CompyNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+				OR (IFNULL(#{srchStr}, '') = '' OR A.MngerNm1 LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+				OR (IFNULL(#{srchStr}, '') = '' OR A.OrgId IN (
+					SELECT OrgId FROM TB_OrgTurn WHERE TurnConnCd = IFNULL(#{srchStr}, '')
+				))
 			)
 	</select>
 
@@ -219,18 +222,30 @@
 			 , IFNULL(C.TurnNum, 0) AS TurnNum
 			 , IFNULL(C.TurnReqCnt, 0) AS TurnReqCnt
 			 , IFNULL(C.TurnUseCnt, 0) AS TurnUseCnt
+			 , IFNULL(C.UseYn, 0) AS TurnUseYn
 		FROM
 			TB_Org AS A
 			INNER JOIN TB_Acunt AS B ON A.OrgId = B.UserId AND B.UserType = 'C00101'
 			LEFT OUTER JOIN (
-				SELECT * FROM TB_OrgTurn AS AA
-				WHERE AA.UseYn = 'Y'
-			)  AS C ON A.OrgId = C.OrgId
+				SELECT
+					ROW_NUMBER() OVER (PARTITION BY OrgId ORDER BY TurnId DESC) AS RowNum
+					, OrgId
+					, UseYn
+					, TurnId
+					, TurnNum
+					, TurnReqCnt
+					, TurnUseCnt
+				FROM
+					TB_OrgTurn
+			)  AS C ON A.OrgId = C.OrgId AND C.RowNum = 1
 		WHERE 1=1
 		  AND (
 				(IFNULL(#{srchStr}, '') = '' OR A.CeoNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
 				OR (IFNULL(#{srchStr}, '') = '' OR A.CompyNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
 				OR (IFNULL(#{srchStr}, '') = '' OR A.MngerNm1 LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+				OR (IFNULL(#{srchStr}, '') = '' OR A.OrgId IN (
+					SELECT OrgId FROM TB_OrgTurn WHERE TurnConnCd = IFNULL(#{srchStr}, '')
+				))
 			)
 		ORDER BY
 			A.OrgId DESC
