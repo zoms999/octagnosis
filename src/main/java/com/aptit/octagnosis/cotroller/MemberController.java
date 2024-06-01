@@ -82,4 +82,26 @@ public class MemberController {
         memberService.registerPersonal(personal);
     }*/
 
+    @PostMapping("/member/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request) {
+        String acuntId = request.get("acuntId");
+        String pw = request.get("pw");
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Acunt acunt = memberService.findAcuntByIdAndPw(acuntId, pw);
+            if (acunt != null) {
+                response.put("success", true);
+                response.put("acunt", acunt);
+            } else {
+                response.put("success", false);
+                response.put("message", "Invalid credentials");
+            }
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "An error occurred during login");
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
 }
