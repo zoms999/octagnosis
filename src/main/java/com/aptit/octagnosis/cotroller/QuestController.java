@@ -1,26 +1,19 @@
 package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.common.CommonLib;
-import com.aptit.octagnosis.mapper.AcuntLogMapper;
-import com.aptit.octagnosis.mapper.AcuntMapper;
-import com.aptit.octagnosis.mapper.MngrLogMapper;
 import com.aptit.octagnosis.mapper.QuestMapper;
 import com.aptit.octagnosis.model.*;
+import com.aptit.octagnosis.modelParm.QuestParm;
+import com.aptit.octagnosis.modelview.QuestPageV1;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Part;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 @RestController

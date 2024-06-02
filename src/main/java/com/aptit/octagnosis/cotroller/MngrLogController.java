@@ -2,9 +2,8 @@ package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.common.CommonLib;
 import com.aptit.octagnosis.mapper.MngrLogMapper;
-import com.aptit.octagnosis.model.AcuntLogParm;
 import com.aptit.octagnosis.model.MngrLog;
-import com.aptit.octagnosis.model.MngrLogParm;
+import com.aptit.octagnosis.modelParm.MngrLogParm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

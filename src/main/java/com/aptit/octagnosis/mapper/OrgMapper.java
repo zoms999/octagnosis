@@ -1,7 +1,7 @@
 package com.aptit.octagnosis.mapper;
 
 import com.aptit.octagnosis.model.Org;
-import com.aptit.octagnosis.model.OrgParm;
+import com.aptit.octagnosis.modelParm.OrgParm;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

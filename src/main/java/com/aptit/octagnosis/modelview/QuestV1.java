@@ -1,4 +1,4 @@
-package com.aptit.octagnosis.model;
+package com.aptit.octagnosis.modelview;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.Entity;

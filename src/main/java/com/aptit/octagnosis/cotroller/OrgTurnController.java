@@ -2,7 +2,7 @@ package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.mapper.OrgTurnMapper;
 import com.aptit.octagnosis.model.OrgTurn;
-import com.aptit.octagnosis.model.OrgTurnParm;
+import com.aptit.octagnosis.modelParm.OrgTurnParm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

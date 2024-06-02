@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.ProdtMapper">
+
+
+	<!-- 등록 ********************************************************-->
+	<insert id="cretProdt" parameterType="com.aptit.octagnosis.model.Prodt">
+		INSERT INTO TB_Prodt (
+			ProdtId
+			, Price
+			, DcRate
+			, ProdtNm
+			, ProdtCate
+			, UsePerid
+			, UseYn
+			, ProdtType
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		) VALUES (
+			#{prodtId}
+			, #{price}
+			, #{dcRate}
+			, #{prodtNm}
+			, #{prodtCate}
+			, #{usePerid}
+			, #{useYn}
+			, #{prodtType}
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, #{uptId}
+			, #{uptDt}
+		)
+	</insert>
+
+	<!-- 수정 ********************************************************-->
+
+	<update id="editProdt" parameterType="com.aptit.octagnosis.model.Prodt">
+		UPDATE TB_Prodt SET
+			Price = #{price}
+			, DcRate = #{dcRate}
+			, ProdtNm = #{prodtNm}
+			, ProdtCate = #{prodtCate}
+			, UsePerid = #{usePerid}
+			, UseYn = #{useYn}
+			, ProdtType = #{prodtType}
+			, UptId	= #{uptId}
+			, UptDt	= #{uptDt}
+		WHERE
+			ProdtId = #{prodtId}
+	</update>
+
+
+	<!-- 삭제 ********************************************************-->
+
+	<!-- 조회 ********************************************************-->
+
+	<select id="getProdt" parameterType="map" resultType="com.aptit.octagnosis.model.Prodt">
+		SELECT
+			ProdtId
+			, Price
+			, DcRate
+			, ProdtNm
+			, ProdtCate
+			, UsePerid
+			, UseYn
+			, ProdtType
+		FROM
+			TB_Prodt
+		WHERE
+			ProdtId = #{prodtId}
+	</select>
+
+	<select id="getProdtListTotCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			TB_Prodt
+		WHERE
+			(ProdtId = CASE WHEN IFNULL(#{prodtId}, 0)  = 0 THEN ProdtId ELSE #{prodtId} END)
+	</select>
+
+	<select id="getProdtList" parameterType="map" resultType="hashmap">
+		SELECT
+			A.ProdtId
+			, A.Price
+			, A.DcRate
+			, A.ProdtNm
+			, A.ProdtCate
+			, A.UsePerid
+			, A.UseYn
+			, A.ProdtType
+			, fnGetCdNm(A.ProdtCate)   AS ProdtCateNm
+			, fnGetCdNm(A.ProdtType)   AS ProdtTypeNm
+		FROM
+			TB_Prodt A
+		WHERE
+			(A.ProdtId = CASE WHEN IFNULL(#{prodtId}, 0)  = 0 THEN A.ProdtId ELSE #{prodtId} END)
+	</select>
+
+	<!-- 기타 ********************************************************-->
+
+</mapper>

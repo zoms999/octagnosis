@@ -54,7 +54,7 @@
 			AND TurnId = #{turnId}
 	</update>
 
-	<update id="editOrgTurnUse" parameterType="com.aptit.octagnosis.model.OrgTurnParm">
+	<update id="editOrgTurnUse" parameterType="com.aptit.octagnosis.modelParm.OrgTurnParm">
 		UPDATE TB_OrgTurn SET
 			UseYn	=	#{useYn}
 			, UptId	=	#{userId}

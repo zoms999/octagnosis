@@ -2,18 +2,13 @@ package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.common.CommonLib;
 import com.aptit.octagnosis.mapper.QuestMapper;
-import com.aptit.octagnosis.model.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.aptit.octagnosis.modelParm.QuestParm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,7 +31,7 @@ public class TestController {
     
     
     @PostMapping("/Test/getQuestPageForTest")
-    public Map<String, Object> getQuestPageForTest(@RequestBody  QuestParm parm) {
+    public Map<String, Object> getQuestPageForTest(@RequestBody QuestParm parm) {
         Map<String, Object> Rtn = new HashMap<>();
         
         Rtn.put("TestList", QuestService.getTestList());

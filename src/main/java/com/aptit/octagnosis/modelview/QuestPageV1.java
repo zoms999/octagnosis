@@ -1,7 +1,7 @@
-package com.aptit.octagnosis.model;
+package com.aptit.octagnosis.modelview;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize

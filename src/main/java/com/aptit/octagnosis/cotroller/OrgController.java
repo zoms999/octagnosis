@@ -3,6 +3,8 @@ package com.aptit.octagnosis.cotroller;
 import com.aptit.octagnosis.common.CommonLib;
 import com.aptit.octagnosis.mapper.*;
 import com.aptit.octagnosis.model.*;
+import com.aptit.octagnosis.modelParm.AcuntParm;
+import com.aptit.octagnosis.modelParm.OrgParm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

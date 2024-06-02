@@ -1,13 +1,7 @@
 package com.aptit.octagnosis.cotroller;
 
-import com.aptit.octagnosis.mapper.AcuntLogMapper;
-import com.aptit.octagnosis.mapper.AcuntMapper;
 import com.aptit.octagnosis.mapper.CompyMapper;
-import com.aptit.octagnosis.mapper.MngrLogMapper;
-import com.aptit.octagnosis.model.Acunt;
-import com.aptit.octagnosis.model.AcuntParm;
 import com.aptit.octagnosis.model.Compy;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

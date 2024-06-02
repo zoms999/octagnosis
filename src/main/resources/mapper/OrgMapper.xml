@@ -113,7 +113,7 @@
 			OrgId = #{orgId}
 	</update>
 
-	<update id="editUrlCd" parameterType="com.aptit.octagnosis.model.OrgParm">
+	<update id="editUrlCd" parameterType="com.aptit.octagnosis.modelParm.OrgParm">
 		UPDATE TB_Org SET
 			UrlCd	= #{urlCd}
 			, UptId	= #{userId}
