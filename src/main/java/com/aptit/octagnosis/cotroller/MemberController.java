@@ -5,18 +5,17 @@ import com.aptit.octagnosis.mapper.AcuntMapper;
 import com.aptit.octagnosis.mapper.MemberMapper;
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Personal;
+import com.aptit.octagnosis.model.Product;
 import com.aptit.octagnosis.req.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -158,5 +157,10 @@ public class MemberController {
     private String generateTemporaryPassword() {
         // 임시 비밀번호 생성 로직 구현 (예: 랜덤 문자열 생성)
         return "Temp123!"; // 임시로 고정된 값 반환
+    }
+
+    @GetMapping("/products")
+    public List<Product> getProducts() {
+        return memberService.getAllProducts();
     }
 }

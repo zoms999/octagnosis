@@ -2,9 +2,12 @@ package com.aptit.octagnosis.mapper;
 
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Personal;
+import com.aptit.octagnosis.model.Product;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface MemberMapper {
@@ -31,4 +34,7 @@ public interface MemberMapper {
             "JOIN TB_Persn p ON a.UserId = p.PersnId " +
             "WHERE a.AcuntId = #{userId} AND p.Email = #{email}")
     String findPasswordByEmailAndUserId(@Param("userId") String userId, @Param("email") String email);
+
+    @Select("SELECT ProdId, Price, DcRate, ProdNm, ProdCate, UseYn, ProdType, InsId, InsDt, UptId, UptDt FROM TB_Prodt")
+    List<Product> getAllProducts();
 }
