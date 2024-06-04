@@ -19,7 +19,7 @@
 			, UptId
 			, UptDt
 		) VALUES (
-			#{prodtId}
+			NEXTVAL(Prodt_ProdId)
 			, #{price}
 			, #{dcRate}
 			, #{prodtNm}
@@ -46,13 +46,18 @@
 			, UseYn = #{useYn}
 			, ProdtType = #{prodtType}
 			, UptId	= #{uptId}
-			, UptDt	= #{uptDt}
+			, UptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 		WHERE
 			ProdtId = #{prodtId}
 	</update>
 
-
 	<!-- 삭제 ********************************************************-->
+
+	<update id="delProdt" parameterType="com.aptit.octagnosis.model.Prodt">
+		DELETE FROM TB_Prodt
+		WHERE
+			ProdtId = #{prodtId}
+	</update>
 
 	<!-- 조회 ********************************************************-->
 

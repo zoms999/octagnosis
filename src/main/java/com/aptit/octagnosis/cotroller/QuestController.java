@@ -37,7 +37,7 @@ public class QuestController {
     // Test 관련  ************************************************
     
     @PostMapping("/Quest/Test/saveTest")
-    public int saveTest(@RequestBody  Map<String, Object> parm) {
+    public int saveTest(@RequestBody Map<String, Object> parm) {
         
         Test Test = ObjectMapper.convertValue(parm.get("Test"), Test.class);
         QuestParm QuestParm = ObjectMapper.convertValue(parm.get("QuestParm"), QuestParm.class);

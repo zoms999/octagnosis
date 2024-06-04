@@ -2,7 +2,10 @@ package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.mapper.ProdtMapper;
 import com.aptit.octagnosis.model.Prodt;
+import com.aptit.octagnosis.model.Test;
 import com.aptit.octagnosis.modelParm.ProdtParm;
+import com.aptit.octagnosis.modelParm.QuestParm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,18 +22,30 @@ public class ProdtController {
     @Autowired
     private ProdtMapper ProdtService;
     
-    @PostMapping("/Prodt/cretProdt")
-    public int cretProdt(@RequestBody Prodt prodt) {
+    @Autowired
+    private com.fasterxml.jackson.databind.ObjectMapper ObjectMapper;
+    
+    @PostMapping("/Prodt/saveProdt")
+    public int cretProdt(@RequestBody Map<String, Object> parm) {
+        Prodt Prodt = ObjectMapper.convertValue(parm.get("Prodt"), Prodt.class);
+        ProdtParm ProdtParm = ObjectMapper.convertValue(parm.get("ProdtParm"), ProdtParm.class);
         
-        return ProdtService.cretProdt(prodt);
+        if (ProdtParm.getProcType().equals("C")) {
+            return ProdtService.cretProdt(Prodt);
+        } else {
+            return ProdtService.editProdt(Prodt);
+        }
     }
     
-    @PostMapping("/Prodt/editProdt")
-    public int editProdt(@RequestBody Prodt prodt) {
-        return ProdtService.editProdt(prodt);
-        //return mngrId;
+    @PostMapping("/Prodt/delProdt")
+    public Map<String, Object> delProdt(@RequestBody Prodt prodt) {
+        Map<String, Object> Rtn = new HashMap<>();
+        
+        ProdtService.delProdt(prodt.getProdtId());
+        
+        return Rtn;
     }
-    
+
     @PostMapping("/Prodt/getProdt")
     public Map<String, Object> getProdt(@RequestBody Prodt prodt) {
         Map<String, Object> Rtn = new HashMap<>();

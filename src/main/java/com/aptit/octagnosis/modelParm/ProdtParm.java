@@ -6,5 +6,7 @@ import lombok.Data;
 @Data
 public class ProdtParm {
     private String prodtId;
-
+    private String procType;
+    
+    
 }

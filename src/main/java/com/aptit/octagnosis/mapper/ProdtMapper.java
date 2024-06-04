@@ -11,6 +11,8 @@ public interface ProdtMapper {
     int cretProdt(Prodt prodt);
     
     int editProdt(Prodt prodt);
+
+    int delProdt(long prodtId);
     
     Prodt getProdt(long prodtId);
     

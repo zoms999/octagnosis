@@ -56,7 +56,7 @@
 		  , TermsPersn = #{termsPersn}
 		  , TermsEvent = #{termsEvent}
 		  , UptId	= #{uptId}
-		  , UptDt	= #{uptDt}
+		  , UptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 		WHERE
 			AcuntId = #{acuntId}
 	</update>
