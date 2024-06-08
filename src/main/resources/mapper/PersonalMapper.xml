@@ -24,6 +24,7 @@
           AND (
                 (IFNULL(#{srchStr}, '') = '' OR PersnNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
                 OR (IFNULL(#{srchStr}, '') = '' OR Phone LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+                OR (IFNULL(#{srchStr}, '') = '' OR OrgId IN (SELECT OrgId FROM TB_Org WHERE CompyNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%')))
             )
     </select>
 
@@ -81,6 +82,7 @@
             AND (
                     (IFNULL(#{srchStr}, '') = '' OR PersnNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
                     OR (IFNULL(#{srchStr}, '') = '' OR Phone LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+                    OR (IFNULL(#{srchStr}, '') = '' OR OrgId IN (SELECT OrgId FROM TB_Org WHERE CompyNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%')))
             )
         ORDER BY
             PersnId DESC

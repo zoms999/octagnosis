@@ -92,19 +92,33 @@ public class MemberController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request) {
         String acuntId = request.get("acuntId");
         String pw = request.get("pw");
+        String orgId = request.get("orgId");
 
         Map<String, Object> response = new HashMap<>();
         try {
             Acunt acunt = memberService.findAcuntByIdAndPw(acuntId, pw);
             if (acunt != null) {
                 Personal persn = PersonalService.getPersonalById(acunt.getUserId());
-                response.put("success", true);
-                response.put("acunt", acunt);
-                response.put("persn", persn);
+                
+                if (orgId.equals("0")) {         // 기관 사용자
+                    response.put("success", true);
+                    response.put("acunt", acunt);
+                    response.put("persn", persn);
+                } else {
+                    if (String.valueOf(persn.getOrgId()).equals(orgId)){
+                        response.put("success", true);
+                        response.put("acunt", acunt);
+                        response.put("persn", persn);
+                    } else {
+                        response.put("success", false);
+                        response.put("message", "Invalid credentials Org");
+                    }
+                }
             } else {
                 response.put("success", false);
                 response.put("message", "Invalid credentials");
             }
+            
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", "An error occurred during login");

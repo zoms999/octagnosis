@@ -42,10 +42,12 @@ public class OrgTurnController {
 
     @PostMapping("/OrgTurn/chkTurnConnCd")
     public Map<String, Object> chkTurnConnCd(@RequestBody OrgTurnParm orgTurnParm) {
+
         Map<String, Object> Rtn = new HashMap<>();
         OrgTurn OrgTurn = OrgTurnService.getExistTurnConnCd(orgTurnParm);
-
+        
         Rtn.put("ExistYn", (OrgTurn == null ? "N" : "Y"));
+        Rtn.put("OrgTurn", OrgTurn);
         return Rtn;
     }
 

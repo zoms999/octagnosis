@@ -166,14 +166,12 @@
 			TB_OrgTurnPersn  A
 			INNER JOIN TB_Persn B ON A.PersnId = B.PersnId
 		WHERE 1=1
-			AND OrgId = #{orgId}
-			AND TurnId = #{turnId}
+			AND A.OrgId = #{orgId}
+			AND A.TurnId = #{turnId}
 		ORDER BY
 			A.PersnId DESC
 		LIMIT #{paging.startRow}, #{paging.rowCntInPage}
 	</select>
-
-
 
 	<!-- 기타 ********************************************************-->
 
