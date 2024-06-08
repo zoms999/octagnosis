@@ -8,13 +8,14 @@ import lombok.Data;
 @Data
 public class Product {
     @Id
-    private long prodId;
+    private long prodtId;
     private long price;
     private int dcRate;
-    private String prodNm;
-    private String prodCate;
-    private char useYn;
-    private String prodType;
+    private String prodtNm;
+    private String prodtCate;
+    private Integer usePerid;
+    private String useYn;
+    private String prodtType;
     private long insId;
     private String insDt;
     private Long uptId;

@@ -93,6 +93,7 @@ public class MemberController {
             if (acunt != null) {
                 response.put("success", true);
                 response.put("acunt", acunt);
+                response.put("personal", acunt.getPersonal());
             } else {
                 response.put("success", false);
                 response.put("message", "Invalid credentials");
