@@ -217,27 +217,27 @@
 
 	<!-- 삭제 ********************************************************-->
 
-	<update id="delTest" parameterType="com.aptit.octagnosis.model.QuestParm">
+	<update id="delTest" parameterType="com.aptit.octagnosis.modelParm.QuestParm">
 		DELETE FROM TB_Test
 		WHERE
 			TestId = #{testId}
 	</update>
 
-	<update id="delQuestPage" parameterType="com.aptit.octagnosis.model.QuestParm">
+	<update id="delQuestPage" parameterType="com.aptit.octagnosis.modelParm.QuestParm">
 		DELETE FROM TB_QuestPage
 		WHERE
 			TestId = #{testId}
 			AND QuestPageId = #{questPageId}
 	</update>
 
-	<update id="delQuestItem" parameterType="com.aptit.octagnosis.model.QuestParm">
+	<update id="delQuestItem" parameterType="com.aptit.octagnosis.modelParm.QuestParm">
 		DELETE FROM TB_QuestItem
 		WHERE
 			questId = #{questId}
 		  AND itemId = #{itemId}
 	</update>
 
-	<update id="delQuestImg" parameterType="com.aptit.octagnosis.model.QuestParm">
+	<update id="delQuestImg" parameterType="com.aptit.octagnosis.modelParm.QuestParm">
 		DELETE FROM TB_QuestImg
 		WHERE
 			questId = #{questId}
@@ -286,7 +286,7 @@
 	</select>
 
 
-	<select id="getQuestPageList" parameterType="map" resultType="com.aptit.octagnosis.model.QuestPageV1">
+	<select id="getQuestPageList" parameterType="map" resultType="com.aptit.octagnosis.modelview.QuestPageV1">
 		SELECT
 			A.testId
 			 , A.questPageId
@@ -318,7 +318,7 @@
 
 	</select>
 
-	<select id="getQuestList" parameterType="map" resultType="com.aptit.octagnosis.model.QuestV1">
+	<select id="getQuestList" parameterType="map" resultType="com.aptit.octagnosis.modelview.QuestV1">
 		SELECT
 			A.testId
 			 , A.questPageId

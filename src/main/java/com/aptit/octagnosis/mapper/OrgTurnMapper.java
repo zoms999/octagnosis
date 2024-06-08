@@ -1,7 +1,7 @@
 package com.aptit.octagnosis.mapper;
 
 import com.aptit.octagnosis.model.OrgTurn;
-import com.aptit.octagnosis.model.OrgTurnParm;
+import com.aptit.octagnosis.modelParm.OrgTurnParm;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

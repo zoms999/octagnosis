@@ -1,9 +1,8 @@
 package com.aptit.octagnosis.mapper;
 
 
-import com.aptit.octagnosis.model.AcuntLogParm;
 import com.aptit.octagnosis.model.MngrLog;
-import com.aptit.octagnosis.model.MngrLogParm;
+import com.aptit.octagnosis.modelParm.MngrLogParm;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

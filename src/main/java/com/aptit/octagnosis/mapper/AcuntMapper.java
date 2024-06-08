@@ -1,7 +1,7 @@
 package com.aptit.octagnosis.mapper;
 
 import com.aptit.octagnosis.model.Acunt;
-import com.aptit.octagnosis.model.AcuntParm;
+import com.aptit.octagnosis.modelParm.AcuntParm;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

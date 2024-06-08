@@ -56,12 +56,12 @@
 		  , TermsPersn = #{termsPersn}
 		  , TermsEvent = #{termsEvent}
 		  , UptId	= #{uptId}
-		  , UptDt	= #{uptDt}
+		  , UptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 		WHERE
 			AcuntId = #{acuntId}
 	</update>
 
-	<update id="editExpirDt" parameterType="com.aptit.octagnosis.model.AcuntParm">
+	<update id="editExpirDt" parameterType="com.aptit.octagnosis.modelParm.AcuntParm">
 		UPDATE TB_Acunt SET
 		  ExpirDt = #{expirDt}
 		  , UptId = #{userId}
@@ -70,7 +70,7 @@
 			AcuntId = #{acuntId}
 	</update>
 
-	<update id="editPw" parameterType="com.aptit.octagnosis.model.AcuntParm">
+	<update id="editPw" parameterType="com.aptit.octagnosis.modelParm.AcuntParm">
 		UPDATE TB_Acunt SET
 			Pw = #{pw}
 			, UptId = #{userId}

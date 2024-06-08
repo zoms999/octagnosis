@@ -1,6 +1,6 @@
 package com.aptit.octagnosis.req;
 
-import com.aptit.octagnosis.model.Paging;
+import com.aptit.octagnosis.modelParm.Paging;
 import lombok.Data;
 
 @Data

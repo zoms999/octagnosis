@@ -1,5 +1,6 @@
-package com.aptit.octagnosis.model;
+package com.aptit.octagnosis.modelParm;
 
+import com.aptit.octagnosis.model.AcuntLog;
 import lombok.Data;
 
 @Data

@@ -2,7 +2,7 @@ package com.aptit.octagnosis.mapper;
 
 
 import com.aptit.octagnosis.model.AcuntLoginLog;
-import com.aptit.octagnosis.model.AcuntLoginLogParm;
+import com.aptit.octagnosis.modelParm.AcuntLoginLogParm;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

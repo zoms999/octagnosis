@@ -1,4 +1,4 @@
-package com.aptit.octagnosis.model;
+package com.aptit.octagnosis.modelParm;
 
 import lombok.Data;
 

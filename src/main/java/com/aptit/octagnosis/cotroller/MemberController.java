@@ -3,6 +3,7 @@ package com.aptit.octagnosis.cotroller;
 import com.aptit.octagnosis.common.EmailSender;
 import com.aptit.octagnosis.mapper.AcuntMapper;
 import com.aptit.octagnosis.mapper.MemberMapper;
+import com.aptit.octagnosis.mapper.PersonalMapper;
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Personal;
 import com.aptit.octagnosis.model.Product;
@@ -27,6 +28,8 @@ public class MemberController {
 
     @Autowired
     private AcuntMapper AcuntService;
+    @Autowired
+    private PersonalMapper PersonalService;
 
     @PostMapping("/member/check-id")
     public Map<String, Boolean> checkIdDuplicate(@RequestBody Map<String, String> request) {
@@ -91,9 +94,10 @@ public class MemberController {
         try {
             Acunt acunt = memberService.findAcuntByIdAndPw(acuntId, pw);
             if (acunt != null) {
+                Personal persn = PersonalService.getPersonalById(acunt.getUserId());
                 response.put("success", true);
                 response.put("acunt", acunt);
-                response.put("personal", acunt.getPersonal());
+                response.put("persn", persn);
             } else {
                 response.put("success", false);
                 response.put("message", "Invalid credentials");

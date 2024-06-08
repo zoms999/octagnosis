@@ -2,6 +2,9 @@ package com.aptit.octagnosis.mapper;
 
 
 import com.aptit.octagnosis.model.*;
+import com.aptit.octagnosis.modelParm.QuestParm;
+import com.aptit.octagnosis.modelview.QuestPageV1;
+import com.aptit.octagnosis.modelview.QuestV1;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
