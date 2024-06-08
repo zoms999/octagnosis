@@ -5,6 +5,7 @@ import com.aptit.octagnosis.mapper.AcuntMapper;
 import com.aptit.octagnosis.mapper.MemberMapper;
 import com.aptit.octagnosis.mapper.PersonalMapper;
 import com.aptit.octagnosis.model.Acunt;
+import com.aptit.octagnosis.model.Org;
 import com.aptit.octagnosis.model.Personal;
 import com.aptit.octagnosis.model.Product;
 import com.aptit.octagnosis.req.RegistrationRequest;
@@ -43,12 +44,13 @@ public class MemberController {
     @PostMapping("/member/validate-code")
     public ResponseEntity<Map<String, Object>> validateOrgCode(@RequestBody Map<String, String> request) {
         String urlCd = request.get("urlCd");
-        String compyNm = memberService.getCompyNmByUrlCd(urlCd);
+        Org org = memberService.getCompyNmByUrlCd(urlCd);
 
         Map<String, Object> response = new HashMap<>();
-        if (compyNm != null) {
+        if (org  != null) {
             response.put("exists", true);
-            response.put("compyNm", compyNm);
+            response.put("orgId", org.getOrgId());
+            response.put("compyNm", org.getCompyNm());
         } else {
             response.put("exists", false);
         }
@@ -62,6 +64,7 @@ public class MemberController {
         Date currentDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String formattedDate = sdf.format(currentDate);
+        
         try {
             memberService.registerPersonal(personal);
             acunt.setRegDt(formattedDate.toString());

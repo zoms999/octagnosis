@@ -31,6 +31,7 @@ public class Personal {
     private String job;
     private String jobNm;
     private String jobDuty;
+    private long orgId;
     private Long insId;
     private String insDt;
     private Long uptId;

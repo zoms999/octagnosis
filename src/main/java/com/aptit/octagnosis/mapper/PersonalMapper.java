@@ -16,7 +16,7 @@ public interface PersonalMapper {
     int getPersonalCount2(Map<String, Object> params);
 
     int getPersonalCount(PersonalRequest request);
-    List<PersonalAcuntView> getPersonalList(PersonalRequest request);
+    List<Map<String, String>> getPersonalList(PersonalRequest request);
 
     Personal getPersonalById(Long persnId);
 

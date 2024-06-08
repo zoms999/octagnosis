@@ -1,6 +1,7 @@
 package com.aptit.octagnosis.mapper;
 
 import com.aptit.octagnosis.model.Acunt;
+import com.aptit.octagnosis.model.Org;
 import com.aptit.octagnosis.model.Personal;
 import com.aptit.octagnosis.model.Product;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,8 +18,8 @@ public interface MemberMapper {
     void registerPersonal(Personal personal);
 
     //유효성 체크
-    @Select("SELECT CompyNm FROM TB_Org WHERE UrlCd = #{urlCd}")
-    String getCompyNmByUrlCd(String urlCd);
+    @Select("SELECT OrgId, CompyNm FROM TB_Org WHERE UrlCd = #{urlCd}")
+    Org getCompyNmByUrlCd(String urlCd);
 
     @Select("SELECT * FROM TB_Acunt WHERE AcuntId = #{acuntId} AND Pw = #{pw}")
     Acunt findAcuntByIdAndPw(String acuntId, String pw);

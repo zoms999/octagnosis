@@ -95,29 +95,7 @@ public class OrgController {
 
         Map<String, Object> Rtn = new HashMap<>();
         Rtn.put("OrgTotCnt", OrgService.getOrgListTotCnt(orgParm));
-
-        /*
-        List<Map<String, String>> OrgList = OrgService.GetOrgList(orgParm);
-        
-        OrgTurnParm OrgTurnParm = new OrgTurnParm();
-        for (Map<String,  String> Item :OrgList) {
-            String orgId = Item.get("OrgId").toString();
-            Long Temp = Long.parseLong(orgId);
-            OrgTurnParm.setOrgId(Temp);
-            OrgTurn OrgTurn = OrgTurnService.GetOrgMaxTurn(OrgTurnParm);
-
-            Item.put("TurnId",  OrgTurn.getTurnId().toString());
-            Item.put("InsDt",  OrgTurn.getInsDt());
-            Item.put("ExpireDt",  OrgTurn.getTurnId().toString());
-            Item.put("TurnReqCnt",  OrgTurn.getTurnReqCnt().toString());
-            Item.put("TurnUseCnt",  OrgTurn.getTurnUseCnt().toString());
-        }
-        */
-
         Rtn.put("OrgList", OrgService.getOrgList(orgParm));
-
-        //return new ResponseEntity<>(Rtn, Lib.getHeader(), HttpStatus.OK);
-
         return Rtn;
     }
 

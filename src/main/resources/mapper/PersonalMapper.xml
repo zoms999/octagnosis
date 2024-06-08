@@ -16,65 +16,71 @@
 
     <select id="getPersonalCount" parameterType="map" resultType="int">
         SELECT COUNT(*)
-        FROM TB_Persn B
-        INNER JOIN TB_Acunt A ON A.UserId = B.PersnId
+        FROM
+            TB_Persn B
+            INNER JOIN TB_Acunt A ON A.UserId = B.PersnId
         WHERE 1=1
+          AND A.UserType = 'C00102'
           AND (
                 (IFNULL(#{srchStr}, '') = '' OR PersnNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
                 OR (IFNULL(#{srchStr}, '') = '' OR Phone LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
             )
     </select>
 
-    <select id="getPersonalList" parameterType="map" resultType="PersonalAcuntView">
+    <select id="getPersonalList" parameterType="map" resultType="hashmap">
         SELECT
-            A.AcuntId,
-            A.UserType,
-            A.UserId,
-            A.Pw,
-            A.UseYn,
-            A.RegDt,
-            A.LeaveDt,
-            A.ExpirDt,
-            A.TermsUse,
-            A.TermsPersn,
-            A.TermsEvent,
-            A.InsId,
-            A.InsDt,
-            A.UptId,
-            A.UptDt,
-            B.PersnId,
-            B.PersnNm,
-            B.BirthDate,
-            B.BirthYear,
-            B.BirthMonth,
-            B.BirthDay,
-            B.Sex,
-            B.Phone,
-            B.Tel,
-            B.Email,
-            B.Zip,
-            B.AddrStret,
-            B.AddrLotNum,
-            B.Addr2,
-            B.Addr3,
-            B.Educt,
-            B.EductStus,
-            B.Job,
-            B.ScholNm,
-            B.ScholMajor,
-            B.ScholGrade,
-            B.JobNm,
-            B.JobDuty,
-            B.InsId AS PersnInsId,
-            B.InsDt AS PersnInsDt,
-            B.UptId AS PersnUptId,
-            B.UptDt AS PersnUptDt
-        FROM TB_Persn B
-        INNER JOIN TB_Acunt A ON A.UserId = B.PersnId
+            A.acuntId,
+            A.userType,
+            A.userId,
+            A.pw,
+            A.useYn,
+            A.regDt,
+            A.leaveDt,
+            A.expirDt,
+            A.termsUse,
+            A.termsPersn,
+            A.termsEvent,
+            A.insId,
+            A.insDt,
+            A.uptId,
+            A.uptDt,
+            B.persnId,
+            B.persnNm,
+            B.birthDate,
+            B.birthYear,
+            B.birthMonth,
+            B.birthDay,
+            B.sex,
+            B.phone,
+            B.tel,
+            B.email,
+            B.zip,
+            B.addrStret,
+            B.addrLotNum,
+            B.addr2,
+            B.addr3,
+            B.educt,
+            B.eductStus,
+            B.job,
+            B.scholNm,
+            B.scholMajor,
+            B.scholGrade,
+            B.jobNm,
+            B.jobDuty,
+            B.InsId AS persnInsId,
+            B.InsDt AS persnInsDt,
+            B.UptId AS persnUptId,
+            B.UptDt AS persnUptDt,
+            B.orgId,
+            (SELECT CompyNm FROM TB_Org WHERE OrgId = IFNULL(B.OrgId, 0)) AS compyNm
+        FROM
+            TB_Persn B
+            INNER JOIN TB_Acunt A ON A.UserId = B.PersnId
         WHERE 1=1
-          AND (
-                (IFNULL(#{srchStr}, '') = '' OR PersnNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
-                OR (IFNULL(#{srchStr}, '') = '' OR Phone LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+            AND A.UserType = 'C00102'
+            AND (
+                    (IFNULL(#{srchStr}, '') = '' OR PersnNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+                    OR (IFNULL(#{srchStr}, '') = '' OR Phone LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
             )
         ORDER BY
             PersnId DESC
@@ -181,7 +187,7 @@
             B.UptDt AS PersnUptDt
         FROM
             TB_Acunt A
-                INNER JOIN TB_Persn B ON A.UserId = B.PersnId
+            INNER JOIN TB_Persn B ON A.UserId = B.PersnId
         WHERE
             A.UserType = 'C00102' AND B.PersnId = #{PersnId}
     </select>
