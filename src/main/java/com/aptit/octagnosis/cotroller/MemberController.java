@@ -26,7 +26,7 @@ public class MemberController {
 
     @Autowired
     private MemberMapper memberService;
-    
+
     @Autowired
     private AcuntMapper AcuntService;
     @Autowired

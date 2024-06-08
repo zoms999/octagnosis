@@ -1,7 +1,6 @@
 package com.aptit.octagnosis.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -23,4 +22,8 @@ public class Acunt {
     private String insDt;
     private Long uptId;
     private String uptDt;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", referencedColumnName = "persnId", insertable = false, updatable = false)
+    private Personal personal;
 }
