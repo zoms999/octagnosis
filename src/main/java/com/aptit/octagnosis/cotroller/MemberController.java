@@ -100,23 +100,30 @@ public class MemberController {
             if (acunt != null) {
                 Personal persn = PersonalService.getPersonalById(acunt.getUserId());
                 
-                if (orgId.equals("0")) {         // 기관 사용자
-                    response.put("success", true);
-                    response.put("acunt", acunt);
-                    response.put("persn", persn);
-                } else {
-                    if (String.valueOf(persn.getOrgId()).equals(orgId)){
+                String PersnOrgId = String.valueOf(persn.getOrgId());
+                
+                if (!PersnOrgId.equals("0") && orgId.equals("0")) {
+                    response.put("success", false);
+                    response.put("errCode", "100");
+                }  else {
+                    if (orgId.equals("0")) {         // 기관 사용자
                         response.put("success", true);
                         response.put("acunt", acunt);
                         response.put("persn", persn);
                     } else {
-                        response.put("success", false);
-                        response.put("message", "Invalid credentials Org");
+                        if (PersnOrgId.equals(orgId)){
+                            response.put("success", true);
+                            response.put("acunt", acunt);
+                            response.put("persn", persn);
+                        } else {
+                            response.put("success", false);
+                            response.put("errCode", "200");
+                        }
                     }
                 }
             } else {
                 response.put("success", false);
-                response.put("message", "Invalid credentials");
+                response.put("errCode", "300");
             }
             
         } catch (Exception e) {

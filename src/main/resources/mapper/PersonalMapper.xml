@@ -91,9 +91,35 @@
 
 
     <select id="getPersonalById" resultType="Personal">
-        SELECT *
-        FROM TB_Persn
-        WHERE PersnId = #{persnId}
+        SELECT
+            persnId
+            , persnNm
+            , birthDate
+            , birthYear
+            , birthMonth
+            , birthDay
+            , sex
+            , phone
+            , tel
+            , email
+            , zip
+            , addrStret
+            , addrLotNum
+            , addr2
+            , addr3
+            , educt
+            , eductStus
+            , scholNm
+            , scholMajor
+            , scholGrade
+            , job
+            , jobNm
+            , jobDuty
+            , IFNULL(orgId, 0) AS orgId
+        FROM
+            TB_Persn
+        WHERE
+            PersnId = #{persnId}
     </select>
 
 
