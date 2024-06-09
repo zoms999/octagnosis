@@ -5,7 +5,7 @@
 
     <insert id="savePayment" parameterType="com.aptit.octagnosis.model.ProdtPay" useGeneratedKeys="true" keyProperty="payId">
         INSERT INTO TB_ProdtPay (DutyYn, StudyYn, SubjYn, ImgYn, AcuntId, ProdId, ProdType, Price, PayDt, OrgId, TurnId, PayYn, InsId, InsDt, UptId, UptDt)
-        VALUES (#{dutyYn}, #{studyYn}, #{subjYn}, #{imgYn}, #{acuntId}, #{prodId}, #{prodType}, #{price}, #{payDt}, #{orgId}, #{turnId}, #{payYn}, #{insId}, #{insDt}, #{uptId}, #{uptDt})
+        VALUES (#{dutyYn}, #{studyYn}, #{subjYn}, #{imgYn}, #{acuntId}, #{prodId}, #{prodType}, #{price}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{orgId}, #{turnId}, #{payYn}, #{insId}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{uptId}, #{uptDt})
         <selectKey keyProperty="payId" resultType="java.lang.Long" order="AFTER">
             SELECT LAST_INSERT_ID() AS payId
         </selectKey>

@@ -13,7 +13,7 @@ public class ProdtPay {
     private String studyYn;
     private String subjYn;
     private String imgYn;
-    private Long acuntId;
+    private String acuntId;
     private Long prodId;
     private String prodType;
     private Long price;
