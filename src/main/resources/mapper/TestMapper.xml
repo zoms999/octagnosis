@@ -20,13 +20,13 @@
 			, A.TurnReqCnt
 			, A.TurnUseCnt
 			, A.ValidEndDt
-			, B.RegDt
-			, B.StartDt
-			, B.EndDt
+			, IFNULL(B.RegDt, '') 	AS RegDt
+			, IFNULL(B.StartDt, '') AS StartDt
+			, IFNULL(B.EndDt, '') 	AS EndDt
 			, (SELECT ProdtNm FROM TB_Prodt WHERE ProdtCate = 'C01101' LIMIT 1 ) AS ProdtNm
-			, C.StartDt 	AS AnsPrgrsStartDt
-			, C.EndDt 		AS AnsPrgrsEndDt
-			, C.DoneYn 		AS AnsPrgrsDoneYn
+			, IFNULL(C.StartDt, '') 	AS AnsPrgrsStartDt
+			, IFNULL(C.EndDt, '') 		AS AnsPrgrsEndDt
+			, IFNULL(C.DoneYn, 'N') 	AS AnsPrgrsDoneYn
 		FROM
 			TB_OrgTurn  A
 			LEFT OUTER JOIN (
