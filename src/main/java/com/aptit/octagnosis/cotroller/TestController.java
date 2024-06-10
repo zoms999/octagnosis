@@ -1,8 +1,14 @@
 package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.common.CommonLib;
+import com.aptit.octagnosis.mapper.AcuntMapper;
+import com.aptit.octagnosis.mapper.PersonalMapper;
 import com.aptit.octagnosis.mapper.QuestMapper;
+import com.aptit.octagnosis.mapper.TestMapper;
+import com.aptit.octagnosis.model.Acunt;
+import com.aptit.octagnosis.model.Personal;
 import com.aptit.octagnosis.modelParm.QuestParm;
+import com.aptit.octagnosis.modelParm.TestParm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +23,16 @@ public class TestController {
 
     @Autowired
     private QuestMapper QuestService;
-
+    
+    @Autowired
+    private TestMapper TestService;
+    
+    @Autowired
+    private AcuntMapper AcuntService;
+    
+    @Autowired
+    private PersonalMapper PersnService;
+    
     @Autowired
     private CommonLib CommonLib;
     @Autowired
@@ -42,6 +57,25 @@ public class TestController {
         
         return Rtn;
     }
+    
+    @PostMapping("/Test/getTestList")
+    public Map<String, Object> getTestList(@RequestBody TestParm parm) {
+        Map<String, Object> Rtn = new HashMap<>();
+
+        Acunt acunt = AcuntService.getAcunt(parm.getAcuntId());
+        Personal persn =  PersnService.getPersonalById(acunt.getUserId());
+        
+        parm.setPersnId(persn.getPersnId());
+        
+        if (parm.getOrgId() == 0) {     // 기관 사용자 검사 목록
+            Rtn.put("TestList", TestService.getTestList(parm));
+        } else {            // 개인 사용자 검사 목록
+            Rtn.put("TestList", TestService.getTestListForTurn(parm));
+        }
+        return Rtn;
+    }
+    
+    
     
     
     

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.TestMapper">
+
+
+	<!-- 등록 ********************************************************-->
+
+	<!-- 수정 ********************************************************-->
+
+
+	<!-- 삭제 ********************************************************-->
+
+
+	<!-- 조회 ********************************************************-->
+
+	<select id="getTestListForTurn" parameterType="map" resultType="hashmap">
+		SELECT
+			A.TurnId
+			, A.TurnNum
+			, A.TurnReqCnt
+			, A.TurnUseCnt
+			, A.ValidEndDt
+			, B.RegDt
+			, B.StartDt
+			, B.EndDt
+			, (SELECT ProdtNm FROM TB_Prodt WHERE ProdtCate = 'C01101' LIMIT 1 ) AS ProdtNm
+			, C.StartDt 	AS AnsPrgrsStartDt
+			, C.EndDt 		AS AnsPrgrsEndDt
+			, C.DoneYn 		AS AnsPrgrsDoneYn
+		FROM
+			TB_OrgTurn  A
+			LEFT OUTER JOIN (
+				SELECT
+					OrgId
+					, TurnId
+					, RegDt
+					, StartDt
+					, EndDt
+				FROM
+					TB_OrgTurnPersn
+				WHERE
+					OrgId = #{orgId}
+					AND PersnId = #{persnId}
+			) B ON A.OrgId = B.OrgId AND A.TurnId = B.TurnId
+			LEFT OUTER JOIN (
+				SELECT
+					TurnId
+					, StartDt
+					, EndDt
+					, DoneYn
+				FROM
+					TB_AnsPrgrs
+				WHERE
+					AcuntId = #{acuntId}
+			) C ON A.TurnId = C.TurnId
+		WHERE
+			A.OrgId = #{orgId}
+			AND A.UseYn = 'Y'
+			AND A.TurnConnCd = #{turnConnCd}
+	</select>
+
+
+	<!-- 기타 ********************************************************-->
+
+</mapper>

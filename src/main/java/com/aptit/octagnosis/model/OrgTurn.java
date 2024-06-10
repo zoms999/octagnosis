@@ -16,6 +16,7 @@ public class OrgTurn {
     private Long turnReqCnt;
     private Long turnUseCnt;
     private String turnConnCd;
+    private String validEndDt;
     private Long insId;
     private String insDt;
     private Long uptId;

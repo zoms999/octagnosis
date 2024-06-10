@@ -19,6 +19,7 @@
 			, TurnReqCnt
 			, TurnUseCnt
 			, TurnConnCd
+			, ValidEndDt
 			, InsId
 			, InsDt
 			, UptId
@@ -31,6 +32,7 @@
 			, #{turnReqCnt}
 			, #{turnUseCnt}
 			, #{turnConnCd}
+			, #{validEndDt}
 			, #{insId}
 			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 			, #{uptId}
@@ -78,6 +80,7 @@
 			, TurnReqCnt
 			, TurnUseCnt
 			, TurnConnCd
+			, ValidEndDt
 			, InsId
 			, InsDt
 			, UptId
@@ -98,6 +101,7 @@
 			, TurnReqCnt
 			, TurnUseCnt
 			, TurnConnCd
+			, ValidEndDt
 			, InsDt
 		FROM
 			TB_OrgTurn
@@ -117,6 +121,7 @@
 			, TurnReqCnt
 			, TurnUseCnt
 			, TurnConnCd
+			, ValidEndDt
 			, InsId
 			, InsDt
 			, UptId
@@ -136,6 +141,7 @@
 			, TurnReqCnt
 			, TurnUseCnt
 			, TurnConnCd
+			, ValidEndDt
 			, insDt
 		FROM
 			TB_OrgTurn
