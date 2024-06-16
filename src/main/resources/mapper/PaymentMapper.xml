@@ -11,4 +11,18 @@
         </selectKey>
     </insert>
 
+
+
+    <select id="findAllPayments" resultType="com.aptit.octagnosis.model.ProdtPayDetail">
+        SELECT
+            p.PayId, p.DutyYn, p.StudyYn, p.SubjYn, p.ImgYn, p.AcuntId, p.prodType,
+            c.CdNm AS prodTypeName, s.PersnNm,
+            p.Price, p.PayDt, p.OrgId, p.TurnId, p.PayYn,
+            p.InsId, p.InsDt, p.UptId, p.UptDt
+        FROM TB_ProdtPay p
+            INNER JOIN TB_Cd c ON p.ProdType = c.Cd
+            INNER JOIN TB_Acunt a ON p.AcuntId = a.AcuntId
+            INNER JOIN TB_Persn s ON a.UserId = s.PersnId
+        WHERE PayYn = 'Y'
+    </select>
 </mapper>
