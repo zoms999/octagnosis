@@ -24,9 +24,11 @@
 			, IFNULL(B.StartDt, '') AS StartDt
 			, IFNULL(B.EndDt, '') 	AS EndDt
 			, (SELECT ProdtNm FROM TB_Prodt WHERE ProdtCate = 'C01101' LIMIT 1 ) AS ProdtNm
-			, IFNULL(C.StartDt, '') 	AS AnsPrgrsStartDt
-			, IFNULL(C.EndDt, '') 		AS AnsPrgrsEndDt
-			, IFNULL(C.DoneYn, 'N') 	AS AnsPrgrsDoneYn
+			, IFNULL(C.TestId, '0') 		AS TestId
+			, IFNULL(C.QuestPageId, '0') 	AS QuestPageId
+			, IFNULL(C.StartDt, '') 		AS AnsPrgrsStartDt
+			, IFNULL(C.EndDt, '') 			AS AnsPrgrsEndDt
+			, IFNULL(C.DoneYn, 'N') 		AS AnsPrgrsDoneYn
 		FROM
 			TB_OrgTurn  A
 			LEFT OUTER JOIN (
@@ -45,6 +47,8 @@
 			LEFT OUTER JOIN (
 				SELECT
 					TurnId
+					, TestId
+					, QuestPageId
 					, StartDt
 					, EndDt
 					, DoneYn
