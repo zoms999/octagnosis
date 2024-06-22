@@ -86,7 +86,7 @@
 			TB_Prodt pt,
 			TB_Acunt ac
 		WHERE
-			ac.AcuntId = 'boms'
+			ac.AcuntId = #{acuntId}
 		  AND pp.AcuntId = ac.AcuntId
 		  AND pt.ProdtId = pp.ProdId;
 
