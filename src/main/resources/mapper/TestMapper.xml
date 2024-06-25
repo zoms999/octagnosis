@@ -100,6 +100,33 @@
 
 
 
+	<select id="getTestList" parameterType="map" resultType="hashmap">
+		SELECT
+			ROW_NUMBER() OVER (
+	ORDER BY pp.PayId DESC) AS num,
+				pp.PayId AS PayId,
+			pp.Price AS Price,
+			pp.PayYn AS PayYn,
+			pt.ProdtNm AS ProdtNm,
+			IFNULL(ap.AnsPrgrsId, '') AS AnsPrgrsId,
+			IFNULL(ap.StartDt, '') AS AnsPrgrsStartDt,
+			IFNULL(ap.EndDt, '') AS AnsPrgrsEndDt,
+			IFNULL(ap.DoneYn, 'N') AS AnsPrgrsDoneYn,
+			IFNULL(ap.TestId, '0') AS TestId,
+			STR_TO_DATE(ac.ExpirDt, '%Y%m%d') AS ExpirDt
+		FROM
+			TB_ProdtPay pp
+				LEFT OUTER JOIN
+			TB_AnsPrgrs ap ON
+				ap.PayId = pp.PayId,
+			TB_Prodt pt,
+			TB_Acunt ac
+		WHERE
+			ac.AcuntId = #{acuntId}
+		  AND pp.AcuntId = ac.AcuntId
+		  AND pt.ProdtId = pp.ProdId;
+
+	</select>
 	<!-- 기타 ********************************************************-->
 
 </mapper>

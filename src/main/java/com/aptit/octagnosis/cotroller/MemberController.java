@@ -7,7 +7,6 @@ import com.aptit.octagnosis.mapper.PersonalMapper;
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Org;
 import com.aptit.octagnosis.model.Personal;
-import com.aptit.octagnosis.model.Product;
 import com.aptit.octagnosis.req.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -188,8 +186,34 @@ public class MemberController {
         return "Temp123!"; // 임시로 고정된 값 반환
     }
 
-    @GetMapping("/products")
+ /*   @GetMapping("/products")
     public List<Product> getProducts() {
+
         return memberService.getAllProducts();
+    }
+*/
+
+    @GetMapping("/products")
+    public Map<String, Object> getProducts() {
+        Map<String, Object> Rtn = new HashMap<>();
+
+        Rtn.put("ProductList", memberService.getAllProducts());
+
+        return Rtn;
+    }
+
+    @GetMapping("/products/{productId}/subproducts")
+    public Map<String, Object> getSubProducts(@PathVariable Long productId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            //List<Map<String, String>> subProducts = memberService.getSubProducts(productId);
+            response.put("success", true);
+            response.put("subProducts",  memberService.getSubProducts(productId));
+            return response;
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Failed to fetch sub-products");
+            return response;
+        }
     }
 }

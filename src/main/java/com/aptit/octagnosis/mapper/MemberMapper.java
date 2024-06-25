@@ -3,10 +3,10 @@ package com.aptit.octagnosis.mapper;
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Org;
 import com.aptit.octagnosis.model.Personal;
-import com.aptit.octagnosis.model.Product;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MemberMapper {
@@ -82,5 +82,11 @@ public interface MemberMapper {
     String findPasswordByEmailAndUserId(@Param("userId") String userId, @Param("email") String email);
 
     @Select("SELECT ProdtId, Price, DcRate, ProdtNm, ProdtCate, UsePerid, UseYn, ProdtType, InsId, InsDt, UptId, UptDt FROM TB_Prodt")
-    List<Product> getAllProducts();
+    List<Map<String, String>> getAllProducts();
+
+
+    @Select("SELECT ProdtSubId, ProdtId, Price, DcRate, ProdtNm, UseYn, ProdtType, InsId, InsDt, UptId, UptDt " +
+            "FROM TB_ProdtSub " +
+            "WHERE ProdtId = #{productId}")
+    List<Map<String, String>> getSubProducts(@Param("productId") Long productId);
 }
