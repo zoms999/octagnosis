@@ -7,6 +7,8 @@ import com.aptit.octagnosis.mapper.QuestMapper;
 import com.aptit.octagnosis.mapper.TestMapper;
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Personal;
+import com.aptit.octagnosis.model.ProdtTest;
+import com.aptit.octagnosis.model.QuestPage;
 import com.aptit.octagnosis.modelParm.QuestParm;
 import com.aptit.octagnosis.modelParm.TestParm;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -67,11 +69,49 @@ public class TestController {
         
         parm.setPersnId(persn.getPersnId());
         
-        if (parm.getOrgId() == 0) {     // 기관 사용자 검사 목록
+        if (parm.getOrgId() == 0) {     // 개인 사용자 검사 목록
             Rtn.put("TestList", TestService.getTestList(parm));
-        } else {            // 개인 사용자 검사 목록
+        } else {                        // 기관 사용자 검사 목록
             Rtn.put("TestList", TestService.getTestListForTurn(parm));
         }
+        return Rtn;
+    }
+    
+    
+    // 다음 검사,검사지 조회
+    @PostMapping("/Test/getNextTest")
+    public Map<String, Object> getNextTest(@RequestBody TestParm parm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        
+        long prodtId = parm.getTestId();
+        long testId = parm.getTestId();
+        long questPageId = parm.getQuestPageId();
+        
+        if (testId == 0) {      // 검사 시작
+            // 다음검사 조회
+            ProdtTest prodtTest = TestService.getNextTest(parm);
+            
+            testId = prodtTest.getTestId();
+            questPageId = 0;
+        } else {
+            // 다음검사지 조회
+            QuestPage questPage = TestService.getNextQuestPage(parm);
+            
+            // 다음검사지가 없으면(다음검사로 넘어감.)
+            if (questPage == null) {
+                ProdtTest prodtTest = TestService.getNextTest(parm);
+                
+                testId = prodtTest.getTestId();
+                questPageId = 0;
+            } else {
+                questPageId = questPage.getQuestPageId();
+            }
+        }
+        
+        //parm.setPersnId(persn.getPersnId());
+        
+        Rtn.put("testId", testId);
+        Rtn.put("questPageId", questPageId);
         return Rtn;
     }
     

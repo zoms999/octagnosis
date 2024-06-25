@@ -13,6 +13,7 @@
 
 	<!-- 조회 ********************************************************-->
 
+	<!-- 기관 회차 검사 목록 -->
 	<select id="getTestListForTurn" parameterType="map" resultType="hashmap">
 		SELECT
 			A.TurnId
@@ -20,6 +21,7 @@
 			, A.TurnReqCnt
 			, A.TurnUseCnt
 			, A.ValidEndDt
+			, A.ProdtId
 			, IFNULL(B.RegDt, '') 	AS RegDt
 			, IFNULL(B.StartDt, '') AS StartDt
 			, IFNULL(B.EndDt, '') 	AS EndDt
@@ -62,6 +64,40 @@
 			AND A.UseYn = 'Y'
 			AND A.TurnConnCd = #{turnConnCd}
 	</select>
+
+	<!-- 개인 상품구매 검사 목록 -->
+
+
+	<!-- 다음 검사지 -->
+	<select id="getNextTest" parameterType="map" resultType="ProdtTest">
+		SELECT
+			TestId
+			, Seq
+		FROM
+			TB_ProdtTest
+		WHERE
+			ProdtId = #{prodtId}
+			AND Seq > IFNULL((SELECT Seq FROM TB_ProdtTest WHERE ProdtId = #{prodtId} AND TestId = #{testId}), 0)
+		ORDER BY
+			Seq
+		LIMIT 1
+	</select>
+
+	<!-- 다음 검사지 -->
+	<select id="getNextQuestPage" parameterType="map" resultType="QuestPage">
+		SELECT
+			TestId
+			 , QuestPageId
+			 , QuestPageSeq
+		FROM TB_QuestPage
+		WHERE
+			TestId = #{testId}
+			AND QuestPageSeq > IFNULL((SELECT QuestPageSeq FROM TB_QuestPage WHERE TestId = #{testId} AND QuestPageId = #{questPageId}), 0)
+		ORDER BY
+			QuestPageSeq
+		LIMIT 1
+	</select>
+
 
 
 	<!-- 기타 ********************************************************-->

@@ -15,6 +15,7 @@
 			OrgId
 			, TurnId
 			, UseYn
+			, ProdtId
 			, TurnNum
 			, TurnReqCnt
 			, TurnUseCnt
@@ -28,6 +29,7 @@
 			#{orgId}
 			, nextval(OrgTurn_TurnId)
 			, #{useYn}
+			, #{prodtId}
 			, #{turnNum}
 			, #{turnReqCnt}
 			, #{turnUseCnt}

@@ -18,4 +18,7 @@ public interface TestMapper {
     List<Map<String, String>> getTestList(TestParm parm);
     
     List<Map<String, String>> getTestListForTurn(TestParm parmW);
+    
+    ProdtTest getNextTest(TestParm parm);
+    QuestPage getNextQuestPage(TestParm parm);
 }

@@ -12,12 +12,10 @@ public class TestParm {
     private long oldQuestPageId;
     private long questId;
     private long itemId;
-    private long imgId;
-    
+    private long prodtId;
     
     private String acuntId;
     private long orgId;
     private long persnId;
     private String turnConnCd;
-    
 }
