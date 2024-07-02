@@ -5,13 +5,138 @@
 
 	<!-- 등록 ********************************************************-->
 
+	<insert id="cretAnsPrgrs" parameterType="com.aptit.octagnosis.model.AnsPrgrs">
+		INSERT INTO TB_AnsPrgrs (
+			AnsPrgrsId
+			, TestId
+			, QuestPageId
+			, StartDt
+			, EndDt
+			, DoneYn
+			, AcuntId
+			, ProdtId
+			, TurnId
+			, PayId
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		) VALUES (
+			#{ansPrgrsId}
+			, #{testId}
+			, #{questPageId}
+			, #{startDt}
+			, #{endDt}
+			, #{doneYn}
+			, #{acuntId}
+			, #{prodtId}
+			, #{turnId}
+			, #{payId}
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, #{uptId}
+			, #{uptDt}
+		)
+	</insert>
+
+	<insert id="cretAns" parameterType="com.aptit.octagnosis.model.Ans">
+		INSERT INTO TB_Ans (
+			AnsPrgrsId
+			, QuestId
+			, Val1
+			, Val2
+			, Weigt
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		) VALUES (
+			#{ansPrgrsId}
+			, #{questId}
+			, #{val1}
+			, #{val2}
+			, #{weigt}
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, #{uptId}
+			, #{uptDt}
+		)
+	</insert>
+
+	<insert id="cretOrgTurnPersn" parameterType="com.aptit.octagnosis.model.OrgTurnPersn">
+		INSERT INTO TB_OrgTurnPersn (
+			OrgId
+			, TurnId
+			, PersnId
+			, RegDt
+			, StartDt
+			, EndDt
+			, InsId
+			, InsDt
+			, UptId
+			, UptDt
+		) VALUES (
+			 #{orgId}
+			 , #{turnId}
+			 , #{persnId}
+			 , #{regDt}
+			 , #{startDt}
+			 , #{endDt}
+			 , #{insId}
+			 , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			 , #{uptId}
+			 , #{uptDt}
+		 )
+	</insert>
+
 	<!-- 수정 ********************************************************-->
+
+	<update id="editAnsPrgrs" parameterType="map">
+		UPDATE TB_AnsPrgrs SET
+			TestId = #{testId}
+			, QuestPageId = #{questPageId}
+			, UptId	= #{uptId}
+			, UptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			AnsPrgrsId = #{ansPrgrsId}
+	</update>
+
+	<update id="editAnsPrgrsComplete" parameterType="map">
+		UPDATE TB_AnsPrgrs SET
+			DoneYn = 'Y'
+			, EndDt = #{endDt}
+			, UptId	= #{uptId}
+			, UptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			AnsPrgrsId = #{ansPrgrsId}
+	</update>
+
+	<update id="editOrgTurnPersnComplete" parameterType="map">
+		UPDATE TB_OrgTurnPersn SET
+			 EndDt = #{endDt}
+			 , UptId	= #{uptId}
+			 , UptDt	= DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE
+			OrgId = #{orgId}
+			AND TurnId = #{turnId}
+			AND PersnId = #{persnId}
+	</update>
 
 
 	<!-- 삭제 ********************************************************-->
 
+	<update id="delAns" parameterType="map">
+		DELETE FROM TB_Ans
+		WHERE
+			AnsPrgrsId = #{ansPrgrsId}
+			AND QuestId = #{questId}
+	</update>
 
 	<!-- 조회 ********************************************************-->
+
+	<select id="getAnsPrgrsId" resultType="long">
+		SELECT nextval(AnsPrgrs_AnsPrgrsId)
+	</select>
 
 	<!-- 기관 회차 검사 목록 -->
 	<select id="getTestListForTurn" parameterType="map" resultType="hashmap">
@@ -26,11 +151,13 @@
 			, IFNULL(B.StartDt, '') AS StartDt
 			, IFNULL(B.EndDt, '') 	AS EndDt
 			, (SELECT ProdtNm FROM TB_Prodt WHERE ProdtCate = 'C01101' LIMIT 1 ) AS ProdtNm
+			, IFNULL(C.AnsPrgrsId, '0') 	AS AnsPrgrsId
 			, IFNULL(C.TestId, '0') 		AS TestId
 			, IFNULL(C.QuestPageId, '0') 	AS QuestPageId
 			, IFNULL(C.StartDt, '') 		AS AnsPrgrsStartDt
 			, IFNULL(C.EndDt, '') 			AS AnsPrgrsEndDt
 			, IFNULL(C.DoneYn, 'N') 		AS AnsPrgrsDoneYn
+			, '0'							AS PayId
 		FROM
 			TB_OrgTurn  A
 			LEFT OUTER JOIN (
@@ -48,7 +175,8 @@
 			) B ON A.OrgId = B.OrgId AND A.TurnId = B.TurnId
 			LEFT OUTER JOIN (
 				SELECT
-					TurnId
+					AnsPrgrsId
+			    	, TurnId
 					, TestId
 					, QuestPageId
 					, StartDt
@@ -127,6 +255,43 @@
 		  AND pt.ProdtId = pp.ProdId;
 
 	</select>
+
+	<select id="getQuestItem" parameterType="map" resultType="com.aptit.octagnosis.model.QuestItem">
+		SELECT
+			A.QuestId
+			 , A.ItemId
+			 , A.ItemType
+			 , A.Conts
+			 , A.ImgNm
+			 , A.Seq
+			 , A.Weigt
+		FROM
+			TB_QuestItem  A
+		WHERE
+		  A.QuestId = #{questId}
+		  AND A.ItemId = #{itemId}
+	</select>
+
+
+	<select id="getAnsPrgrs" parameterType="map" resultType="com.aptit.octagnosis.model.AnsPrgrs">
+		SELECT
+			A.AnsPrgrsId
+			 , A.TestId
+			 , A.QuestPageId
+			 , A.StartDt
+			 , A.EndDt
+			 , A.DoneYn
+			 , A.AcuntId
+			 , A.ProdtId
+			 , A.TurnId
+			 , A.PayId
+		FROM
+			TB_AnsPrgrs  A
+		WHERE
+			A.AnsPrgrsId = #{ansPrgrsId}
+	</select>
+
+
 	<!-- 기타 ********************************************************-->
 
 </mapper>
