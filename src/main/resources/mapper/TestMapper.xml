@@ -71,6 +71,7 @@
 				pp.PayId AS PayId,
 			pp.Price AS Price,
 			pp.PayYn AS PayYn,
+			pp.prodType AS ProdType,
 			pt.ProdtNm AS ProdtNm,
 			IFNULL(ap.AnsPrgrsId, '') AS AnsPrgrsId,
 			IFNULL(ap.StartDt, '') AS AnsPrgrsStartDt,
