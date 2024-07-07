@@ -15,6 +15,7 @@ public class QuestV1 {
     private Long questPageId;
     @Id
     private Long questId;
+    private Long itemId;
     private int questNo;
     private String questCont1;
     private String questCont2;
@@ -32,6 +33,9 @@ public class QuestV1 {
 
     private int itemCnt;
     private int imgCnt;
-    
+
+    private String val1;
+    private String val2;
+
     
 }

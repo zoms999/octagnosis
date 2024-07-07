@@ -12,6 +12,7 @@ public class OrgTurn {
     @Id
     private Long turnId;
     private String useYn;
+    private Long prodtId;
     private Long turnNum;
     private Long turnReqCnt;
     private Long turnUseCnt;

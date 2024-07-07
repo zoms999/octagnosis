@@ -9,7 +9,7 @@
 	</resultMap>
 
 	<!-- 등록 ********************************************************-->
-	<insert id="cretAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
+	<insert id="cretAnsPrgrs" parameterType="com.aptit.octagnosis.model.AnsPrgrs">
 		INSERT INTO TB_Acunt (
 		   AcuntId
 		 , UserType

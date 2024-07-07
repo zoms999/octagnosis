@@ -1,19 +1,20 @@
 package com.aptit.octagnosis.cotroller;
 
 import com.aptit.octagnosis.common.CommonLib;
-import com.aptit.octagnosis.mapper.AcuntMapper;
-import com.aptit.octagnosis.mapper.PersonalMapper;
-import com.aptit.octagnosis.mapper.QuestMapper;
-import com.aptit.octagnosis.mapper.TestMapper;
-import com.aptit.octagnosis.model.Acunt;
-import com.aptit.octagnosis.model.Personal;
+import com.aptit.octagnosis.mapper.*;
+import com.aptit.octagnosis.model.*;
+import com.aptit.octagnosis.modelParm.OrgTurnParm;
 import com.aptit.octagnosis.modelParm.QuestParm;
 import com.aptit.octagnosis.modelParm.TestParm;
+import com.aptit.octagnosis.modelview.QuestV1;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,10 @@ public class TestController {
     
     @Autowired
     private AcuntMapper AcuntService;
-    
+
+    @Autowired
+    private OrgTurnMapper OrgTurnService;
+
     @Autowired
     private PersonalMapper PersnService;
     
@@ -67,15 +71,202 @@ public class TestController {
         
         parm.setPersnId(persn.getPersnId());
         
-        if (parm.getOrgId() == 0) {     // 기관 사용자 검사 목록
+        if (parm.getOrgId() == 0) {     // 개인 사용자 검사 목록
             Rtn.put("TestList", TestService.getTestList(parm));
-        } else {            // 개인 사용자 검사 목록
+        } else {                        // 기관 사용자 검사 목록
             Rtn.put("TestList", TestService.getTestListForTurn(parm));
         }
         return Rtn;
     }
     
     
+    // 다음 검사,검사지 조회
+    @PostMapping("/Test/getNextTest")
+    public Map<String, Object> getNextTest(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        long ansPrgrsId = testParm.getAnsPrgrsId();
+
+        // 답변진행이 없으면 -> 답변진행등록
+        if (ansPrgrsId == 0) {
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            String curDt = today.format(formatter);
+
+            ansPrgrsId = TestService.getAnsPrgrsId();
+            AnsPrgrs ansPrgrs = new AnsPrgrs() {{
+                setTestId(testParm.getTestId());
+                setQuestPageId(testParm.getQuestPageId());
+                setStartDt(curDt);
+                setEndDt("");
+                setDoneYn("N");
+                setAcuntId(testParm.getAcuntId());
+                setProdtId(testParm.getProdtId());
+                setTurnId(testParm.getTurnId());
+                setPayId(testParm.getPayId());
+                setInsId(testParm.getInsId());
+            }};
+
+            ansPrgrs.setAnsPrgrsId(ansPrgrsId);
+
+            TestService.cretAnsPrgrs(ansPrgrs);
+
+            // 기관회차 등록
+            if (testParm.getOrgId() != 0 && testParm.getTurnId() != 0) {
+                OrgTurnPersn orgTurnPersn = new OrgTurnPersn() {{
+                    setOrgId(testParm.getOrgId());
+                    setTurnId(testParm.getTurnId());
+                    setPersnId(testParm.getInsId());
+                    setRegDt(curDt);
+                    setStartDt(curDt);
+                    setEndDt("");
+                    setInsId(testParm.getInsId());
+                }};
+
+                TestService.cretOrgTurnPersn(orgTurnPersn);
+            }
+
+            // 구매상품 사용처리
+            if (testParm.getPayId() != 0) {
+
+            }
+
+       }
+        
+        long testId = testParm.getTestId();
+        long questPageId = testParm.getQuestPageId();
+        
+        if (testId == 0) {      // 검사 시작
+            // 다음검사 조회
+            ProdtTest prodtTest = TestService.getNextTest(testParm);
+            
+            testId = prodtTest.getTestId();
+            questPageId = 0;
+        } else {
+            // 다음검사지 조회
+            QuestPage questPage = TestService.getNextQuestPage(testParm);
+            
+            // 다음검사지가 없으면(다음검사로 넘어감.)
+            if (questPage == null) {
+                ProdtTest prodtTest = TestService.getNextTest(testParm);
+                
+                testId = prodtTest == null ? 0 : prodtTest.getTestId();
+                questPageId = 0;
+            } else {
+                questPageId = questPage.getQuestPageId();
+            }
+        }
+        
+        //parm.setPersnId(persn.getPersnId());
+
+        Rtn.put("ansPrgrsId", ansPrgrsId);
+        Rtn.put("testId", testId);
+        Rtn.put("questPageId", questPageId);
+        return Rtn;
+    }
+
+    @PostMapping("/Test/saveAns")
+    @Transactional
+    public Map<String, Object> saveAns(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+
+        // 답변진행 TestId, QuestPageId  수정
+        TestService.editAnsPrgrs(testParm);
+
+        for(QuestV1 questV1 : testParm.getQuestList()) {
+            Ans ans = new Ans() {{
+                setAnsPrgrsId(testParm.getAnsPrgrsId());
+                setQuestId(questV1.getQuestId());
+                setVal1(questV1.getVal1());
+                setVal2(questV1.getVal2());
+            }};
+
+            // Val1이 선택한 값.
+            questV1.setItemId(Long.parseLong(questV1.getVal1()));
+
+            QuestItem questItem = TestService.getQuestItem(questV1);
+
+            ans.setWeigt(questItem.getWeigt());
+            ans.setInsId(testParm.getInsId());
+
+            // 답안 삭제
+            TestService.delAns(ans);
+            // 답안 등록
+            TestService.cretAns(ans);
+        }
+
+
+        // 다음질문지 정보 추출
+        long prodtId = testParm.getTestId();
+        long testId = testParm.getTestId();
+        long questPageId = testParm.getQuestPageId();
+
+        if (testId == 0) {      // 검사 시작
+            // 다음검사 조회
+            ProdtTest prodtTest = TestService.getNextTest(testParm);
+
+            testId = prodtTest.getTestId();
+            questPageId = 0;
+        } else {
+            // 다음검사지 조회
+            QuestPage questPage = TestService.getNextQuestPage(testParm);
+
+            // 다음검사지가 없으면(다음검사로 넘어감.)
+            if (questPage == null) {
+                ProdtTest prodtTest = TestService.getNextTest(testParm);
+
+                testId = prodtTest == null ? 0 : prodtTest.getTestId();
+                questPageId = 0;
+            } else {
+                questPageId = questPage.getQuestPageId();
+            }
+        }
+
+
+        // 검사 완료처리
+        if (testId == 0  && questPageId == 0) {
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            String curDt = today.format(formatter);
+
+            AnsPrgrs ansPrgrs = new AnsPrgrs() {{
+                setAnsPrgrsId(testParm.getAnsPrgrsId());
+                setEndDt(curDt);
+                setDoneYn("N");
+                setUptId(testParm.getInsId());
+            }};
+
+            TestService.editAnsPrgrsComplete(ansPrgrs);
+
+            AnsPrgrs LastAnsPrgrs = TestService.getAnsPrgrs(testParm);
+
+            // 답변에 회차id가 있고, 전달된 파라미터에서 TurnConnCd 가 있으면 기관회차개인 정보 업데이트
+            if (LastAnsPrgrs.getTurnId() != 0 && !testParm.getTurnConnCd().isEmpty()) {
+
+                OrgTurnParm orgTurnParm = new OrgTurnParm() {{
+                    setTurnConnCd(testParm.getTurnConnCd());
+                }};
+
+                OrgTurn orgTurn = OrgTurnService.getExistTurnConnCd(orgTurnParm);
+
+                OrgTurnPersn orgTurnPersn  = new OrgTurnPersn() {{
+                    setOrgId(orgTurn.getOrgId());
+                    setTurnId(orgTurn.getTurnId());
+                    setPersnId(testParm.getInsId());
+                    setEndDt(curDt);
+                    setUptId(testParm.getInsId());
+                }};
+
+                // 기관회차에 등록한 정보 EndDt 정보 등록
+                TestService.editOrgTurnPersnComplete(orgTurnPersn);
+            }
+        }
+
+        Rtn.put("testId", testId);
+        Rtn.put("questPageId", questPageId);
+        return Rtn;
+    }
+
+
     
     
     

@@ -15,7 +15,30 @@ import java.util.Map;
 @Mapper
 public interface TestMapper {
 
+
+    int cretAnsPrgrs(AnsPrgrs ansPrgrs);
+    int editAnsPrgrs(TestParm testParm);
+    int editAnsPrgrsComplete(AnsPrgrs ansPrgrs);
+
+    int cretAns(Ans ans);
+
+    int delAns(Ans ans);
+
+    int cretOrgTurnPersn(OrgTurnPersn orgTurnPersn);
+    int editOrgTurnPersnComplete(OrgTurnPersn orgTurnPersn);
+
     List<Map<String, String>> getTestList(TestParm parm);
     
     List<Map<String, String>> getTestListForTurn(TestParm parmW);
+    
+    ProdtTest getNextTest(TestParm parm);
+    QuestPage getNextQuestPage(TestParm parm);
+
+    QuestItem getQuestItem(QuestV1 parm);
+
+    AnsPrgrs getAnsPrgrs(TestParm parm);
+
+    long getAnsPrgrsId();
+
 }
+
