@@ -196,6 +196,9 @@
 	<!-- 개인 상품구매 검사 목록 -->
 
 
+
+
+
 	<!-- 다음 검사지 -->
 	<select id="getNextTest" parameterType="map" resultType="ProdtTest">
 		SELECT
@@ -225,7 +228,6 @@
 			QuestPageSeq
 		LIMIT 1
 	</select>
-
 
 
 	<select id="getTestList" parameterType="map" resultType="hashmap">
@@ -290,6 +292,27 @@
 			TB_AnsPrgrs  A
 		WHERE
 			A.AnsPrgrsId = #{ansPrgrsId}
+	</select>
+
+	<!-- 기관회차 / PayId 로 답변지 조회 -->
+	<select id="getAnsPrgrsForValid" parameterType="map" resultType="com.aptit.octagnosis.model.AnsPrgrs">
+		SELECT
+			A.AnsPrgrsId
+			 , A.TestId
+			 , A.QuestPageId
+			 , A.StartDt
+			 , A.EndDt
+			 , A.DoneYn
+			 , A.AcuntId
+			 , A.ProdtId
+			 , A.TurnId
+			 , A.PayId
+		FROM
+			TB_AnsPrgrs  A
+		WHERE
+			A.AcuntId = #{acuntId}
+		  AND (#{turnId} = 0 OR A.TurnId = #{turnId})
+		  AND (#{payId} = 0 OR A.PayId = #{payId})
 	</select>
 
 

@@ -37,6 +37,7 @@ public interface TestMapper {
     QuestItem getQuestItem(QuestV1 parm);
 
     AnsPrgrs getAnsPrgrs(TestParm parm);
+    AnsPrgrs getAnsPrgrsForValid(TestParm parm);
 
     long getAnsPrgrsId();
 

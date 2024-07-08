@@ -82,59 +82,75 @@ public class TestController {
     
     // 다음 검사,검사지 조회
     @PostMapping("/Test/getNextTest")
+    @Transactional
     public Map<String, Object> getNextTest(@RequestBody TestParm testParm) {
         Map<String, Object> Rtn = new HashMap<>();
         long ansPrgrsId = testParm.getAnsPrgrsId();
+        long testId = testParm.getTestId();
+        long questPageId;
 
         // 답변진행이 없으면 -> 답변진행등록
         if (ansPrgrsId == 0) {
-            LocalDate today = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-            String curDt = today.format(formatter);
 
-            ansPrgrsId = TestService.getAnsPrgrsId();
-            AnsPrgrs ansPrgrs = new AnsPrgrs() {{
-                setTestId(testParm.getTestId());
-                setQuestPageId(testParm.getQuestPageId());
-                setStartDt(curDt);
-                setEndDt("");
-                setDoneYn("N");
-                setAcuntId(testParm.getAcuntId());
-                setProdtId(testParm.getProdtId());
-                setTurnId(testParm.getTurnId());
-                setPayId(testParm.getPayId());
-                setInsId(testParm.getInsId());
-            }};
+            // AnsPrgsId 를 다시 조회함. -> 답변진행이 등록안된 상태에서 testStart 페이지에서 "검사시작"을 계속 클릭할수 있음.
+            AnsPrgrs ansPrgrsVaild  = TestService.getAnsPrgrsForValid(testParm);
 
-            ansPrgrs.setAnsPrgrsId(ansPrgrsId);
+            if (ansPrgrsVaild != null) {
+                ansPrgrsId = ansPrgrsVaild.getAnsPrgrsId();
+                testId = ansPrgrsVaild.getTestId();
+            } else {
 
-            TestService.cretAnsPrgrs(ansPrgrs);
+                LocalDate today = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                String curDt = today.format(formatter);
 
-            // 기관회차 등록
-            if (testParm.getOrgId() != 0 && testParm.getTurnId() != 0) {
-                OrgTurnPersn orgTurnPersn = new OrgTurnPersn() {{
-                    setOrgId(testParm.getOrgId());
-                    setTurnId(testParm.getTurnId());
-                    setPersnId(testParm.getInsId());
-                    setRegDt(curDt);
+                ansPrgrsId = TestService.getAnsPrgrsId();
+                AnsPrgrs ansPrgrs = new AnsPrgrs() {{
+                    setTestId(testParm.getTestId());
+                    setQuestPageId(testParm.getQuestPageId());
                     setStartDt(curDt);
                     setEndDt("");
+                    setDoneYn("N");
+                    setAcuntId(testParm.getAcuntId());
+                    setProdtId(testParm.getProdtId());
+                    setTurnId(testParm.getTurnId());
+                    setPayId(testParm.getPayId());
                     setInsId(testParm.getInsId());
                 }};
 
-                TestService.cretOrgTurnPersn(orgTurnPersn);
+                ansPrgrs.setAnsPrgrsId(ansPrgrsId);
+
+                TestService.cretAnsPrgrs(ansPrgrs);
+
+                // 기관회차 등록
+                if (testParm.getOrgId() != 0 && testParm.getTurnId() != 0) {
+                    OrgTurnPersn orgTurnPersn = new OrgTurnPersn() {{
+                        setOrgId(testParm.getOrgId());
+                        setTurnId(testParm.getTurnId());
+                        setPersnId(testParm.getInsId());
+                        setRegDt(curDt);
+                        setStartDt(curDt);
+                        setEndDt("");
+                        setInsId(testParm.getInsId());
+                    }};
+
+                    TestService.cretOrgTurnPersn(orgTurnPersn);
+                }
+
+                // 구매상품 사용처리
+                if (testParm.getPayId() != 0) {
+
+
+                }
             }
+        }
 
-            // 구매상품 사용처리
-            if (testParm.getPayId() != 0) {
+        // testId를 다시 조회함 -> 사용자가 검사창을 닫는 경우 문제를 이어갈수 없기에 다시 testId 를 조회함.
+        testParm.setAnsPrgrsId(ansPrgrsId);
+        AnsPrgrs ansPrgrs  = TestService.getAnsPrgrsForValid(testParm);
+        testParm.setTestId(ansPrgrs.getTestId());
+        testParm.setQuestPageId(ansPrgrs.getQuestPageId());
 
-            }
-
-       }
-        
-        long testId = testParm.getTestId();
-        long questPageId = testParm.getQuestPageId();
-        
         if (testId == 0) {      // 검사 시작
             // 다음검사 조회
             ProdtTest prodtTest = TestService.getNextTest(testParm);
