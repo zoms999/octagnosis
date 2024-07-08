@@ -105,9 +105,10 @@ public class TestController {
                 String curDt = today.format(formatter);
 
                 ansPrgrsId = TestService.getAnsPrgrsId();
+
                 AnsPrgrs ansPrgrs = new AnsPrgrs() {{
-                    setTestId(testParm.getTestId());
-                    setQuestPageId(testParm.getQuestPageId());
+                    setTestId(0l);
+                    setQuestPageId(0l);
                     setStartDt(curDt);
                     setEndDt("");
                     setDoneYn("N");
@@ -148,12 +149,12 @@ public class TestController {
         // testId를 다시 조회함 -> 사용자가 검사창을 닫는 경우 문제를 이어갈수 없기에 다시 testId 를 조회함.
         testParm.setAnsPrgrsId(ansPrgrsId);
         AnsPrgrs ansPrgrs  = TestService.getAnsPrgrsForValid(testParm);
-        testParm.setTestId(ansPrgrs.getTestId());
+        testParm.setTestId(testId == 0 ? ansPrgrs.getTestId() : testId);
         testParm.setQuestPageId(ansPrgrs.getQuestPageId());
 
         if (testId == 0) {      // 검사 시작
             // 다음검사 조회
-            ProdtTest prodtTest = TestService.getNextTest(testParm);
+            ProdtTest prodtTest = TestService.getFirstTest(testParm);
             
             testId = prodtTest.getTestId();
             questPageId = 0;
