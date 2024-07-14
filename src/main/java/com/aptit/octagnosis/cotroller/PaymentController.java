@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -17,14 +18,33 @@ public class PaymentController {
     private PaymentMapper paymentMapper;
 
     @PostMapping("/payment/save")
-    public String savePayment(@RequestBody ProdtPay prodtPay) {
+    public ResponseEntity<ProdtPay> savePayment(@RequestBody ProdtPay prodtPay) {
         paymentMapper.savePayment(prodtPay);
-        return "Payment information saved successfully.";
+        return ResponseEntity.ok(prodtPay); // Return the saved ProdtPay object including payId
+    }
+
+
+
+    @DeleteMapping("/payment/delete/{payId}")
+    public ResponseEntity<String> deletePayment(@PathVariable Long payId) {
+        paymentMapper.deletePayment(payId);
+        return ResponseEntity.ok("Payment deleted successfully.");
     }
 
     @GetMapping("/payment/all")
     public ResponseEntity<List<ProdtPayDetail>> getAllPayments() {
         List<ProdtPayDetail> payments = paymentMapper.findAllPayments();
         return ResponseEntity.ok(payments);
+    }
+
+    @PostMapping("/payment/updateStatus/{payId}")
+    public ResponseEntity<String> updatePaymentStatus(@PathVariable Long payId, @RequestBody Map<String, String> status) {
+        String newStatus = status.get("status");
+        if (newStatus.equals("SUCCESS") || newStatus.equals("FAIL")) {
+            paymentMapper.updatePaymentStatus(payId, newStatus);
+            return ResponseEntity.ok("Payment status updated successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid status");
+        }
     }
 }

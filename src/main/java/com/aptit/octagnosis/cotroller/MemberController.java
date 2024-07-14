@@ -186,6 +186,28 @@ public class MemberController {
         return "Temp123!"; // 임시로 고정된 값 반환
     }
 
+    @PostMapping("/member/user-data")
+    public ResponseEntity<Map<String, Object>> getUserData(@RequestBody Map<String, String> request) {
+        String acuntId = request.get("acuntId");
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Acunt acunt = AcuntService.getAcunt(acuntId);
+            if (acunt != null) {
+                Personal personal = PersonalService.getPersonalById(acunt.getUserId());
+                response.put("Acunt", acunt);
+                response.put("Personal", personal);
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(404).body(null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+
+
  /*   @GetMapping("/products")
     public List<Product> getProducts() {
 

@@ -11,7 +11,9 @@
         </selectKey>
     </insert>
 
-
+    <delete id="deletePayment" parameterType="java.lang.Long">
+        DELETE FROM TB_ProdtPay WHERE PayId = #{payId}
+    </delete>
 
     <select id="findAllPayments" resultType="com.aptit.octagnosis.model.ProdtPayDetail">
         SELECT
@@ -25,4 +27,11 @@
             INNER JOIN TB_Persn s ON a.UserId = s.PersnId
         WHERE PayYn = 'Y'
     </select>
+
+
+    <update id="updatePaymentStatus">
+        UPDATE TB_ProdtPay
+        SET PayYn = #{status}
+        WHERE PayId = #{payId}
+    </update>
 </mapper>
