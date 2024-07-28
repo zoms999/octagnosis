@@ -21,6 +21,26 @@ public interface TestMapper {
     int editAnsPrgrsComplete(AnsPrgrs ansPrgrs);
 
     int cretAns(Ans ans);
+    
+    // 검사결과 집계
+    int cretRsltSumImg(TestParm testParm);
+    int cretRsltSumTnk(TestParm testParm);
+    int cretRsltSumTal(TestParm testParm);
+    int cretRsltSumTnd(TestParm testParm);
+    int cretRsltMain(TestParm testParm);
+    
+    int cretRsltJobTnd(TestParm testParm);
+    int cretRsltJobTal(TestParm testParm);
+    int cretRsltJobImg(TestParm testParm);
+    int cretRsltJobBest(TestParm testParm);
+    
+    int cretRsltDuty(TestParm testParm);
+    
+    
+    int editRsltMainThink(TestParm testParm);
+    int editRsltMainTalnt(TestParm testParm);
+    int editRsltMainImg(TestParm testParm);
+    
 
     int delAns(Ans ans);
 

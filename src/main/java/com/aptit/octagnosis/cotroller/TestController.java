@@ -276,6 +276,37 @@ public class TestController {
                 // 기관회차에 등록한 정보 EndDt 정보 등록
                 TestService.editOrgTurnPersnComplete(orgTurnPersn);
             }
+            
+            // 질문지 종합결과 집계  ****************
+            // 선호도 집계
+            TestService.cretRsltSumImg(testParm);
+            // 사고력 집계
+            TestService.cretRsltSumTnk(testParm);
+            // 사고력 - 재능 집계
+            TestService.cretRsltSumTal(testParm);
+            // 성향 집계
+            TestService.cretRsltSumTnd(testParm);
+            
+            // 검사 결과 Tedcy 집계
+            TestService.cretRsltMain(testParm);
+            // 검사 결과 Think 집계
+            TestService.editRsltMainThink(testParm);
+            // 검사 결과 Talnt 집계
+            TestService.editRsltMainTalnt(testParm);
+            // 검사 결과 Image 집계
+            TestService.editRsltMainImg(testParm);
+            
+            // 검사 결과 성향 직업 집계
+            TestService.cretRsltJobTnd(testParm);
+            // 검사 결과 재능 직업 집계
+            TestService.cretRsltJobTal(testParm);
+            // 검사 결과 선호 직업 집계
+            TestService.cretRsltJobImg(testParm);
+            // 검사 결과 Best 직업 집계
+            TestService.cretRsltJobBest(testParm);
+            
+            // 검사 결과 직무 집계
+            TestService.cretRsltDuty(testParm);
         }
 
         Rtn.put("testId", testId);

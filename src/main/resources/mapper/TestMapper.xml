@@ -89,6 +89,695 @@
 		 )
 	</insert>
 
+	<!-- 검사 결과 등록 : C00501 (이미지/선호도) -->
+	<insert id="cretRsltSumImg" parameterType="map">
+		INSERT INTO TB_RsltSum (
+			AnsPrgrsId
+			, QuestType
+			, QuestAttrCd
+			, Score
+			, Rate
+			, Rank
+			, ResRate
+			, QuestCnt
+			, InsId
+			, InsDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			, A4.QuestType
+			, A4.QuestAttrCd
+			, A4.Score
+			, A4.Rate
+			, ROW_NUMBER() OVER (ORDER BY A4.Rate DESC, A4.TotScore DESC) 			AS Rank
+			, ROUND(CONVERT(A4.QuestCnt, DECIMAL) / CONVERT(A4.TotCnt, DECIMAL), 3) 	AS ResRate
+			, A4.TotCnt
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		FROM
+			(
+				SELECT
+					#{ansPrgrsId}
+					 , A3.QuestType
+					 , A3.QuestAttrCd
+					 , SUM(A3.Val) 		AS Score
+					 , CASE
+						   WHEN A3.QuestAttrCd = 'img21000' THEN ROUND(CONVERT(SUM(A3.Val), DECIMAL) / CONVERT(A3.TotScore, DECIMAL), 3) * 1.4
+						   ELSE ROUND(CONVERT(SUM(A3.Val), DECIMAL) / CONVERT(A3.TotScore, DECIMAL), 3)
+						END 				AS Rate
+					 , A3.TotScore 		AS TotScore
+					 , COUNT(*) 		AS TotCnt
+					 , SUM(CASE WHEN A3.Val > 0 THEN 1 ELSE 0 END) AS QuestCnt
+				FROM
+					(
+						SELECT
+							A2.QuestId
+							 , A2.QuestNo
+							 , A2.QuestType
+							 , A2.QuestAttrCd
+							 , A2.TotScore
+							 , B2.Val1 +  B2.Val2 AS Val
+						FROM
+							(
+								SELECT
+									A1.QuestId
+									 , A1.QuestNo
+									 , B1.QuestType
+									 , B1.QuestAttrCd
+									 , B1.TotScore
+								FROM
+									TB_Quest A1
+									INNER JOIN 	TB_QuestAttr B1 ON A1.QuestAttrCd1 = B1.QuestAttrCd
+								WHERE
+									A1.QuestType = 'C00501'
+							) A2
+								INNER JOIN (
+								SELECT
+									A2.QuestId
+									 , IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val1), 0) AS Val1
+									 , IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val2), 0) AS Val2
+								FROM
+									TB_Ans A2
+								WHERE
+									A2.AnsPrgrsId = #{ansPrgrsId}
+							) B2 ON A2.QuestId = B2.QuestId
+					) A3
+				GROUP BY
+					A3.QuestType, A3.QuestAttrCd
+				ORDER BY
+					A3.QuestType, A3.QuestAttrCd
+			) A4
+	</insert>
+
+	<!-- 검사 결과 등록 : C00503 (사고력) -->
+	<insert id="cretRsltSumTnk" parameterType="map">
+		INSERT INTO TB_RsltSum (
+			AnsPrgrsId
+			, QuestType
+			, QuestAttrCd
+			, Score
+			, Rate
+			, Rank
+			, ResRate
+			, QuestCnt
+			, InsId
+			, InsDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			, A4.QuestType
+			, A4.QuestAttrCd
+			, A4.Score
+			, A4.Rate
+			, ROW_NUMBER() OVER (ORDER BY A4.Rate DESC, A4.TotScore DESC) 	AS Rank
+			, 0 															AS ResRate
+			, A4.TotCnt
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		FROM
+			(
+				SELECT
+					A3.QuestType
+					 , A3.QuestAttrCd
+					 , SUM(A3.Val) 		AS Score
+					 , ROUND(CONVERT(SUM(A3.Val), DECIMAL) / CONVERT(A3.TotScore, DECIMAL), 3) AS Rate
+					 , A3.TotScore 		AS TotScore
+					 , COUNT(*) 		AS TotCnt
+				FROM
+					(
+						SELECT
+							A2.QuestId
+							 , A2.QuestNo
+							 , A2.QuestType
+							 , A2.QuestAttrCd
+							 , A2.TotScore
+							 , B2.Val1 +  B2.Val2 AS Val
+						FROM
+							(
+								SELECT
+									A1.QuestId
+									 , A1.QuestNo
+									 , B1.QuestType
+									 , B1.QuestAttrCd
+									 , B1.TotScore
+								FROM
+									TB_Quest A1
+									INNER JOIN 	TB_QuestAttr B1 ON A1.QuestAttrCd1 = B1.QuestAttrCd
+								WHERE
+									A1.QuestType = 'C00503'
+							) A2
+								INNER JOIN (
+								SELECT
+									A2.QuestId
+									 , IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val1), 0) AS Val1
+									 , IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val2), 0) AS Val2
+								FROM
+									TB_Ans A2
+								WHERE
+									A2.AnsPrgrsId = #{ansPrgrsId}
+							) B2 ON A2.QuestId = B2.QuestId
+					) A3
+				GROUP BY
+					A3.QuestType, A3.QuestAttrCd
+				ORDER BY
+					A3.QuestType, A3.QuestAttrCd
+			) A4
+
+
+	</insert>
+
+	<!-- 검사 결과 등록 : C00503-C00502  (사고력-재능) -->
+	<insert id="cretRsltSumTal" parameterType="map">
+		INSERT INTO TB_RsltSum (
+			AnsPrgrsId
+			, QuestType
+			, QuestAttrCd
+			, Score
+			, Rate
+			, Rank
+			, ResRate
+			, QuestCnt
+			, InsId
+			, InsDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			, A4.QuestType
+			, A4.QuestAttrCd
+			, A4.Score
+			, A4.Rate
+			, ROW_NUMBER() OVER (ORDER BY A4.Rate DESC, A4.TotScore DESC) 	AS Rank
+			, 0 															AS ResRate
+			, A4.TotCnt
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		FROM
+			(
+				SELECT
+					A3.QuestType
+					 , A3.QuestAttrCd
+					 , SUM(A3.Val) 		AS Score
+					 , ROUND(CONVERT(SUM(A3.Val), DECIMAL) / CONVERT(A3.TotScore, DECIMAL), 3) AS Rate
+					 , A3.TotScore 		AS TotScore
+					 , COUNT(*) 		AS TotCnt
+				FROM
+					(
+						SELECT
+							A2.QuestId
+							 , A2.QuestNo
+							 , A2.QuestType
+							 , A2.QuestAttrCd
+							 , A2.TotScore
+							 , B2.Val1 +  B2.Val2 AS Val
+						FROM
+							(
+								SELECT
+									A1.QuestId
+									 , A1.QuestNo
+									 , B1.QuestType
+									 , B1.QuestAttrCd
+									 , B1.TotScore
+								FROM
+									TB_Quest A1
+									INNER JOIN 	TB_QuestAttr B1 ON A1.QuestAttrCd2 = B1.QuestAttrCd
+								WHERE
+									A1.QuestType = 'C00503'
+							) A2
+							INNER JOIN (
+								SELECT
+									A2.QuestId
+									 , IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val1), 0) AS Val1
+									 , IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val2), 0) AS Val2
+								FROM
+									TB_Ans A2
+								WHERE
+									A2.AnsPrgrsId = #{ansPrgrsId}
+							) B2 ON A2.QuestId = B2.QuestId
+					) A3
+				GROUP BY
+					A3.QuestType, A3.QuestAttrCd
+				ORDER BY
+					A3.QuestType, A3.QuestAttrCd
+			) A4
+
+
+	</insert>
+
+	<!-- 검사 결과 등록 : C00504 (성향) -->
+	<insert id="cretRsltSumTnd" parameterType="map">
+		INSERT INTO TB_RsltSum (
+			AnsPrgrsId
+			, QuestType
+			, QuestAttrCd
+			, Score
+			, Rate
+			, Rank
+			, ResRate
+			, QuestCnt
+			, InsId
+			, InsDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			, A4.QuestType
+			, A4.QuestAttrCd
+			, A4.Score
+			, A4.Rate
+			, ROW_NUMBER() OVER (ORDER BY A4.Rate DESC, A4.FCnt DESC, A4.OCnt) 	AS Rank
+			, 0 																AS ResRate
+			, A4.TotCnt
+			, #{insId}
+			, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		FROM
+			(
+				SELECT
+					A3.QuestType
+					 , A3.QuestAttrCd
+					 , SUM(A3.Val) 																AS Score
+					 , ROUND(CONVERT(SUM(A3.Val), DECIMAL) / CONVERT(A3.TotScore, DECIMAL), 3)	AS Rate
+					 , COUNT(*) 																AS TotCnt
+					 , CONVERT(SUM(CASE WHEN A3.Val = 5 THEN 1 ELSE 0 END), DECIMAL)			AS FCnt
+					 , CONVERT(SUM(CASE WHEN A3.Val = 1 THEN 1 ELSE 0 END), DECIMAL)			AS OCnt
+				FROM
+					(
+						SELECT
+							A2.QuestId
+							 , A2.QuestNo
+							 , A2.QuestType
+							 , A2.QuestAttrCd
+							 , A2.TotScore
+							 , B2.Val1 +  B2.Val2 AS Val
+						FROM
+							(
+								SELECT
+									A1.QuestId
+									 , A1.QuestNo
+									 , B1.QuestType
+									 , B1.QuestAttrCd
+									 , B1.TotScore
+								FROM
+									TB_Quest A1
+									INNER JOIN 	TB_QuestAttr B1 ON A1.QuestAttrCd1 = B1.QuestAttrCd
+								WHERE
+									A1.QuestType = 'C00504'
+							) A2
+								INNER JOIN (
+								SELECT
+									A2.QuestId
+									 , IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val1), 0) AS Val1
+									 , IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val2), 0) AS Val2
+								FROM
+									TB_Ans A2
+								WHERE
+									A2.AnsPrgrsId = #{ansPrgrsId}
+							) B2 ON A2.QuestId = B2.QuestId
+					) A3
+				GROUP BY
+					A3.QuestType, A3.QuestAttrCd
+				ORDER BY
+					A3.QuestType, A3.QuestAttrCd
+			) A4
+	</insert>
+
+	<!-- 검사 결과 Main 등록 -->
+	<insert id="cretRsltMain" parameterType="map">
+		INSERT INTO TB_RsltMain (
+			AnsPrgrsId		, Tedcy1		, Tedcy2		, Tedcy3
+			, Think1		, Think2		, ThinkTotScore
+			, Talnt1		, Talnt2		, Talnt3		, Talnt4		, Talnt5		, Talnt6		, Talnt7
+			, ImgPostvRate	, ImgTotCnt		, ImgPostvCnt
+			, InsId			, InsDt
+			, UptId			, UptDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			, MIN(CASE WHEN Rk = 1 THEN QuestAttrCd END) AS Tedcy1
+			, MIN(CASE WHEN Rk = 2 THEN QuestAttrCd END) AS Tedcy2
+			, MIN(CASE WHEN Rk = 3 THEN QuestAttrCd END) AS Tedcy3
+		    , '', '', 0
+			, '', '', '', '', '', '', ''
+			, 0, 0, 0
+			, #{insId} , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+			, null, null
+		FROM
+		    (
+				SELECT
+					QuestAttrCd
+					, ROW_NUMBER() OVER (ORDER BY Rank) AS Rk
+				FROM
+					TB_RsltSum
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+					AND QuestType = 'C00504'
+					AND <![CDATA[ Rank <= 5 ]]>
+				LIMIT 5
+			) AS tnd;
+	</insert>
+
+	<!-- 검사 결과 성향 직업 등록 -->
+	<insert id="cretRsltJobTnd" parameterType="map">
+		INSERT INTO TB_RsltJob (
+			AnsPrgrsId
+			, JobKind
+			, JobCd
+			, Rank
+			, TedcyCd
+			, DuplCnt
+			, InsId , InsDt , UptId , UptDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			, 'C01301'
+			, JobCd
+			, ROW_NUMBER() OVER (ORDER BY rk, cnt DESC) AS rej_rank
+			, ''
+			, cnt
+			, #{insId} , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') , null, null
+		FROM
+			(
+				SELECT
+					JobCd,
+					COUNT(*) AS cnt,
+					MIN(rk) AS rk
+				FROM
+					(
+						SELECT
+							B.JobCd,
+							1 AS rk,
+							ROW_NUMBER() OVER() AS rk2
+						FROM
+							TB_RsltMain A
+							JOIN TB_TedcyJob B ON B.TedcyCd1 = A.Tedcy1
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+
+						UNION
+
+						SELECT
+							B.JobCd,
+							2 AS rk,
+							ROW_NUMBER() OVER() AS rk2
+						FROM
+							TB_RsltMain A
+							JOIN TB_TedcyJob B ON B.TedcyCd2 = A.Tedcy2
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+					) a
+				GROUP BY
+					JobCd
+			) t;
+	</insert>
+
+	<!-- 검사 결과 재능 직업 등록 -->
+	<insert id="cretRsltJobTal" parameterType="map">
+		INSERT INTO TB_RsltJob (
+			AnsPrgrsId
+			, JobKind
+			, JobCd
+			, Rank
+			, TedcyCd
+			, DuplCnt
+			, InsId , InsDt , UptId , UptDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			 , 'C01302'
+			 , JobCd
+			 , ROW_NUMBER() OVER (ORDER BY rk, cnt DESC) AS rej_rank
+			 , ''
+			 , cnt
+			 , #{insId} , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') , null, null
+		FROM
+			(
+				SELECT
+					JobCd,
+					COUNT(*) AS cnt,
+					MIN(rk) AS rk
+				FROM
+					(
+						SELECT
+							B.JobCd,
+							1 AS rk
+						FROM
+							TB_RsltMain A
+							INNER JOIN TB_TalntJob B ON B.TalntCd1 = A.Talnt1
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+
+						UNION
+
+						SELECT
+							B.JobCd,
+							2 AS rk
+						FROM
+							TB_RsltMain A
+							JOIN TB_TalntJob B ON B.TalntCd2 = A.Talnt2
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+
+						UNION
+
+						SELECT
+							B.JobCd,
+							3 AS rk
+						FROM
+							TB_RsltMain A
+							JOIN TB_TalntJob B ON B.TalntCd3 = A.Talnt3
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+
+						UNION
+
+						SELECT
+							B.JobCd,
+							4 AS rk
+						FROM
+							TB_RsltMain A
+							JOIN TB_TalntJob B ON B.TalntCd4 = A.Talnt4
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+					) a
+				GROUP BY
+					JobCd
+			) t;
+	</insert>
+
+	<!-- 검사 결과 선호 직업 등록 -->
+	<insert id="cretRsltJobImg" parameterType="map">
+		INSERT INTO TB_RsltJob (
+			AnsPrgrsId
+			, JobKind
+			, JobCd
+			, Rank
+			, TedcyCd
+			, DuplCnt
+			, InsId , InsDt , UptId , UptDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			, CASE
+				WHEN Rank = 1 THEN 'C01303'
+				WHEN Rank = 2 THEN 'C01304'
+				ELSE  'C01305'
+			  END AS JobKind
+			, JobCd
+			, ROW_NUMBER() OVER (PARTITION BY Rank ORDER BY rk) AS rej_rank
+			, QuestAttrCd1
+			, 0
+			, #{insId} , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') , null, null
+		FROM
+		    (
+				SELECT
+					Rank
+					, jm.QuestId
+					, QuestAttrCd1
+					, jm.JobCd
+					, ROW_NUMBER() OVER (PARTITION BY Rank ORDER BY Weigt DESC) AS rk
+				FROM
+				    (
+					SELECT
+						sc1.Rank,
+						qu.QuestAttrCd1,
+						qu.QuestId,
+						an.Weigt
+					FROM
+						TB_RsltSum sc1
+						JOIN TB_Quest qu ON qu.QuestAttrCd1 = sc1.QuestAttrCd
+						JOIN
+						    (
+								SELECT
+									A.QuestId
+									, Val1
+									, Val2
+									, IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A.Val1), 0)
+									+ IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A.Val2), 0) AS Weigt
+								FROM
+									TB_Ans A
+								WHERE
+									A.AnsPrgrsId = #{ansPrgrsId}
+						) an ON an.QuestId = qu.QuestId
+					WHERE
+						sc1.AnsPrgrsId = #{ansPrgrsId}
+						AND sc1.QuestType = 'C00501'
+						AND <![CDATA[ sc1.Rank <= 3 ]]>
+						AND qu.UseYn = 'Y'
+						AND an.Val1 IN (
+							SELECT
+								B.ItemId
+							FROM
+								TB_Quest A
+								INNER JOIN TB_QuestItem  B ON A.QuestId = B.QuestId
+							WHERE
+								A.QuestType = 'C00501'
+								AND B.Seq = 1
+						)
+					ORDER BY
+						sc1.Rank,
+						an.Weigt DESC
+				) img
+				JOIN TB_ImgJob jm ON jm.QuestId = img.QuestId
+			) t
+		WHERE
+			<![CDATA[ rk <= 5 ]]>
+	</insert>
+
+	<!-- 검사 결과 선호 직업 등록 -->
+	<insert id="cretRsltJobBest" parameterType="map">
+		INSERT INTO TB_RsltJob (
+			AnsPrgrsId
+			, JobKind
+			, JobCd
+			, Rank
+			, TedcyCd
+			, DuplCnt
+			, InsId , InsDt , UptId , UptDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			, 'C01306'
+			, JobCd
+			, rk
+		    , ''
+			, cnt
+			, #{insId} , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') , null, null
+		FROM
+			(
+				SELECT
+					JobCd
+					, SUM(DuplCnt) AS cnt
+					, ROW_NUMBER() OVER (ORDER BY SUM(DuplCnt) DESC) AS rk
+				FROM
+					TB_RsltJob
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+					AND JobKind IN ('C01301', 'C01302')
+				GROUP BY
+					JobCd
+			) t
+		WHERE
+			<![CDATA[ rk <= 10 ]]>
+	</insert>
+
+	<!-- 검사 결과 직무 등록 -->
+	<insert id="cretRsltDuty" parameterType="map">
+		INSERT INTO TB_RsltDuty (
+			AnsPrgrsId
+			, JobDutyType
+			, JobDutyCd
+			, Rank
+			, Cnt
+			, InsId , InsDt , UptId , UptDt
+		)
+		SELECT
+			#{ansPrgrsId}
+			, 'C01301'
+			, JobDutyCd
+			, ROW_NUMBER() OVER (ORDER BY rk, cnt DESC) AS Rank
+			, cnt
+			, #{insId} , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') , null, null
+		FROM
+			(
+				SELECT
+					JobDutyCd
+					, COUNT(*) AS cnt
+					, MIN(rk) AS rk
+				FROM
+					(
+						SELECT
+							A.Rank AS rk,
+							A.QuestAttrCd,
+							B.JobDutyCd
+						FROM
+							TB_RsltSum A
+							JOIN TB_TedcyJobDuty B ON B.TedcyCd1 = A.QuestAttrCd
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+							AND A.QuestType = 'C00504'
+							AND A.Rank = 1
+
+						UNION
+
+						SELECT
+							A.Rank,
+							A.QuestAttrCd,
+							B.JobDutyCd
+						FROM
+							TB_RsltSum A
+							JOIN TB_TedcyJobDuty B ON B.TedcyCd2 = A.QuestAttrCd
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+							AND A.QuestType = 'C00504'
+							AND A.Rank = 2
+
+						UNION
+
+						SELECT
+							A.Rank,
+							A.QuestAttrCd,
+							B.JobDutyCd
+						FROM
+							TB_RsltSum A
+							JOIN TB_TedcyJobDuty B ON B.TedcyCd3 = A.QuestAttrCd
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+							AND A.QuestType = 'C00504'
+							AND A.Rank = 3
+
+						UNION
+
+						SELECT
+							A.Rank,
+							A.QuestAttrCd,
+							B.JobDutyCd
+						FROM
+							TB_RsltSum A
+							JOIN TB_TedcyJobDuty B ON B.TedcyCd4 = A.QuestAttrCd
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+							AND A.QuestType = 'C00504'
+							AND A.Rank = 4
+
+						UNION
+
+						SELECT
+							A.Rank,
+							A.QuestAttrCd,
+							B.JobDutyCd
+						FROM
+							TB_RsltSum A
+							JOIN TB_TedcyJobDuty B ON B.TedcyCd5 = A.QuestAttrCd
+						WHERE
+							A.AnsPrgrsId = #{ansPrgrsId}
+							AND A.QuestType = 'C00504'
+							AND A.Rank = 5
+					) A2
+				GROUP BY
+					JobDutyCd
+			) A3
+	</insert>
+
+
+
 	<!-- 수정 ********************************************************-->
 
 	<update id="editAnsPrgrs" parameterType="map">
@@ -122,6 +811,131 @@
 			AND PersnId = #{persnId}
 	</update>
 
+	<!-- 검사 결과 Main Think 집계 -->
+	<update id="editRsltMainThink" parameterType="map">
+		UPDATE TB_RsltMain SET
+			Think1 = (
+				SELECT QuestAttrCd FROM  TB_RsltSum
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+					AND QuestType = 'C00503'
+					AND Rank = 1
+			LIMIT 1
+			)
+			, Think2 = (
+				SELECT QuestAttrCd FROM  TB_RsltSum
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+					AND QuestType = 'C00503'
+					AND Rank = 2
+				LIMIT 1
+			)
+			, ThinkTotScore = (
+				SELECT
+					ROUND(CAST(SUM(A.Score) AS DECIMAL) / CAST(SUM(B.TotScore) AS DECIMAL), 2) * 100 AS thkscore
+				FROM
+					TB_RsltSum A
+					INNER JOIN TB_QuestAttr B ON A.QuestAttrCd = B.QuestAttrCd
+				WHERE
+					A.AnsPrgrsId = #{ansPrgrsId}
+					AND A.QuestType = 'C00503'
+			)
+		WHERE
+			AnsPrgrsId = #{ansPrgrsId}
+
+	</update>
+
+	<!-- 검사 결과 Main Talnt 집계 -->
+	<update id="editRsltMainTalnt" parameterType="map">
+		UPDATE TB_RsltMain A
+			JOIN (
+				SELECT
+					MIN(CASE WHEN rk = 1 THEN QuestAttrCd END) AS tal1,
+					MIN(CASE WHEN rk = 2 THEN QuestAttrCd END) AS tal2,
+					MIN(CASE WHEN rk = 3 THEN QuestAttrCd END) AS tal3,
+					MIN(CASE WHEN rk = 4 THEN QuestAttrCd END) AS tal4,
+					MIN(CASE WHEN rk = 5 THEN QuestAttrCd END) AS tal5,
+					MIN(CASE WHEN rk = 6 THEN QuestAttrCd END) AS tal6,
+					MIN(CASE WHEN rk = 7 THEN QuestAttrCd END) AS tal7
+				FROM
+					(
+						SELECT
+							QuestAttrCd,
+							ROW_NUMBER() OVER (ORDER BY Rank) AS rk
+						FROM
+							TB_RsltSum
+						WHERE
+							AnsPrgrsId = #{ansPrgrsId}
+							AND QuestType = 'C00502'
+							AND <![CDATA[ Rank <= 7 ]]>
+						LIMIT 7
+					) tal
+			) B ON A.AnsPrgrsId = #{ansPrgrsId}
+		SET
+			A.Talnt1 = B.tal1,
+			A.Talnt2 = B.tal2,
+			A.Talnt3 = B.tal3,
+			A.Talnt4 = B.tal4,
+			A.Talnt5 = B.tal5,
+			A.Talnt6 = B.tal6,
+			A.Talnt7 = B.tal7
+		WHERE
+			A.AnsPrgrsId = #{ansPrgrsId}
+	</update>
+
+	<!-- 검사 결과 Main Image 집계 -->
+	<update id="editRsltMainImg" parameterType="map">
+		UPDATE TB_RsltMain A
+			JOIN (
+				SELECT
+					ROUND(CAST(c.PostvCnt AS DECIMAL) / CAST(t.TotCnt AS DECIMAL), 3) AS PostvRate
+		    		, t.TotCnt
+		    		, c.PostvCnt
+				FROM
+					(
+						SELECT
+							COUNT(*) AS TotCnt
+						FROM
+							TB_Quest
+						WHERE
+							QuestType = 'C00501'
+							AND UseYn = 'Y'
+					) t,
+					(
+						SELECT
+							Count(*) as PostvCnt
+						FROM
+							(
+								SELECT
+									QuestId
+									, Val1 		AS ItemId
+								FROM TB_Ans
+								WHERE
+									AnsPrgrsId = #{ansPrgrsId}
+							) A
+							INNER  JOIN (
+								SELECT
+									A.QuestId
+									, B.ItemId
+									, B.Seq
+									, B.Weigt
+								FROM
+									TB_Quest A
+									INNER JOIN TB_QuestItem  B ON A.QuestId = B.QuestId
+								WHERE
+									A.QuestType = 'C00501'
+							) B ON A.QuestId = B.QuestId AND A.ItemId = B.ItemId
+						WHERE
+							B.Seq = 1
+					) c
+			) B  ON A.AnsPrgrsId = #{ansPrgrsId}
+		SET
+			A.ImgPostvRate = B.PostvRate,
+			A.ImgTotCnt = B.TotCnt,
+			A.ImgPostvCnt = B.PostvCnt
+		WHERE
+			A.AnsPrgrsId = #{ansPrgrsId}
+	</update>
 
 	<!-- 삭제 ********************************************************-->
 
@@ -323,6 +1137,11 @@
 		  AND (#{turnId} = 0 OR A.TurnId = #{turnId})
 		  AND (#{payId} = 0 OR A.PayId = #{payId})
 	</select>
+
+
+
+
+
 
 
 	<!-- 기타 ********************************************************-->
