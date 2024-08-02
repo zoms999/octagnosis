@@ -1140,6 +1140,40 @@
 
 
 
+	<select id="getTestRsltTotCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			TB_OrgTurnPersn
+		WHERE 1=1
+		  AND OrgId = #{orgId}
+		  AND TurnId = #{turnId}
+	</select>
+
+	<select id="getTestRsltList" parameterType="map" resultType="hashmap">
+		SELECT
+			A.PersnId
+			 , A.StartDt
+			 , A.EndDt
+			 , B.PersnNm
+			 , B.Phone
+			 , B.Email
+			 , C.AcuntId
+			 , D.AnsPrgrsId
+			 , D.StartDt
+			 , D.EndDt
+			 , D.DoneYn
+		FROM
+			TB_OrgTurnPersn  A
+			INNER JOIN TB_Persn B ON A.PersnId = B.PersnId
+			INNER JOIN TB_Acunt C ON B.PersnId = C.UserId AND C.UserType = 'C00101'
+			INNER JOIN TB_AnsPrgrs D ON A.TurnId = D.TurnId AND C.AcuntId = D.AcuntId
+		WHERE 1=1
+		  AND A.OrgId = #{orgId}
+		  AND A.TurnId = #{turnId}
+		ORDER BY
+			A.PersnId DESC
+			LIMIT #{paging.startRow}, #{paging.rowCntInPage}
+	</select>
 
 
 

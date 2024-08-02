@@ -87,8 +87,7 @@ public class OrgController {
         return Rtn;
     }
 
-    // 기관목록
-
+    // 기관목록 - 게시판
     @PostMapping("/Org/getOrgList")
     public Map<String, Object> getOrgList(@RequestBody OrgParm orgParm) {
         //public ResponseEntity<Map<String, Object>> GetOrgList(@RequestBody OrgParm orgParm) {
@@ -98,7 +97,16 @@ public class OrgController {
         Rtn.put("OrgList", OrgService.getOrgList(orgParm));
         return Rtn;
     }
-
+    
+    // 기관목록 - 단순목록
+    @PostMapping("/Org/getOrgList2")
+    public Map<String, Object> getOrgList2(@RequestBody OrgParm orgParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("OrgList", OrgService.getOrgList2(orgParm));
+        return Rtn;
+    }
+    
+    
     // 기관코드 유효성 검증
     @PostMapping("/Org/chkUrlCd")
     public Map<String, Object> chkUrlCd(@RequestBody OrgParm org) {

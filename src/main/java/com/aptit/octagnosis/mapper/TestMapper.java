@@ -2,6 +2,7 @@ package com.aptit.octagnosis.mapper;
 
 
 import com.aptit.octagnosis.model.*;
+import com.aptit.octagnosis.modelParm.OrgTurnParm;
 import com.aptit.octagnosis.modelParm.QuestParm;
 import com.aptit.octagnosis.modelParm.TestParm;
 import com.aptit.octagnosis.modelview.QuestPageV1;
@@ -61,6 +62,11 @@ public interface TestMapper {
     AnsPrgrs getAnsPrgrsForValid(TestParm parm);
 
     long getAnsPrgrsId();
+    
+    int getTestRsltTotCnt(TestParm orgTurnParm);
+    
+    List<Map<String, String>> getTestRsltList(TestParm orgTurnParm);
+    
 
 }
 

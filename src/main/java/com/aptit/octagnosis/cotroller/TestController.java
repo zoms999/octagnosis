@@ -313,9 +313,14 @@ public class TestController {
         Rtn.put("questPageId", questPageId);
         return Rtn;
     }
-
-
     
-    
-    
+    // 기관회차 개인정보
+    @PostMapping("/Test/getTestRsltList")
+    public Map<String, Object> getTestRsltList(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("TotCnt", TestService.getTestRsltTotCnt(testParm));
+        Rtn.put("List", TestService.getTestRsltList(testParm));
+        return Rtn;
+        
+    }
 }

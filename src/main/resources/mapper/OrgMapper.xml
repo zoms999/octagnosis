@@ -252,4 +252,46 @@
 		LIMIT #{paging.startRow}, #{paging.rowCntInPage}
 	</select>
 
+	<select id="getOrgList2" parameterType="map" resultType="hashmap">
+		SELECT
+			A.OrgId
+			 , A.BizNum
+			 , A.CorpNum
+			 , A.CeoNm
+			 , A.CompyNm
+			 , A.Tel1
+			 , A.Tel2
+			 , A.MngerNm1
+			 , A.MngerPhone1
+			 , B.RegDt
+			 , B.ExpirDt
+			 , IFNULL(C.TurnId, 0) AS TurnId
+			 , IFNULL(C.TurnNum, 0) AS TurnNum
+			 , IFNULL(C.TurnReqCnt, 0) AS TurnReqCnt
+			 , IFNULL(C.TurnUseCnt, 0) AS TurnUseCnt
+			 , IFNULL(C.UseYn, 0) AS TurnUseYn
+		FROM
+			TB_Org AS A
+			INNER JOIN TB_Acunt AS B ON A.OrgId = B.UserId AND B.UserType = 'C00101'
+			LEFT OUTER JOIN (
+				SELECT
+					ROW_NUMBER() OVER (PARTITION BY OrgId ORDER BY TurnId DESC) AS RowNum
+					, OrgId
+					, UseYn
+					, TurnId
+					, TurnNum
+					, TurnReqCnt
+					, TurnUseCnt
+				FROM
+					TB_OrgTurn
+			)  AS C ON A.OrgId = C.OrgId AND C.RowNum = 1
+		WHERE 1=1
+		  AND (
+				(IFNULL(#{srchStr}, '') = '' OR A.CompyNm LIKE CONCAT('%', IFNULL(#{srchStr}, ''), '%'))
+			)
+		ORDER BY
+			A.OrgId DESC
+	</select>
+
+
 </mapper>

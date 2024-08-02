@@ -24,6 +24,7 @@ public interface OrgMapper {
     int getOrgListTotCnt(OrgParm orgParm);
 
     List<Map<String, String>> getOrgList(OrgParm orgParm);
+    List<Map<String, String>> getOrgList2(OrgParm orgParm);
 
     Org getExistOrg(OrgParm orgParm);
 }
