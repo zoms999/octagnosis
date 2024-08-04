@@ -36,5 +36,8 @@ public class Personal {
     private String insDt;
     private Long uptId;
     private String uptDt;
-
+    
+    private String eductNm;
+    private String eductStusNm;
+    private String jobCdNm;
 }

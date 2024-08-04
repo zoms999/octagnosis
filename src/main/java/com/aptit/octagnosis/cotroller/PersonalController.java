@@ -3,6 +3,8 @@ package com.aptit.octagnosis.cotroller;
 import com.aptit.octagnosis.mapper.PersonalMapper;
 import com.aptit.octagnosis.model.Acunt;
 import com.aptit.octagnosis.model.Personal;
+import com.aptit.octagnosis.modelParm.PersnParm;
+import com.aptit.octagnosis.modelParm.TestParm;
 import com.aptit.octagnosis.modelview.PersonalAcuntView;
 import com.aptit.octagnosis.req.PersonalRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,4 +142,13 @@ public class PersonalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal server error occurred");
         }
     }
+    
+    // 기관회차 개인정보
+    @PostMapping("/personal/getPersn")
+    public Map<String, Object> getPersn(@RequestBody PersnParm persnParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Persn", personalMapper.getPersonalById(persnParm.persnId));
+        return Rtn;
+    }
+    
 }

@@ -116,6 +116,9 @@
             , jobNm
             , jobDuty
             , IFNULL(orgId, 0) AS orgId
+            , fnGetCdNm(educt)      AS eductNm
+            , fnGetCdNm(eductStus)  AS eductStusNm
+            , fnGetCdNm(job)        AS jobCdNm
         FROM
             TB_Persn
         WHERE

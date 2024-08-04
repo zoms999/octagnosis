@@ -1177,6 +1177,834 @@
 
 
 
+	<!-- 검사결과 ********************************************************-->
+
+	<!-- 성형결과 -->
+	<select id="getRsltTndcy1_1_OLD" parameterType="map" resultType="hashmap">
+		SELECT
+			max( CASE WHEN rk = 1 THEN tnd END ) AS Tnd1,
+			max( CASE WHEN rk = 2 THEN tnd END ) AS Tnd2,
+			max( CASE WHEN rk = 3 THEN tnd END ) AS Tnd3
+		FROM
+			(
+				SELECT
+					replace(qa.QuestAttrNm, '형', '') AS tnd,
+					1 AS rk
+				FROM
+					TB_RsltMain rv,
+					TB_QuestAttr qa
+				WHERE
+					rv.AnsPrgrsId = #{ansPrgrsId}
+				  AND qa.QuestAttrCd = rv.Tedcy1
+				UNION
+				SELECT
+					replace(qa.QuestAttrNm, '형', '') AS tnd,
+					2 AS rk
+				FROM
+					TB_RsltMain rv,
+					TB_QuestAttr qa
+				WHERE
+					rv.AnsPrgrsId = #{ansPrgrsId}
+				  AND qa.QuestAttrCd = rv.Tedcy2
+				UNION
+				SELECT
+					replace(qa.QuestAttrNm, '형', '') AS tnd,
+					3 AS rk
+				FROM
+					TB_RsltMain rv,
+					TB_QuestAttr qa
+				WHERE
+					rv.AnsPrgrsId = #{ansPrgrsId}
+				  AND qa.QuestAttrCd = rv.Tedcy3
+			) t;
+	</select>
+
+	<select id="getRsltTndcy1_1" parameterType="map" resultType="hashmap">
+		SELECT
+			A.QuestAttrCd
+			 , B.QuestAttrNm
+			 , A.Rk
+		FROM
+			(
+				SELECT
+					QuestAttrCd
+					 , ROW_NUMBER() OVER (ORDER BY Rank) AS Rk
+				FROM
+					TB_RsltSum
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+				  AND QuestType = 'C00504'
+			) A
+			INNER JOIN TB_QuestAttr B ON A.QuestAttrCd = B.QuestAttrCd
+		ORDER BY
+		    A.Rk
+	</select>
+
+	<select id="getRsltTndcy1_2" parameterType="map" resultType="hashmap">
+		SELECT
+			1 as Rk,
+			qa.QuestAttrNm,
+			replace(qe.Expl, '당신', '' || '님') AS Expl
+		FROM
+			TB_RsltMain rv,
+			TB_QuestExpl qe,
+			TB_QuestAttr qa
+		WHERE
+			rv.AnsPrgrsId = #{ansPrgrsId}
+		  AND qe.QuestAttrCd = rv.Tedcy1
+		  AND qe.QuestAttrCd = qa.QuestAttrCd
+
+		UNION ALL
+
+		SELECT
+			2 as Rk,
+			qa.QuestAttrNm,
+			replace(qe.Expl, '당신', '' || '님') AS Expl
+		FROM
+			TB_RsltMain rv,
+			TB_QuestExpl qe,
+			TB_QuestAttr qa
+		WHERE
+			rv.AnsPrgrsId = #{ansPrgrsId}
+		  AND qe.QuestAttrCd = rv.Tedcy2
+		  AND qe.QuestAttrCd = qa.QuestAttrCd
+
+		UNION ALL
+
+		SELECT
+			3 as Rk,
+			qa.QuestAttrNm,
+			replace(qe.Expl, '당신', '' || '님') AS Expl
+		FROM
+			TB_RsltMain rv,
+			TB_QuestExpl qe,
+			TB_QuestAttr qa
+		WHERE
+			rv.AnsPrgrsId = #{ansPrgrsId}
+		  AND qe.QuestAttrCd = rv.Tedcy3
+		  and qe.QuestAttrCd = qa.QuestAttrCd
+	</select>
+
+	<select id="getRsltTndcy2" parameterType="map" resultType="hashmap">
+		SELECT
+			pr.ParapCont1
+		FROM
+			(
+				SELECT
+					A2.QuestId
+					, IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val1), 0)
+					  + IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A2.Val2), 0) AS Weigh
+				FROM
+					TB_Ans A2
+				WHERE
+					A2.AnsPrgrsId = #{ansPrgrsId}
+			) an
+			INNER JOIN TB_Quest qu ON qu.QuestId = an.QuestId
+			INNER JOIN TB_QuestRsltParap pr ON qu.QuestId = pr.QuestId
+			INNER JOIN (
+				SELECT
+					QuestAttrCd,
+					Rank
+				FROM
+					TB_RsltSum sc1
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+					AND QuestType = 'C00504'
+					AND <![CDATA[ Rank <= 3 ]]>
+			) sc1 ON     qu.QuestAttrCd1 = sc1.QuestAttrCd
+		WHERE
+			qu.UseYn = 'Y'
+			AND qu.QuestType = 'C00504'
+			AND <![CDATA[ an.Weigh >= 5 ]]>
+		ORDER BY
+			an.Weigh DESC,
+			sc1.Rank
+	</select>
+
+	<select id="getRsltThink_1" parameterType="map" resultType="hashmap">
+		SELECT
+			(
+				SELECT
+					qa.QuestAttrNm
+				FROM
+					TB_QuestAttr qa
+				WHERE
+					qa.QuestAttrCd = A.Think1
+			) AS thkm,
+			(
+				SELECT
+					qa.QuestAttrNm
+				FROM
+					TB_QuestAttr qa
+				WHERE
+					qa.QuestAttrCd = A.Think2
+			) AS thks,
+			ThinkTotScore AS tscore
+		FROM
+			TB_RsltMain A
+		WHERE
+			AnsPrgrsId = #{ansPrgrsId};
+
+
+	</select>
+
+	<select id="getRsltThink_2" parameterType="map" resultType="hashmap">
+		SELECT
+			B.QuestAttrCd
+			 , B.QuestAttrNm
+			 , sum(round(Rate * 100)) AS thkSum
+		FROM
+			TB_RsltSum A
+				INNER JOIN (
+				SELECT QuestAttrCd, QuestAttrNm
+				FROM TB_QuestAttr
+				WHERE QuestType = 'C00503'
+			) B ON A.QuestAttrCd = B.QuestAttrCd
+		WHERE
+			AnsPrgrsId = #{ansPrgrsId}
+		  AND QuestType = 'C00503'
+		GROUP BY
+			B.QuestAttrCd, B.QuestAttrNm
+	</select>
+
+	<select id="getRsltThink_3" parameterType="map" resultType="hashmap">
+		SELECT
+			qa.QuestAttrNm
+			 , ROUND(sc1.Rate * 100) AS score
+			 , REPLACE(qe.Expl, '당신', '님') AS Expl
+		FROM
+			TB_RsltSum sc1,
+			TB_QuestAttr qa,
+			TB_QuestExpl qe
+		WHERE
+			sc1.AnsPrgrsId = #{ansPrgrsId}
+		  AND sc1.QuestType = 'C00503'
+		  AND qa.QuestAttrCd = sc1.QuestAttrCd
+		  AND qe.QuestAttrCd = qa.QuestAttrCd
+		  AND qe.ExplNo = CASE
+							  WHEN sc1.Rate * 100 BETWEEN 80 AND 100 THEN 1
+							  WHEN sc1.Rate * 100 BETWEEN 51 AND 79 THEN 2
+							  ELSE 3
+						  END
+		ORDER BY
+			sc1.Rank;
+
+	</select>
+
+	<select id="getRsltTedcyJob_1" parameterType="map" resultType="hashmap">
+		SELECT
+			CONCAT(
+				(
+					SELECT
+						REPLACE(QuestAttrNm, '형', '')
+					FROM
+						TB_QuestAttr,
+						TB_RsltMain
+					WHERE
+						AnsPrgrsId = #{ansPrgrsId}
+						AND QuestAttrCd = Tedcy1
+				)
+				,  (
+					SELECT
+						REPLACE(QuestAttrNm, '형', '')
+					FROM
+						TB_QuestAttr,
+						TB_RsltMain
+					WHERE
+						AnsPrgrsId = #{ansPrgrsId}
+						AND QuestAttrCd = Tedcy2
+				)
+				, '형'
+			)  as tendency,
+			GROUP_CONCAT(jo.JobNm SEPARATOR ', ') AS tndjob
+		FROM
+			(
+				SELECT
+					JobCd
+				FROM
+					TB_RsltJob
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+					AND JobKind = 'C01301'
+					AND <![CDATA[ Rank <= 7 ]]>
+			) j,
+			TB_Job jo
+		WHERE
+			jo.JobCd = j.JobCd;
+	</select>
+
+	<select id="getRsltTedcyJob_2" parameterType="map" resultType="hashmap">
+		SELECT
+			jo.JobNm,
+			jo.Expl,
+			jo.MainWork
+		FROM
+			TB_RsltJob rj,
+			TB_Job jo
+		WHERE
+			rj.AnsPrgrsId = #{ansPrgrsId}
+			AND rj.JobKind = 'C01301'
+			AND jo.JobCd = rj.JobCd
+			AND <![CDATA[ Rank <= 7 ]]>
+		ORDER BY
+			rj.Rank
+	</select>
+
+	<select id="getRsltTedcyJob_3" parameterType="map" resultType="hashmap">
+		SELECT
+			jo.JobNm,
+			GROUP_CONCAT(
+				ma.DepatNm
+				ORDER BY
+					ma.DepatNm
+				SEPARATOR ', '
+			) AS major
+		FROM
+			TB_RsltJob rj,
+			TB_Job jo,
+			TB_JobDepat jmm,
+			TB_Depat ma
+		WHERE
+			rj.AnsPrgrsId = #{ansPrgrsId}
+			AND rj.JobKind = 'C01301'
+			AND jo.JobCd = rj.JobCd
+			AND <![CDATA[ Rank <= 7 ]]>
+			AND jmm.JobCd = rj.JobCd
+			AND ma.DepatSeq = jmm.DepatSeq
+		GROUP BY
+			jo.JobCd,
+			rj.Rank
+		ORDER BY
+			rj.Rank
+
+	</select>
+
+	<select id="getRsltAbility_1" parameterType="map" resultType="hashmap">
+		SELECT
+			GROUP_CONCAT(
+				qa.QuestAttrNm
+				ORDER BY
+					sc1.Rank
+				SEPARATOR ', '
+			) AS tal
+		FROM
+			TB_QuestAttr qa,
+			TB_RsltSum sc1
+		WHERE
+			sc1.AnsPrgrsId = #{ansPrgrsId}
+			AND sc1.QuestType = 'C00502'
+			AND <![CDATA[  sc1.Rank <= 5 ]]>
+			AND sc1.QuestAttrCd = qa.QuestAttrCd
+	</select>
+
+	<select id="getRsltAbility_2" parameterType="map" resultType="hashmap">
+		SELECT
+			qa.QuestAttrNm,
+			round(sc1.Rate * 100) AS tscore,
+			REPLACE(qe.Expl, '당신', '000님') AS Expl
+		FROM
+			TB_RsltSum sc1,
+			TB_QuestAttr qa,
+			TB_QuestExpl qe
+		WHERE
+			sc1.AnsPrgrsId = #{ansPrgrsId}
+			AND sc1.QuestType = 'C00502'
+			AND qa.QuestAttrCd = sc1.QuestAttrCd
+			AND qe.QuestAttrCd = qa.QuestAttrCd
+			AND <![CDATA[  sc1.Rank <= 5 ]]>
+		ORDER BY
+			sc1.Rank
+	</select>
+
+	<select id="getRsltAbilityJob_1" parameterType="map" resultType="hashmap">
+		SELECT
+			CONCAT(
+					(
+						SELECT
+							REPLACE(QuestAttrNm, '형', '')
+						FROM
+							TB_QuestAttr,
+							TB_RsltMain
+						WHERE
+							AnsPrgrsId = #{ansPrgrsId}
+						  AND QuestAttrCd = Tedcy1
+					)
+				,  (
+						SELECT
+							REPLACE(QuestAttrNm, '형', '')
+						FROM
+							TB_QuestAttr,
+							TB_RsltMain
+						WHERE
+							AnsPrgrsId = #{ansPrgrsId}
+						  AND QuestAttrCd = Tedcy2
+					)
+				, '형'
+				)  as tendency,
+			GROUP_CONCAT(jo.JobNm SEPARATOR ', ') AS tndjob
+		FROM
+			(
+				SELECT
+					JobCd
+				FROM
+					TB_RsltJob
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+				  AND JobKind = 'C01302'
+				  AND <![CDATA[ Rank <= 7 ]]>
+			) j,
+			TB_Job jo
+		WHERE
+			jo.JobCd = j.JobCd;
+	</select>
+
+	<select id="getRsltAbilityJob_2" parameterType="map" resultType="hashmap">
+		SELECT
+			jo.JobNm,
+			jo.Expl,
+			jo.MainWork
+		FROM
+			TB_RsltJob rj,
+			TB_Job jo
+		WHERE
+			rj.AnsPrgrsId = #{ansPrgrsId}
+		  AND rj.JobKind = 'C01302'
+		  AND jo.JobCd = rj.JobCd
+		  AND <![CDATA[ Rank <= 7 ]]>
+		ORDER BY
+			rj.Rank
+	</select>
+
+	<select id="getRsltAbilityJob_3" parameterType="map" resultType="hashmap">
+		SELECT
+			jo.JobNm,
+			GROUP_CONCAT(
+					ma.DepatNm
+						ORDER BY
+					ma.DepatNm
+				SEPARATOR ', '
+				) AS major
+		FROM
+			TB_RsltJob rj,
+			TB_Job jo,
+			TB_JobDepat jmm,
+			TB_Depat ma
+		WHERE
+			rj.AnsPrgrsId = #{ansPrgrsId}
+		  AND rj.JobKind = 'C01302'
+		  AND jo.JobCd = rj.JobCd
+		  AND <![CDATA[ Rank <= 7 ]]>
+			AND jmm.JobCd = rj.JobCd
+		  AND ma.DepatSeq = jmm.DepatSeq
+		GROUP BY
+			jo.JobCd,
+			rj.Rank
+		ORDER BY
+			rj.Rank
+
+	</select>
+
+	<select id="getRsltStudy_1" parameterType="map" resultType="hashmap">
+		SELECT
+			(
+				SELECT
+					REPLACE(qa.QuestAttrNm, '형', '')
+				FROM
+					TB_QuestAttr qa
+				WHERE
+					qa.QuestAttrCd = rv.Tedcy1
+			) AS tnd1,
+			REPLACE(ts1.StudyTedcy, '당신', '000님') AS tnd1_study,
+			REPLACE(ts1.StudyWay, '당신', '000님') AS tnd1_way,
+			(
+				SELECT
+					REPLACE(qa.QuestAttrNm, '형', '')
+				FROM
+					TB_QuestAttr qa
+				WHERE
+					qa.QuestAttrCd = rv.Tedcy2
+			) AS tnd2,
+			REPLACE(ts2.StudyTedcy, '당신', '000님') AS tnd2_study,
+			REPLACE(ts2.StudyWay, '당신', '000님') AS tnd2_way,
+			cast(substring(rv.Tedcy1, 4, 2) AS INT) - 10 AS tndrow,
+			cast(substring(rv.Tedcy2, 4, 2) AS INT) - 10 AS tndcol
+		FROM
+			TB_RsltMain rv,
+			TB_TedcyStudy ts1,
+			TB_TedcyStudy ts2
+		WHERE
+			AnsPrgrsId = #{ansPrgrsId}
+		  AND ts1.QuestAttrCd = rv.Tedcy1
+		  AND ts2.QuestAttrCd = rv.Tedcy2
+	</select>
+
+	<!-- 적합한 학습법1  - 최적학습 투자비율 추천1-->
+	<select id="getRsltStudy_2" parameterType="map" resultType="hashmap">
+		SELECT
+			sr.MethdNm AS Sname,
+			cast(sr.AplyRate * 100 AS INT) AS Srate,
+			sr.ChartColor AS Scolor
+		FROM
+			TB_RsltMain rv,
+			TB_StydyWayRate sr
+		WHERE
+			rv.AnsPrgrsId = #{ansPrgrsId}
+		  AND sr.QuestAttrCd = rv.Tedcy1
+		  AND sr.TypeCd = 'S'
+		ORDER BY
+			sr.MethdCd;
+	</select>
+
+	<!-- 적합한 학습법1  - 최적학습 투자비율 추천2-->
+	<select id="getRsltStudy_3" parameterType="map" resultType="hashmap">
+		SELECT
+			sr.MethdNm AS Sname,
+			cast(sr.AplyRate * 100 AS INT) AS Srate,
+			sr.ChartColor AS Scolor
+		FROM
+			TB_RsltMain rv,
+			TB_StydyWayRate sr
+		WHERE
+			rv.AnsPrgrsId = #{ansPrgrsId}
+		  AND sr.QuestAttrCd = rv.Tedcy2
+		  AND sr.TypeCd = 'S'
+		ORDER BY
+			sr.MethdCd
+	</select>
+
+	<!-- 적합한 학습법2  최적학습 투자비율 추천1-->
+	<select id="getRsltStudy_4" parameterType="map" resultType="hashmap">
+		SELECT
+			sr.MethdNm AS Sname,
+			cast(sr.AplyRate * 100 AS INT) AS Srate,
+			sr.ChartColor AS Scolor
+		FROM
+			TB_RsltMain rv,
+			TB_StydyWayRate sr
+		WHERE
+			rv.AnsPrgrsId = #{ansPrgrsId}
+		  AND sr.QuestAttrCd = rv.Tedcy1
+		  AND sr.TypeCd = 'W'
+		ORDER BY
+			sr.MethdCd;
+
+
+	</select>
+
+	<!-- 적합한 학습법2  최적학습 투자비율 추천2-->
+	<select id="getRsltStudy_5" parameterType="map" resultType="hashmap">
+		SELECT
+			sr.MethdNm AS Sname,
+			cast(sr.AplyRate * 100 AS INT) AS Srate,
+			sr.ChartColor AS Scolor
+		FROM
+			TB_RsltMain rv,
+			TB_StydyWayRate sr
+		WHERE
+			rv.AnsPrgrsId = #{ansPrgrsId}
+		  AND sr.QuestAttrCd = rv.Tedcy2
+		  AND sr.TypeCd = 'W'
+		ORDER BY
+			sr.MethdCd
+	</select>
+
+	<!-- 교과목  적성적합 교과목순위-->
+	<select id="getRsltSubjt_1" parameterType="map" resultType="hashmap">
+		SELECT
+			subject AS srank,
+			SubjGrp AS sgroup,
+			SubjSel AS schoice,
+			Subj AS subject,
+			Expl AS sexplain,
+			QuestAttrNm AS tnd1,
+			rank() OVER (
+				PARTITION BY SubjGrp,
+				SubjSel
+				ORDER BY
+					cast(subject AS INT)
+			) AS srank2
+		FROM
+			(
+				SELECT
+					CASE
+						WHEN rv.Tedcy1 = 'tnd11000' THEN sm.TypeComuc
+						/*소통형 */
+						WHEN rv.Tedcy1 = 'tnd12000' THEN sm.TypeCret
+						/*창조형 */
+						WHEN rv.Tedcy1 = 'tnd13000' THEN sm.TypePratc
+						/*실용형 */
+						WHEN rv.Tedcy1 = 'tnd14000' THEN sm.TypeSport
+						/*운동형 */
+						WHEN rv.Tedcy1 = 'tnd15000' THEN sm.TypeCanon
+						/*규범형 */
+						WHEN rv.Tedcy1 = 'tnd16000' THEN sm.TypeInfrn
+						/*추리형 */
+						WHEN rv.Tedcy1 = 'tnd17000' THEN sm.TypeProdc
+						/*제작형 */
+						WHEN rv.Tedcy1 = 'tnd18000' THEN sm.TypeLife
+						/*생명형 */
+						WHEN rv.Tedcy1 = 'tnd19000' THEN sm.TypeAnals
+						/*분석형 */
+						WHEN rv.Tedcy1 = 'tnd20000' THEN sm.TypeObsrv
+						/*관찰형 */
+						WHEN rv.Tedcy1 = 'tnd21000' THEN sm.TypePricp
+						/*원리형 */
+						WHEN rv.Tedcy1 = 'tnd22000' THEN sm.TypeSvic
+						/*봉사형 */
+						WHEN rv.Tedcy1 = 'tnd23000' THEN sm.TypeEdu
+						/*교육형 */
+						WHEN rv.Tedcy1 = 'tnd24000' THEN sm.TypeMulti
+						/*복합형 */
+						WHEN rv.Tedcy1 = 'tnd25000' THEN sm.TypeAdvnt
+						/*진취형 */
+						END AS subject,
+					sm.SubjGrp,
+					sm.SubjSel,
+					sm.Subj,
+					sm.Expl,
+					sm.SubjCd,
+					qa.QuestAttrNm,
+					sm.SubjGrpCd,
+					sm.SubjSelCd
+				FROM
+					TB_RsltMain rv,
+					TB_TedcySubjt sm,
+					TB_QuestAttr qa
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+				  AND sm.UseYn = 'Y'
+				  AND qa.QuestAttrCd = rv.Tedcy1
+			) t
+		ORDER BY
+			SubjGrpCd,
+			SubjSelCd,
+			cast(subject AS INT),
+			SubjCd;
+
+	</select>
+
+	<!-- 교과목  강한 적성별 교과목 리스트-->
+	<select id="getRsltSubjt_2" parameterType="map" resultType="hashmap">
+		SELECT
+			subject AS srank,
+			SubjGrp AS sgroup,
+			SubjSel AS schoice,
+			Subj AS subject,
+			Expl AS sexplain,
+			QuestAttrNm AS tnd1
+		FROM
+			(
+				SELECT
+					CASE
+						WHEN rv.Tedcy1 = 'tnd11000' THEN sm.TypeComuc       /*소통형 */
+						WHEN rv.Tedcy1 = 'tnd12000' THEN sm.TypeCret            /*창조형 */
+						WHEN rv.Tedcy1 = 'tnd13000' THEN sm.TypePratc           /*실용형 */
+						WHEN rv.Tedcy1 = 'tnd14000' THEN sm.TypeSport              /*운동형 */
+						WHEN rv.Tedcy1 = 'tnd15000' THEN sm.TypeCanon                /*규범형 */
+						WHEN rv.Tedcy1 = 'tnd16000' THEN sm.TypeInfrn           /*추리형 */
+						WHEN rv.Tedcy1 = 'tnd17000' THEN sm.TypeProdc          /*제작형 */
+						WHEN rv.Tedcy1 = 'tnd18000' THEN sm.TypeLife                /*생명형 */
+						WHEN rv.Tedcy1 = 'tnd19000' THEN sm.TypeAnals            /*분석형 */
+						WHEN rv.Tedcy1 = 'tnd20000' THEN sm.TypeObsrv         /*관찰형 */
+						WHEN rv.Tedcy1 = 'tnd21000' THEN sm.TypePricp           /*원리형 */
+						WHEN rv.Tedcy1 = 'tnd22000' THEN sm.TypeSvic             /*봉사형 */
+						WHEN rv.Tedcy1 = 'tnd23000' THEN sm.TypeEdu           /*교육형 */
+						WHEN rv.Tedcy1 = 'tnd24000' THEN sm.TypeMulti           /*복합형 */
+						WHEN rv.Tedcy1 = 'tnd25000' THEN sm.TypeAdvnt         /*진취형 */
+						END AS subject,
+					sm.SubjGrp,
+					sm.SubjSel,
+					sm.Subj,
+					sm.Expl,
+					sm.SubjCd,
+					qa.QuestAttrNm
+				FROM
+					TB_RsltMain rv,
+					TB_TedcySubjt sm,
+					TB_QuestAttr qa
+				WHERE
+					AnsPrgrsId = #{ansPrgrsId}
+					AND sm.UseYn = 'Y'
+					AND qa.QuestAttrCd = rv.Tedcy1
+			) t
+		ORDER BY
+			cast(subject AS INT),
+			SubjCd;
+	</select>
+
+	<!-- 검사 결과 - 직무1-->
+	<select id="getRsltJobDuty_1" parameterType="map" resultType="hashmap">
+		SELECT
+			du.JobDutyNm,
+			du.Expl,
+			du.Deprt
+		FROM
+			TB_RsltDuty rd,
+			TB_Duty du
+		WHERE
+			rd.AnsPrgrsId = #{ansPrgrsId}
+			AND rd.JobDutyType = 'C01301'
+			AND du.JobDutyCd = rd.JobDutyCd
+			AND <![CDATA[ rd.Rank <= 5 ]]>
+		ORDER BY
+			rd.Rank;
+	</select>
+
+	<select id="getRsltPrefer_1" parameterType="map" resultType="hashmap">
+		SELECT
+			rv.ImgTotCnt tcnt,
+			rv.ImgPostvCnt cnt,
+			rv.ImgPostvRate * 100 AS irate
+		FROM
+			TB_RsltMain rv
+		WHERE
+			rv.AnsPrgrsId = #{ansPrgrsId};
+	</select>
+
+	<select id="getRsltPrefer_2" parameterType="map" resultType="hashmap">
+		SELECT
+			max( CASE WHEN rk2 = 1 THEN QuestAttrNm END ) AS tdname1,
+			max( CASE WHEN rk2 = 1 THEN QuestCnt END ) AS qcnt1,
+			max( CASE WHEN rk2 = 1 THEN rrate END ) AS rrate1,
+			max( CASE WHEN rk2 = 2 THEN QuestAttrNm END ) AS tdname2,
+			max( CASE WHEN rk2 = 2 THEN QuestCnt END ) AS qcnt2,
+			max( CASE WHEN rk2 = 2 THEN rrate END ) AS rrate2,
+			max( CASE WHEN rk2 = 3 THEN QuestAttrNm END ) AS tdname3,
+			max( CASE WHEN rk2 = 3 THEN QuestCnt END ) AS qcnt3,
+			max( CASE WHEN rk2 = 3 THEN rrate END ) AS rrate3,
+			max( CASE WHEN rk2 = 1 THEN Expl END ) AS exp1,
+			max( CASE WHEN rk2 = 2 THEN Expl END ) AS exp2,
+			max( CASE WHEN rk2 = 3 THEN Expl END ) AS exp3
+		FROM
+		(
+			SELECT
+				qa.QuestAttrNm,
+				sc1.QuestCnt,
+				round(sc1.ResRate * 100) AS rrate,
+				row_number() OVER (PARTITION BY sc1.Rank) AS rk,
+				sc1.Rank rk2,
+				qe.Expl
+			FROM
+				TB_RsltSum sc1,
+				TB_QuestAttr qa,
+				TB_QuestExpl qe
+			WHERE
+				sc1.AnsPrgrsId = 65
+				AND sc1.QuestType = 'C00501'
+				AND qa.QuestAttrCd = sc1.QuestAttrCd
+				AND <![CDATA[ sc1.Rank <= 3 ]]>
+				AND qe.QuestAttrCd = qa.QuestAttrCd
+				AND qe.ExplNo = 1
+			ORDER BY
+				sc1.Rank
+		) t
+		WHERE
+		rk = 1;
+	</select>
+
+	<select id="getRsltPrefer_3" parameterType="map" resultType="hashmap">
+		SELECT
+			qa.QuestAttrNm,
+			jo.JobNm,
+			jo.Expl,
+			jo.MainWork,
+			GROUP_CONCAT(
+				ma.DepatNm
+				ORDER BY
+					ma.DepatNm
+				SEPARATOR ', '
+			) AS major
+		FROM
+			TB_Job jo,
+			TB_JobDepat jmm,
+			TB_Depat ma,
+			TB_RsltJob rj
+			LEFT OUTER JOIN TB_QuestAttr qa ON qa.QuestAttrCd = rj.TedcyCd
+		WHERE
+			rj.AnsPrgrsId = 65
+			AND rj.JobKind = 'C01303'
+			AND <![CDATA[ rj.Rank <= 5 ]]>
+			AND jo.JobCd = rj.JobCd
+			AND jmm.JobCd = jo.JobCd
+			AND ma.DepatSeq = jmm.DepatSeq
+		GROUP BY
+			JobKind,
+			qa.QuestAttrCd,
+			jo.JobCd,
+			rj.Rank
+		ORDER BY
+			rj.JobKind
+		;
+	</select>
+
+	<select id="getRsltPrefer_4" parameterType="map" resultType="hashmap">
+		SELECT
+			qa.QuestAttrNm,
+			jo.JobNm,
+			jo.Expl,
+			jo.MainWork,
+			GROUP_CONCAT(
+				ma.DepatNm
+				ORDER BY
+					ma.DepatNm
+				SEPARATOR ', '
+			) AS major
+		FROM
+			TB_Job jo,
+			TB_JobDepat jmm,
+			TB_Depat ma,
+			TB_RsltJob rj
+			LEFT OUTER JOIN TB_QuestAttr qa ON qa.QuestAttrCd = rj.TedcyCd
+		WHERE
+			rj.AnsPrgrsId = 65
+			AND rj.JobKind = 'C01304'
+			AND <![CDATA[ rj.Rank <= 5 ]]>
+			AND jo.JobCd = rj.JobCd
+			AND jmm.JobCd = jo.JobCd
+			AND ma.DepatSeq = jmm.DepatSeq
+		GROUP BY
+			JobKind,
+			qa.QuestAttrCd,
+			jo.JobCd,
+			rj.Rank
+		ORDER BY
+			JobKind
+		;
+	</select>
+
+	<select id="getRsltPrefer_5" parameterType="map" resultType="hashmap">
+		SELECT
+			qa.QuestAttrNm,
+			jo.JobNm,
+			jo.Expl,
+			jo.MainWork,
+			GROUP_CONCAT(
+				ma.DepatNm
+				ORDER BY
+					ma.DepatNm
+				SEPARATOR ', '
+			) AS major
+		FROM
+			TB_Job jo,
+			TB_JobDepat jmm,
+			TB_Depat ma,
+			TB_RsltJob rj
+			LEFT OUTER JOIN TB_QuestAttr qa ON qa.QuestAttrCd = rj.TedcyCd
+		WHERE
+			rj.AnsPrgrsId = 65
+			AND rj.JobKind = 'C01305'
+			AND <![CDATA[ rj.Rank <= 5 ]]>
+			AND jo.JobCd = rj.JobCd
+			AND jmm.JobCd = jo.JobCd
+			AND ma.DepatSeq = jmm.DepatSeq
+		GROUP BY
+			JobKind,
+			qa.QuestAttrCd,
+			jo.JobCd,
+			rj.Rank
+		ORDER BY
+			JobKind;
+	</select>
 
 	<!-- 기타 ********************************************************-->
 

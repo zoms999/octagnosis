@@ -63,10 +63,45 @@ public interface TestMapper {
 
     long getAnsPrgrsId();
     
-    int getTestRsltTotCnt(TestParm orgTurnParm);
+    int getTestRsltTotCnt(TestParm parm);
     
-    List<Map<String, String>> getTestRsltList(TestParm orgTurnParm);
+    List<Map<String, String>> getTestRsltList(TestParm parm);
     
+    List<Map<String, String>> getRsltTndcy1_1(TestParm parm);
+    List<Map<String, String>> getRsltTndcy1_2(TestParm parm);
+    
+    List<Map<String, String>> getRsltTndcy2(TestParm parm);
 
+    List<Map<String, String>> getRsltThink_1(TestParm parm);
+    List<Map<String, String>> getRsltThink_2(TestParm parm);
+    List<Map<String, String>> getRsltThink_3(TestParm parm);
+
+    List<Map<String, String>> getRsltTedcyJob_1(TestParm parm);
+    List<Map<String, String>> getRsltTedcyJob_2(TestParm parm);
+    List<Map<String, String>> getRsltTedcyJob_3(TestParm parm);
+
+    List<Map<String, String>> getRsltAbility_1(TestParm parm);
+    List<Map<String, String>> getRsltAbility_2(TestParm parm);
+    
+    List<Map<String, String>> getRsltAbilityJob_1(TestParm parm);
+    List<Map<String, String>> getRsltAbilityJob_2(TestParm parm);
+    List<Map<String, String>> getRsltAbilityJob_3(TestParm parm);
+    
+    List<Map<String, String>> getRsltStudy_1(TestParm parm);
+    List<Map<String, String>> getRsltStudy_2(TestParm parm);
+    List<Map<String, String>> getRsltStudy_3(TestParm parm);
+    List<Map<String, String>> getRsltStudy_4(TestParm parm);
+    List<Map<String, String>> getRsltStudy_5(TestParm parm);
+    
+    List<Map<String, String>> getRsltSubjt_1(TestParm parm);
+    List<Map<String, String>> getRsltSubjt_2(TestParm parm);
+    
+    List<Map<String, String>> getRsltJobDuty_1(TestParm parm);
+    List<Map<String, String>> getRsltPrefer_1(TestParm parm);
+    List<Map<String, String>> getRsltPrefer_2(TestParm parm);
+    List<Map<String, String>> getRsltPrefer_3(TestParm parm);
+    List<Map<String, String>> getRsltPrefer_4(TestParm parm);
+    List<Map<String, String>> getRsltPrefer_5(TestParm parm);
+    
 }
 

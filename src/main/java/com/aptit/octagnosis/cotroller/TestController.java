@@ -321,6 +321,103 @@ public class TestController {
         Rtn.put("TotCnt", TestService.getTestRsltTotCnt(testParm));
         Rtn.put("List", TestService.getTestRsltList(testParm));
         return Rtn;
-        
     }
+    
+    // 결과보기 - 성향진단
+    @PostMapping("/Test/getRsltTndcy1")
+    public Map<String, Object> getRsltTndcy1(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltTndcy1_1(testParm));
+        Rtn.put("Rslt2", TestService.getRsltTndcy1_2(testParm));
+        return Rtn;
+    }
+    // 결과보기 - 성향분석
+    @PostMapping("/Test/getRsltTndcy2")
+    public Map<String, Object> getRsltTndcy2(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltTndcy2(testParm));
+        return Rtn;
+    }
+    
+    // 결과보기 - 사고력
+    @PostMapping("/Test/getRsltThink")
+    public Map<String, Object> getRsltThink(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltThink_1(testParm));
+        Rtn.put("Rslt2", TestService.getRsltThink_2(testParm));
+        Rtn.put("Rslt3", TestService.getRsltThink_3(testParm));
+        return Rtn;
+    }
+    
+    // 결과보기 - 성향적합직업학과
+    @PostMapping("/Test/getRsltTedcyJob")
+    public Map<String, Object> getRsltTedcyJob(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltTedcyJob_1(testParm));
+        Rtn.put("Rslt2", TestService.getRsltTedcyJob_2(testParm));
+        Rtn.put("Rslt3", TestService.getRsltTedcyJob_3(testParm));
+        return Rtn;
+    }
+    
+    // 결과보기 - 역량진단
+    @PostMapping("/Test/getRsltAbility")
+    public Map<String, Object> getRsltAbility(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltAbility_1(testParm));
+        Rtn.put("Rslt2", TestService.getRsltAbility_2(testParm));
+        return Rtn;
+    }
+    
+    // 결과보기 - 역량적합직업학과
+    @PostMapping("/Test/getRsltAbilityJob")
+    public Map<String, Object> getRsltAbilityJob(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltAbilityJob_1(testParm));
+        Rtn.put("Rslt2", TestService.getRsltAbilityJob_2(testParm));
+        Rtn.put("Rslt3", TestService.getRsltAbilityJob_3(testParm));
+        return Rtn;
+    }
+    
+    // 결과보기 - 학습
+    @PostMapping("/Test/getRsltStudy")
+    public Map<String, Object> getRsltStudy(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltStudy_1(testParm));
+        Rtn.put("Rslt2", TestService.getRsltStudy_2(testParm));
+        Rtn.put("Rslt3", TestService.getRsltStudy_3(testParm));
+        Rtn.put("Rslt4", TestService.getRsltStudy_4(testParm));
+        Rtn.put("Rslt5", TestService.getRsltStudy_5(testParm));
+        return Rtn;
+    }
+    
+    // 결과보기 - 교과목
+    @PostMapping("/Test/getRsltSubjt")
+    public Map<String, Object> getRsltSubjt(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltSubjt_1(testParm));
+        Rtn.put("Rslt2", TestService.getRsltSubjt_2(testParm));
+        return Rtn;
+    }
+    
+    // 결과보기 - 직무
+    @PostMapping("/Test/getRsltJobDuty")
+    public Map<String, Object> getRsltJobDuty(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltJobDuty_1(testParm));
+        return Rtn;
+    }
+    
+    // 결과보기 - 선호도
+    @PostMapping("/Test/getRsltPrefer")
+    public Map<String, Object> getRsltPrefer(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("Rslt1", TestService.getRsltPrefer_1(testParm));
+        Rtn.put("Rslt2", TestService.getRsltPrefer_2(testParm));
+        Rtn.put("Rslt3", TestService.getRsltPrefer_3(testParm));
+        Rtn.put("Rslt4", TestService.getRsltPrefer_4(testParm));
+        Rtn.put("Rslt5", TestService.getRsltPrefer_5(testParm));
+        return Rtn;
+    }
+    
+    
 }
