@@ -125,7 +125,6 @@
             PersnId = #{persnId}
     </select>
 
-
     <resultMap id="accountResultMap" type="java.util.Map">
         <result column="AcuntId" property="acuntId"/>
         <result column="UserType" property="userType"/>

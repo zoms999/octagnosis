@@ -17,9 +17,8 @@ public interface PersonalMapper {
 
     int getPersonalCount(PersonalRequest request);
     List<Map<String, String>> getPersonalList(PersonalRequest request);
-
+    
     Personal getPersonalById(Long persnId);
-
     Acunt getAccountlById(Long persnId);
     void accountUpdatePassword(Long persnId, String newPassword);
 

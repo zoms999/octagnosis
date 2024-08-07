@@ -17,6 +17,7 @@ public interface QuestMapper {
     int editTest(Test test);
     int delTest(QuestParm parm);
     List<Map<String, String>> getTestList();
+    List<Map<String, String>> getProdTestList(QuestParm parm);
     
     int cretQuestPage(QuestPage questPage);
     int editQuestPage(QuestPage questPage);

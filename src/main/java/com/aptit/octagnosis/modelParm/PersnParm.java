@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 public class PersnParm {
     public Long persnId;
+    public String acuntId;
     
 }

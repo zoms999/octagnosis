@@ -147,7 +147,9 @@ public class PersonalController {
     @PostMapping("/personal/getPersn")
     public Map<String, Object> getPersn(@RequestBody PersnParm persnParm) {
         Map<String, Object> Rtn = new HashMap<>();
+        
         Rtn.put("Persn", personalMapper.getPersonalById(persnParm.persnId));
+        
         return Rtn;
     }
     

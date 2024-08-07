@@ -53,7 +53,7 @@ public class TestController {
     public Map<String, Object> getQuestPageForTest(@RequestBody QuestParm parm) {
         Map<String, Object> Rtn = new HashMap<>();
         
-        Rtn.put("TestList", QuestService.getTestList());
+        Rtn.put("TestList", QuestService.getProdTestList(parm));
         Rtn.put("QuestPage", QuestService.getQuestPage(parm));
         Rtn.put("QuestList", QuestService.getQuestList(parm));
         Rtn.put("QuestItemList", QuestService.getQuestItemAllList(parm));
@@ -322,6 +322,16 @@ public class TestController {
         Rtn.put("List", TestService.getTestRsltList(testParm));
         return Rtn;
     }
+    
+    // 검사결제 개인정보
+    @PostMapping("/Test/getTestRsltPayList")
+    public Map<String, Object> getTestRsltPayList(@RequestBody TestParm testParm) {
+        Map<String, Object> Rtn = new HashMap<>();
+        Rtn.put("TotCnt", TestService.getTestRsltPayTotCnt(testParm));
+        Rtn.put("List", TestService.getTestRsltPayList(testParm));
+        return Rtn;
+    }
+    
     
     // 결과보기 - 성향진단
     @PostMapping("/Test/getRsltTndcy1")

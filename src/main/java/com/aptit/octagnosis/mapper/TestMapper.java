@@ -64,8 +64,11 @@ public interface TestMapper {
     long getAnsPrgrsId();
     
     int getTestRsltTotCnt(TestParm parm);
-    
     List<Map<String, String>> getTestRsltList(TestParm parm);
+    
+    int getTestRsltPayTotCnt(TestParm parm);
+    List<Map<String, String>> getTestRsltPayList(TestParm parm);
+    
     
     List<Map<String, String>> getRsltTndcy1_1(TestParm parm);
     List<Map<String, String>> getRsltTndcy1_2(TestParm parm);
