@@ -8,6 +8,41 @@
 		<!-- Add other properties similarly -->
 	</resultMap>
 
+	<insert id="cretAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
+		INSERT INTO TB_Acunt (
+			AcuntId,
+			UserType,
+			UserId,
+			Pw,
+			UseYn,
+			RegDt,
+			LeaveDt,
+			ExpirDt,
+			TermsUse,
+			TermsPersn,
+			TermsEvent,
+			InsId,
+			InsDt,
+			UptId,
+			UptDt
+		) VALUES (
+					 #{acuntId},
+					 #{userType},
+					 #{userId},
+					 #{pw},
+					 #{useYn},
+					 #{regDt},
+					 #{leaveDt},
+					 DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 12 MONTH), '%Y%m%d'),
+					 #{termsUse},
+					 #{termsPersn},
+					 #{termsEvent},
+					 #{insId},
+					 DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),
+					 #{uptId},
+					 #{uptDt}
+				 )
+	</insert>
 	<!-- 등록 ********************************************************-->
 	<insert id="cretAnsPrgrs" parameterType="com.aptit.octagnosis.model.AnsPrgrs">
 		INSERT INTO TB_Acunt (
@@ -77,6 +112,15 @@
 			, UptDt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 		WHERE
 			AcuntId = #{acuntId}
+	</update>
+
+
+	<update id="updateAcunt" parameterType="com.aptit.octagnosis.model.Acunt">
+		UPDATE TB_Acunt
+		SET pw = #{pw},
+			uptId = #{uptId},
+			uptDt = #{uptDt}
+		WHERE acuntId = #{acuntId}
 	</update>
 
 	<!-- 삭제 ********************************************************-->

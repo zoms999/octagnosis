@@ -15,4 +15,34 @@
         </selectKey>
     </insert>
 
+
+    <update id="updatePersonal" parameterType="com.aptit.octagnosis.model.Personal">
+        UPDATE TB_Persn
+        SET persnnm = #{persnNm},
+            birthdate = #{birthDate},
+            birthyear = #{birthYear},
+            birthmonth = #{birthMonth},
+            birthday = #{birthDay},
+            sex = #{sex},
+            phone = #{phone},
+            tel = #{tel},
+            email = #{email},
+            zip = #{zip},
+            addrstret = #{addrStret},
+            addrlotnum = #{addrLotNum},
+            addr2 = #{addr2},
+            addr3 = #{addr3},
+            educt = #{educt},
+            eductstus = #{eductStus},
+            job = #{job},
+            scholnm = #{scholNm},
+            scholmajor = #{scholMajor},
+            scholgrade = #{scholGrade},
+            jobnm = #{jobNm},
+            jobduty = #{jobDuty},
+            orgId = #{orgId},
+            uptid = #{uptId},
+            uptdt = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+        WHERE persnId = #{persnId}
+    </update>
 </mapper>

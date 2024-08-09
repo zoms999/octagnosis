@@ -12,6 +12,8 @@ public interface AcuntMapper {
 
     int editAcunt(Acunt acunt);
 
+    int updateAcunt(Acunt acunt);
+
     int editExpirDt(AcuntParm acuntParm);
 
     int editPw(AcuntParm acuntParm);

@@ -206,6 +206,30 @@ public class MemberController {
         }
     }
 
+    @PostMapping("/member/update-user")
+    public ResponseEntity<String> updateMember(@RequestBody RegistrationRequest request) {
+        Acunt acunt = request.getAcunt();
+        Personal personal = request.getPersonal();
+        Date currentDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String formattedDate = sdf.format(currentDate);
+
+        try {
+            memberService.updatePersonal(personal);
+            acunt.setUptDt(formattedDate);
+            acunt.setUptId(personal.getPersnId());
+            int result = AcuntService.updateAcunt(acunt);
+            if (result > 0) {
+                return ResponseEntity.ok("Update successful");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Update failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during update");
+        }
+    }
+
 
 
  /*   @GetMapping("/products")

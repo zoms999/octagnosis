@@ -15,6 +15,8 @@ public interface MemberMapper {
     boolean isAcountIdDuplicate(String acuntId);
     void registerPersonal(Personal personal);
 
+    void updatePersonal(Personal personal);
+
     //유효성 체크
     @Select("SELECT OrgId, CompyNm FROM TB_Org WHERE UrlCd = #{urlCd}")
     Org getCompyNmByUrlCd(String urlCd);
