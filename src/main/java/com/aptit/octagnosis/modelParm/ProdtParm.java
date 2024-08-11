@@ -8,5 +8,6 @@ public class ProdtParm {
     private String prodtId;
     private String procType;
     
+    private String language;
     
 }

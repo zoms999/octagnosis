@@ -964,7 +964,10 @@
 			, IFNULL(B.RegDt, '') 	AS RegDt
 			, IFNULL(B.StartDt, '') AS StartDt
 			, IFNULL(B.EndDt, '') 	AS EndDt
-			, (SELECT ProdtNm FROM TB_Prodt WHERE ProdtCate = 'C01101' LIMIT 1 ) AS ProdtNm
+			, (SELECT
+				   fnGetLang(#{language}, 'TB_Prodt', 'ProdtNm', LangSeq, ProdtNm)
+			   FROM TB_Prodt
+			   WHERE ProdtCate = 'C01101' LIMIT 1 ) AS ProdtNm
 			, IFNULL(C.AnsPrgrsId, '0') 	AS AnsPrgrsId
 			, IFNULL(C.TestId, '0') 		AS TestId
 			, IFNULL(C.QuestPageId, '0') 	AS QuestPageId
@@ -1015,7 +1018,8 @@
 			 , pp.Price 						AS Price
 			 , pp.PayYn 						AS PayYn
 			 , pp.prodType 						AS ProdType
-			 , pt.ProdtNm 						AS ProdtNm
+			 , fnGetLang(#{language}, 'TB_Prodt', 'ProdtNm', pt.LangSeq, pt.ProdtNm)
+			     								AS ProdtNm
 			 , IFNULL(ap.AnsPrgrsId, '0') 		AS AnsPrgrsId
 			 , IFNULL(ap.StartDt, '') 			AS AnsPrgrsStartDt
 			 , IFNULL(ap.EndDt, '') 			AS AnsPrgrsEndDt
@@ -1257,10 +1261,12 @@
 			) t;
 	</select>
 
+	<!--성향진단 탭-->
 	<select id="getRsltTndcy1_1" parameterType="map" resultType="hashmap">
 		SELECT
 			A.QuestAttrCd
-			 , B.QuestAttrNm
+			 , fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', B.LangSeq, B.QuestAttrNm)
+							AS QuestAttrNm
 			 , A.Rk
 		FROM
 			(
@@ -1280,9 +1286,12 @@
 
 	<select id="getRsltTndcy1_2" parameterType="map" resultType="hashmap">
 		SELECT
-			1 as Rk,
-			qa.QuestAttrNm,
-			replace(qe.Expl, '당신', '' || '님') AS Expl
+			1 as Rk
+			, fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm)
+					AS QuestAttrNm
+			, replace(
+					fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl)
+				, '당신', '' || '님') AS Expl
 		FROM
 			TB_RsltMain rv,
 			TB_QuestExpl qe,
@@ -1295,9 +1304,12 @@
 		UNION ALL
 
 		SELECT
-			2 as Rk,
-			qa.QuestAttrNm,
-			replace(qe.Expl, '당신', '' || '님') AS Expl
+			2 as Rk
+		    , fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm)
+					   AS QuestAttrNm
+		    , replace(
+					fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl)
+				, '당신', '' || '님') AS Expl
 		FROM
 			TB_RsltMain rv,
 			TB_QuestExpl qe,
@@ -1310,9 +1322,12 @@
 		UNION ALL
 
 		SELECT
-			3 as Rk,
-			qa.QuestAttrNm,
-			replace(qe.Expl, '당신', '' || '님') AS Expl
+			3 as Rk
+			, fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm)
+							   AS QuestAttrNm
+			, replace(
+					fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl)
+				, '당신', '' || '님') AS Expl
 		FROM
 			TB_RsltMain rv,
 			TB_QuestExpl qe,
@@ -1323,9 +1338,11 @@
 		  and qe.QuestAttrCd = qa.QuestAttrCd
 	</select>
 
+	<!--성향분석 탭-->
 	<select id="getRsltTndcy2" parameterType="map" resultType="hashmap">
 		SELECT
-			pr.ParapCont1
+			fnGetLang(#{language}, 'TB_QuestRsltParap', 'ParapCont1', pr.LangSeq, pr.ParapCont1)
+				AS ParapCont1
 		FROM
 			(
 				SELECT
@@ -1359,11 +1376,13 @@
 			sc1.Rank
 	</select>
 
+	<!--사고력 탭-->
 	<select id="getRsltThink_1" parameterType="map" resultType="hashmap">
 		SELECT
 			(
 				SELECT
-					qa.QuestAttrNm
+					fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm)
+						AS QuestAttrNm
 				FROM
 					TB_QuestAttr qa
 				WHERE
@@ -1371,7 +1390,8 @@
 			) AS thkm,
 			(
 				SELECT
-					qa.QuestAttrNm
+					fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm)
+						AS QuestAttrNm
 				FROM
 					TB_QuestAttr qa
 				WHERE
@@ -1389,12 +1409,15 @@
 	<select id="getRsltThink_2" parameterType="map" resultType="hashmap">
 		SELECT
 			B.QuestAttrCd
-			 , B.QuestAttrNm
-			 , sum(round(Rate * 100)) AS thkSum
+			, B.QuestAttrNm
+			, sum(round(Rate * 100)) AS thkSum
 		FROM
 			TB_RsltSum A
-				INNER JOIN (
-				SELECT QuestAttrCd, QuestAttrNm
+			INNER JOIN (
+				SELECT
+				    QuestAttrCd
+				    , fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', LangSeq, QuestAttrNm)
+					AS QuestAttrNm
 				FROM TB_QuestAttr
 				WHERE QuestType = 'C00503'
 			) B ON A.QuestAttrCd = B.QuestAttrCd
@@ -1407,9 +1430,12 @@
 
 	<select id="getRsltThink_3" parameterType="map" resultType="hashmap">
 		SELECT
-			qa.QuestAttrNm
+			fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm)
+				AS QuestAttrNm
 			 , ROUND(sc1.Rate * 100) AS score
-			 , REPLACE(qe.Expl, '당신', '님') AS Expl
+			 , REPLACE(
+					fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl)
+			     , '당신', '님') AS Expl
 		FROM
 			TB_RsltSum sc1,
 			TB_QuestAttr qa,
@@ -1429,32 +1455,39 @@
 
 	</select>
 
+	<!--성향적합직업학과 탭-->
 	<select id="getRsltTedcyJob_1" parameterType="map" resultType="hashmap">
 		SELECT
 			CONCAT(
 				(
 					SELECT
-						REPLACE(QuestAttrNm, '형', '')
+						REPLACE(
+							fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', A.LangSeq, A.QuestAttrNm)
+						    , '형', ' ')
 					FROM
-						TB_QuestAttr,
-						TB_RsltMain
+						TB_QuestAttr A,
+						TB_RsltMain B
 					WHERE
-						AnsPrgrsId = #{ansPrgrsId}
-						AND QuestAttrCd = Tedcy1
+						B.AnsPrgrsId = #{ansPrgrsId}
+						AND A.QuestAttrCd = B.Tedcy1
 				)
 				,  (
 					SELECT
-						REPLACE(QuestAttrNm, '형', '')
+						REPLACE(
+							fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', A.LangSeq, A.QuestAttrNm)
+						    , '형', ' ')
 					FROM
-						TB_QuestAttr,
-						TB_RsltMain
+						TB_QuestAttr A,
+						TB_RsltMain B
 					WHERE
-						AnsPrgrsId = #{ansPrgrsId}
-						AND QuestAttrCd = Tedcy2
+						B.AnsPrgrsId = #{ansPrgrsId}
+						AND A.QuestAttrCd = B.Tedcy2
 				)
 				, '형'
 			)  as tendency,
-			GROUP_CONCAT(jo.JobNm SEPARATOR ', ') AS tndjob
+			GROUP_CONCAT(
+					fnGetLang(#{language}, 'TB_Job', 'JobNm', jo.LangSeq, jo.JobNm)
+			    SEPARATOR ', ') AS tndjob
 		FROM
 			(
 				SELECT
@@ -1473,9 +1506,9 @@
 
 	<select id="getRsltTedcyJob_2" parameterType="map" resultType="hashmap">
 		SELECT
-			jo.JobNm,
-			jo.Expl,
-			jo.MainWork
+			fnGetLang(#{language}, 'TB_Job', 'JobNm', jo.LangSeq, jo.JobNm) AS JobNm
+		    , fnGetLang(#{language}, 'TB_Job', 'Expl', jo.LangSeq, jo.Expl) AS Expl
+		    , fnGetLang(#{language}, 'TB_Job', 'MainWork', jo.LangSeq, jo.MainWork) AS MainWork
 		FROM
 			TB_RsltJob rj,
 			TB_Job jo
@@ -1490,11 +1523,11 @@
 
 	<select id="getRsltTedcyJob_3" parameterType="map" resultType="hashmap">
 		SELECT
-			jo.JobNm,
+			fnGetLang(#{language}, 'TB_Job', 'JobNm', jo.LangSeq, jo.JobNm) AS JobNm,
 			GROUP_CONCAT(
-				ma.DepatNm
+					fnGetLang(#{language}, 'TB_Depat', 'DepatNm', ma.LangSeq, ma.DepatNm)
 				ORDER BY
-					ma.DepatNm
+					fnGetLang(#{language}, 'TB_Depat', 'DepatNm', ma.LangSeq, ma.DepatNm)
 				SEPARATOR ', '
 			) AS major
 		FROM
@@ -1517,16 +1550,22 @@
 
 	</select>
 
+
+	<!--역량진단 탭-->
 	<select id="getRsltAbility_1" parameterType="map" resultType="hashmap">
 		SELECT
 			GROUP_CONCAT(
-				qa.QuestAttrNm
+					qa.QuestAttrNm
 				ORDER BY
 					sc1.Rank
 				SEPARATOR ', '
 			) AS tal
 		FROM
-			TB_QuestAttr qa,
+			(
+				SELECT QuestAttrCd
+					 , fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', LangSeq, QuestAttrNm) AS QuestAttrNm
+				FROM TB_QuestAttr
+			) qa,
 			TB_RsltSum sc1
 		WHERE
 			sc1.AnsPrgrsId = #{ansPrgrsId}
@@ -1537,9 +1576,11 @@
 
 	<select id="getRsltAbility_2" parameterType="map" resultType="hashmap">
 		SELECT
-			qa.QuestAttrNm,
+			fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm) AS QuestAttrNm,
 			round(sc1.Rate * 100) AS tscore,
-			REPLACE(qe.Expl, '당신', '000님') AS Expl
+			REPLACE(
+					fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl)
+			    , '당신', '000님') AS Expl
 		FROM
 			TB_RsltSum sc1,
 			TB_QuestAttr qa,
@@ -1554,32 +1595,40 @@
 			sc1.Rank
 	</select>
 
+
+	<!--역량적합직업학과 탭-->
 	<select id="getRsltAbilityJob_1" parameterType="map" resultType="hashmap">
 		SELECT
 			CONCAT(
 					(
 						SELECT
-							REPLACE(QuestAttrNm, '형', '')
+							REPLACE(
+								fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', A.LangSeq, A.QuestAttrNm)
+							    , '형', '')
 						FROM
-							TB_QuestAttr,
-							TB_RsltMain
+							TB_QuestAttr A,
+							TB_RsltMain B
 						WHERE
-							AnsPrgrsId = #{ansPrgrsId}
-						  AND QuestAttrCd = Tedcy1
+							B.AnsPrgrsId = #{ansPrgrsId}
+						  	AND A.QuestAttrCd = B.Tedcy1
 					)
 				,  (
 						SELECT
-							REPLACE(QuestAttrNm, '형', '')
+							REPLACE(
+								fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', A.LangSeq, A.QuestAttrNm)
+							    , '형', '')
 						FROM
-							TB_QuestAttr,
-							TB_RsltMain
+							TB_QuestAttr A,
+							TB_RsltMain B
 						WHERE
-							AnsPrgrsId = #{ansPrgrsId}
-						  AND QuestAttrCd = Tedcy2
+							B.AnsPrgrsId = #{ansPrgrsId}
+						  AND A.QuestAttrCd = B.Tedcy2
 					)
 				, '형'
 				)  as tendency,
-			GROUP_CONCAT(jo.JobNm SEPARATOR ', ') AS tndjob
+			GROUP_CONCAT(
+				fnGetLang(#{language}, 'TB_Job', 'JobNm', jo.LangSeq, jo.JobNm)
+			    SEPARATOR ', ') AS tndjob
 		FROM
 			(
 				SELECT
@@ -1598,9 +1647,9 @@
 
 	<select id="getRsltAbilityJob_2" parameterType="map" resultType="hashmap">
 		SELECT
-			jo.JobNm,
-			jo.Expl,
-			jo.MainWork
+			fnGetLang(#{language}, 'TB_Job', 'JobNm', jo.LangSeq, jo.JobNm) AS JobNm
+		    , fnGetLang(#{language}, 'TB_Job', 'Expl', jo.LangSeq, jo.Expl) AS Expl
+		    , fnGetLang(#{language}, 'TB_Job', 'MainWork', jo.LangSeq, jo.MainWork) AS MainWork
 		FROM
 			TB_RsltJob rj,
 			TB_Job jo
@@ -1615,7 +1664,7 @@
 
 	<select id="getRsltAbilityJob_3" parameterType="map" resultType="hashmap">
 		SELECT
-			jo.JobNm,
+			fnGetLang(#{language}, 'TB_Job', 'JobNm', jo.LangSeq, jo.JobNm) AS JobNm,
 			GROUP_CONCAT(
 					ma.DepatNm
 						ORDER BY
@@ -1626,14 +1675,20 @@
 			TB_RsltJob rj,
 			TB_Job jo,
 			TB_JobDepat jmm,
-			TB_Depat ma
+			(
+				SELECT
+			    	DepatSeq
+			      	, fnGetLang(#{language}, 'TB_Depat', 'DepatNm', LangSeq, DepatNm) AS DepatNm
+				FROM
+					TB_Depat
+			) ma
 		WHERE
 			rj.AnsPrgrsId = #{ansPrgrsId}
-		  AND rj.JobKind = 'C01302'
-		  AND jo.JobCd = rj.JobCd
-		  AND <![CDATA[ Rank <= 7 ]]>
+			AND rj.JobKind = 'C01302'
+			AND jo.JobCd = rj.JobCd
+			AND <![CDATA[ Rank <= 7 ]]>
 			AND jmm.JobCd = rj.JobCd
-		  AND ma.DepatSeq = jmm.DepatSeq
+			AND ma.DepatSeq = jmm.DepatSeq
 		GROUP BY
 			jo.JobCd,
 			rj.Rank
@@ -1642,18 +1697,20 @@
 
 	</select>
 
+
+	<!--학습 탭-->
 	<select id="getRsltStudy_1" parameterType="map" resultType="hashmap">
 		SELECT
 			(
 				SELECT
-					REPLACE(qa.QuestAttrNm, '형', '')
+					REPLACE(fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm), '형', '')
 				FROM
 					TB_QuestAttr qa
 				WHERE
 					qa.QuestAttrCd = rv.Tedcy1
 			) AS tnd1,
-			REPLACE(ts1.StudyTedcy, '당신', '000님') AS tnd1_study,
-			REPLACE(ts1.StudyWay, '당신', '000님') AS tnd1_way,
+			REPLACE(fnGetLang(#{language}, 'TB_TedcyStudy', 'StudyTedcy', ts1.LangSeq, ts1.StudyTedcy) , '당신', '000님') AS tnd1_study,
+			REPLACE(fnGetLang(#{language}, 'TB_TedcyStudy', 'StudyWay', ts1.LangSeq, ts1.StudyWay) , '당신', '000님') AS tnd1_way,
 			(
 				SELECT
 					REPLACE(qa.QuestAttrNm, '형', '')
@@ -1662,8 +1719,8 @@
 				WHERE
 					qa.QuestAttrCd = rv.Tedcy2
 			) AS tnd2,
-			REPLACE(ts2.StudyTedcy, '당신', '000님') AS tnd2_study,
-			REPLACE(ts2.StudyWay, '당신', '000님') AS tnd2_way,
+			REPLACE(fnGetLang(#{language}, 'TB_TedcyStudy', 'StudyTedcy', ts2.LangSeq, ts2.StudyTedcy), '당신', '000님') AS tnd2_study,
+			REPLACE(fnGetLang(#{language}, 'TB_TedcyStudy', 'StudyWay', ts2.LangSeq, ts2.StudyWay) , '당신', '000님') AS tnd2_way,
 			cast(substring(rv.Tedcy1, 4, 2) AS INT) - 10 AS tndrow,
 			cast(substring(rv.Tedcy2, 4, 2) AS INT) - 10 AS tndcol
 		FROM
@@ -1676,10 +1733,10 @@
 		  AND ts2.QuestAttrCd = rv.Tedcy2
 	</select>
 
-	<!-- 적합한 학습법1  - 최적학습 투자비율 추천1-->
+	<!-- 학습 탭 - 적합한 학습법1  - 최적학습 투자비율 추천1-->
 	<select id="getRsltStudy_2" parameterType="map" resultType="hashmap">
 		SELECT
-			sr.MethdNm AS Sname,
+			fnGetLang(#{language}, 'TB_StydyWayRate', 'MethdNm', sr.LangSeq, sr.MethdNm)  AS Sname,
 			cast(sr.AplyRate * 100 AS INT) AS Srate,
 			sr.ChartColor AS Scolor
 		FROM
@@ -1687,16 +1744,16 @@
 			TB_StydyWayRate sr
 		WHERE
 			rv.AnsPrgrsId = #{ansPrgrsId}
-		  AND sr.QuestAttrCd = rv.Tedcy1
-		  AND sr.TypeCd = 'S'
+			AND sr.QuestAttrCd = rv.Tedcy1
+			AND sr.TypeCd = 'S'
 		ORDER BY
 			sr.MethdCd;
 	</select>
 
-	<!-- 적합한 학습법1  - 최적학습 투자비율 추천2-->
+	<!-- 학습 탭 - 적합한 학습법1  - 최적학습 투자비율 추천2-->
 	<select id="getRsltStudy_3" parameterType="map" resultType="hashmap">
 		SELECT
-			sr.MethdNm AS Sname,
+			fnGetLang(#{language}, 'TB_StydyWayRate', 'MethdNm', sr.LangSeq, sr.MethdNm)  AS Sname,
 			cast(sr.AplyRate * 100 AS INT) AS Srate,
 			sr.ChartColor AS Scolor
 		FROM
@@ -1710,10 +1767,10 @@
 			sr.MethdCd
 	</select>
 
-	<!-- 적합한 학습법2  최적학습 투자비율 추천1-->
+	<!-- 학습 탭 - 적합한 학습법2  최적학습 투자비율 추천1-->
 	<select id="getRsltStudy_4" parameterType="map" resultType="hashmap">
 		SELECT
-			sr.MethdNm AS Sname,
+			fnGetLang(#{language}, 'TB_StydyWayRate', 'MethdNm', sr.LangSeq, sr.MethdNm)  AS Sname,
 			cast(sr.AplyRate * 100 AS INT) AS Srate,
 			sr.ChartColor AS Scolor
 		FROM
@@ -1729,10 +1786,10 @@
 
 	</select>
 
-	<!-- 적합한 학습법2  최적학습 투자비율 추천2-->
+	<!-- 학습 탭 - 적합한 학습법2  최적학습 투자비율 추천2-->
 	<select id="getRsltStudy_5" parameterType="map" resultType="hashmap">
 		SELECT
-			sr.MethdNm AS Sname,
+			fnGetLang(#{language}, 'TB_StydyWayRate', 'MethdNm', sr.LangSeq, sr.MethdNm)  AS Sname,
 			cast(sr.AplyRate * 100 AS INT) AS Srate,
 			sr.ChartColor AS Scolor
 		FROM
@@ -1746,7 +1803,8 @@
 			sr.MethdCd
 	</select>
 
-	<!-- 교과목  적성적합 교과목순위-->
+
+	<!-- 교과목 탭 - 적성적합 교과목순위-->
 	<select id="getRsltSubjt_1" parameterType="map" resultType="hashmap">
 		SELECT
 			subject AS srank,
@@ -1796,12 +1854,12 @@
 						WHEN rv.Tedcy1 = 'tnd25000' THEN sm.TypeAdvnt
 						/*진취형 */
 						END AS subject,
-					sm.SubjGrp,
-					sm.SubjSel,
-					sm.Subj,
-					sm.Expl,
+					fnGetLang(#{language}, 'TB_TedcySubjt', 'SubjGrp', sm.LangSeq, sm.SubjGrp) AS SubjGrp,
+					fnGetLang(#{language}, 'TB_TedcySubjt', 'SubjSel', sm.LangSeq, sm.SubjSel) AS SubjSel,
+					fnGetLang(#{language}, 'TB_TedcySubjt', 'Subj', sm.LangSeq, sm.Subj) AS Subj,
+					fnGetLang(#{language}, 'TB_TedcySubjt', 'Expl', sm.LangSeq, sm.Expl) AS Expl,
 					sm.SubjCd,
-					qa.QuestAttrNm,
+					fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm) AS QuestAttrNm,
 					sm.SubjGrpCd,
 					sm.SubjSelCd
 				FROM
@@ -1821,7 +1879,7 @@
 
 	</select>
 
-	<!-- 교과목  강한 적성별 교과목 리스트-->
+	<!-- 교과목 탭 - 강한 적성별 교과목 리스트-->
 	<select id="getRsltSubjt_2" parameterType="map" resultType="hashmap">
 		SELECT
 			subject AS srank,
@@ -1850,12 +1908,12 @@
 						WHEN rv.Tedcy1 = 'tnd24000' THEN sm.TypeMulti           /*복합형 */
 						WHEN rv.Tedcy1 = 'tnd25000' THEN sm.TypeAdvnt         /*진취형 */
 						END AS subject,
-					sm.SubjGrp,
-					sm.SubjSel,
-					sm.Subj,
-					sm.Expl,
+					fnGetLang(#{language}, 'TB_TedcySubjt', 'SubjGrp', sm.LangSeq, sm.SubjGrp) AS SubjGrp,
+					fnGetLang(#{language}, 'TB_TedcySubjt', 'SubjSel', sm.LangSeq, sm.SubjSel) AS SubjSel,
+					fnGetLang(#{language}, 'TB_TedcySubjt', 'Subj', sm.LangSeq, sm.Subj) AS Subj,
+					fnGetLang(#{language}, 'TB_TedcySubjt', 'Expl', sm.LangSeq, sm.Expl) AS Expl,
 					sm.SubjCd,
-					qa.QuestAttrNm
+					fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm) AS QuestAttrNm
 				FROM
 					TB_RsltMain rv,
 					TB_TedcySubjt sm,
@@ -1870,12 +1928,13 @@
 			SubjCd;
 	</select>
 
-	<!-- 검사 결과 - 직무1-->
+
+	<!-- 직무 탭-->
 	<select id="getRsltJobDuty_1" parameterType="map" resultType="hashmap">
 		SELECT
-			du.JobDutyNm,
-			du.Expl,
-			du.Deprt
+			fnGetLang(#{language}, 'TB_Duty', 'JobDutyNm', du.LangSeq, du.JobDutyNm) AS JobDutyNm,
+			fnGetLang(#{language}, 'TB_Duty', 'Expl', du.LangSeq, du.Expl) AS Expl,
+			fnGetLang(#{language}, 'TB_Duty', 'Deprt', du.LangSeq, du.Deprt) AS Deprt
 		FROM
 			TB_RsltDuty rd,
 			TB_Duty du
@@ -1916,18 +1975,18 @@
 		FROM
 		(
 			SELECT
-				qa.QuestAttrNm,
+				fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm) AS QuestAttrNm,
 				sc1.QuestCnt,
 				round(sc1.ResRate * 100) AS rrate,
 				row_number() OVER (PARTITION BY sc1.Rank) AS rk,
 				sc1.Rank rk2,
-				qe.Expl
+				fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl) AS Expl
 			FROM
 				TB_RsltSum sc1,
 				TB_QuestAttr qa,
 				TB_QuestExpl qe
 			WHERE
-				sc1.AnsPrgrsId = 65
+				sc1.AnsPrgrsId = #{ansPrgrsId}
 				AND sc1.QuestType = 'C00501'
 				AND qa.QuestAttrCd = sc1.QuestAttrCd
 				AND <![CDATA[ sc1.Rank <= 3 ]]>
@@ -1942,10 +2001,10 @@
 
 	<select id="getRsltPrefer_3" parameterType="map" resultType="hashmap">
 		SELECT
-			qa.QuestAttrNm,
-			jo.JobNm,
-			jo.Expl,
-			jo.MainWork,
+			fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm) AS QuestAttrNm,
+			fnGetLang(#{language}, 'TB_Job', 'JobNm', jo.LangSeq, jo.JobNm) AS JobNm,
+			fnGetLang(#{language}, 'TB_Job', 'Expl', jo.LangSeq, jo.Expl) AS Expl,
+			fnGetLang(#{language}, 'TB_Job', 'MainWork', jo.LangSeq, jo.MainWork) AS MainWork,
 			GROUP_CONCAT(
 				ma.DepatNm
 				ORDER BY
@@ -1955,11 +2014,16 @@
 		FROM
 			TB_Job jo,
 			TB_JobDepat jmm,
-			TB_Depat ma,
+			(
+			    SELECT
+					DepatSeq
+					, fnGetLang(#{language}, 'TB_Depat', 'DepatNm', LangSeq, DepatNm) AS DepatNm
+				FROM TB_Depat
+			) ma,
 			TB_RsltJob rj
 			LEFT OUTER JOIN TB_QuestAttr qa ON qa.QuestAttrCd = rj.TedcyCd
 		WHERE
-			rj.AnsPrgrsId = 65
+			rj.AnsPrgrsId = #{ansPrgrsId}
 			AND rj.JobKind = 'C01303'
 			AND <![CDATA[ rj.Rank <= 5 ]]>
 			AND jo.JobCd = rj.JobCd
@@ -1977,10 +2041,10 @@
 
 	<select id="getRsltPrefer_4" parameterType="map" resultType="hashmap">
 		SELECT
-			qa.QuestAttrNm,
-			jo.JobNm,
-			jo.Expl,
-			jo.MainWork,
+			fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm) AS QuestAttrNm,
+			fnGetLang(#{language}, 'TB_Job', 'JobNm', jo.LangSeq, jo.JobNm) AS JobNm,
+			fnGetLang(#{language}, 'TB_Job', 'Expl', jo.LangSeq, jo.Expl) AS Expl,
+			fnGetLang(#{language}, 'TB_Job', 'MainWork', jo.LangSeq, jo.MainWork) AS MainWork,
 			GROUP_CONCAT(
 				ma.DepatNm
 				ORDER BY
@@ -1990,11 +2054,16 @@
 		FROM
 			TB_Job jo,
 			TB_JobDepat jmm,
-			TB_Depat ma,
+			(
+				SELECT
+					DepatSeq
+					 , fnGetLang(#{language}, 'TB_Depat', 'DepatNm', LangSeq, DepatNm) AS DepatNm
+				FROM TB_Depat
+			) ma,
 			TB_RsltJob rj
 			LEFT OUTER JOIN TB_QuestAttr qa ON qa.QuestAttrCd = rj.TedcyCd
 		WHERE
-			rj.AnsPrgrsId = 65
+			rj.AnsPrgrsId = #{ansPrgrsId}
 			AND rj.JobKind = 'C01304'
 			AND <![CDATA[ rj.Rank <= 5 ]]>
 			AND jo.JobCd = rj.JobCd
@@ -2010,12 +2079,14 @@
 		;
 	</select>
 
+
+	<!-- 선호도 탭-->
 	<select id="getRsltPrefer_5" parameterType="map" resultType="hashmap">
 		SELECT
-			qa.QuestAttrNm,
-			jo.JobNm,
-			jo.Expl,
-			jo.MainWork,
+			fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm) AS QuestAttrNm,
+			fnGetLang(#{language}, 'TB_Job', 'JobNm', jo.LangSeq, jo.JobNm) AS JobNm,
+			fnGetLang(#{language}, 'TB_Job', 'Expl', jo.LangSeq, jo.Expl) AS Expl,
+			fnGetLang(#{language}, 'TB_Job', 'MainWork', jo.LangSeq, jo.MainWork) AS MainWork,
 			GROUP_CONCAT(
 				ma.DepatNm
 				ORDER BY
@@ -2025,11 +2096,16 @@
 		FROM
 			TB_Job jo,
 			TB_JobDepat jmm,
-			TB_Depat ma,
+			(
+				SELECT
+					DepatSeq
+					 , fnGetLang(#{language}, 'TB_Depat', 'DepatNm', LangSeq, DepatNm) AS DepatNm
+				FROM TB_Depat
+			) ma,
 			TB_RsltJob rj
 			LEFT OUTER JOIN TB_QuestAttr qa ON qa.QuestAttrCd = rj.TedcyCd
 		WHERE
-			rj.AnsPrgrsId = 65
+			rj.AnsPrgrsId = #{ansPrgrsId}
 			AND rj.JobKind = 'C01305'
 			AND <![CDATA[ rj.Rank <= 5 ]]>
 			AND jo.JobCd = rj.JobCd

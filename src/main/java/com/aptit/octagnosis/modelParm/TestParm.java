@@ -32,4 +32,7 @@ public class TestParm {
     private long uptId;
     
     private Paging paging;
+    
+    private String language;
+
 }

@@ -274,12 +274,13 @@
 	<select id="getProdTestList" parameterType="map" resultType="hashmap">
 		SELECT
 			A.testId
-			 , A.testNm
+			 , fnGetLang(#{language}, 'TB_Test', 'TestNm', LangSeq, A.testNm)
+		     								AS testNm
 			 , B.seq
 			 , (SELECT COUNT(*) FROM TB_QuestPage WHERE testId = A.testId) as questPageCnt
 		FROM
 			TB_Test A
-				INNER JOIN TB_ProdtTest B ON A.TestId  = B.TestId
+			INNER JOIN TB_ProdtTest B ON A.TestId  = B.TestId
 		WHERE
 			B.ProdtId = #{prodtId}
 		ORDER BY
@@ -291,7 +292,8 @@
 		SELECT
 			testId
 			 , questPageId
-			 , questPageNm
+			 , fnGetLang(#{language}, 'TB_QuestPage', 'QuestPageNm', LangSeq, questPageNm)
+		     					AS questPageNm
 			 , questPageSeq
 			 , questPageType
 		FROM
@@ -340,9 +342,9 @@
 			 , A.questPageId
 			 , A.questId
 			 , A.questNo
-			 , A.questCont1
-			 , A.questCont2
-			 , A.questCont3
+			 , fnGetLang(#{language}, 'TB_Quest', 'QuestCont1', A.LangSeq, QuestCont1) as questCont1
+			 , fnGetLang(#{language}, 'TB_Quest', 'QuestCont2', A.LangSeq, QuestCont2) as questCont2
+			 , fnGetLang(#{language}, 'TB_Quest', 'QuestCont3', A.LangSeq, QuestCont3) as questCont3
 			 , A.questType
 			 , A.questAttrCd1
 			 , A.questAttrCd2
@@ -395,7 +397,7 @@
 			questId
 			, itemId
 			, itemType
-			, conts
+			, fnGetLang(#{language}, 'TB_QuestItem', 'Conts', LangSeq, Conts) AS conts
 			, imgNm
 			, seq
 			, weigt
@@ -411,7 +413,7 @@
 			questId
 			 , itemId
 			 , itemType
-			 , conts
+			 , fnGetLang(#{language}, 'TB_QuestItem', 'Conts', LangSeq, Conts) AS conts
 			 , imgNm
 			 , seq
 			 , weigt
@@ -428,7 +430,7 @@
 			questId
 			 , itemId
 			 , itemType
-			 , conts
+			 , fnGetLang(#{language}, 'TB_QuestItem', 'Conts', LangSeq, Conts) AS conts
 			 , imgNm
 			 , seq
 			 , weigt
