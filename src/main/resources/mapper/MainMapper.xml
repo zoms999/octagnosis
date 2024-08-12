@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aptit.octagnosis.mapper.MainMapper">
+
+	<!-- 최근 등록 개인-->
+	<select id="getDashboard1" parameterType="map" resultType="hashmap">
+		SELECT
+			A.AcuntId
+			 , A.UserType
+			 , B.PersnNm
+			 , (SELECT CompyNm FROM TB_Org  WHERE OrgId = B.OrgId) as CompyNm
+			 , A.RegDt
+		FROM
+			TB_Acunt A
+				INNER JOIN TB_Persn B on A.UserId = B.PersnId
+		ORDER BY
+			A.RegDt DESC
+		LIMIT 5
+
+	</select>
+
+	<!-- 최근 등록 기관-->
+	<select id="getDashboard2" parameterType="map" resultType="hashmap">
+		SELECT
+			A.CompyNm
+			 , B.AcuntId
+			 , B.RegDt
+		FROM
+			TB_Org A
+				INNER JOIN TB_Acunt B ON A.OrgId = B.UserId
+		WHERE
+			B.UserType = 'C00101'
+		LIMIT 5
+	</select>
+
+	<!-- 최근 검사완료 기관소속 회원-->
+	<select id="getDashboard3" parameterType="map" resultType="hashmap">
+		SELECT
+			A.AcuntId
+			, A.UserType
+			, B.PersnNm
+			, (SELECT CompyNm FROM TB_Org  WHERE OrgId = B.OrgId) as CompyNm
+			, C.EndDt
+			, C.TurnId
+			, C.PayId
+		FROM
+			TB_Acunt A
+			INNER JOIN TB_Persn B on A.UserId = B.PersnId
+			INNER JOIN TB_AnsPrgrs C ON A.AcuntId = C.AcuntId
+		WHERE
+			C.DoneYn = 'Y'
+			AND <![CDATA[ C.TurnId <> 0 ]]>
+		ORDER BY
+			C.EndDt DESC
+		LIMIT 5
+	</select>
+
+	<!-- 최근 검사완료 개인 회원-->
+	<select id="getDashboard4" parameterType="map" resultType="hashmap">
+		SELECT
+			A.AcuntId
+			 , A.UserType
+			 , B.PersnNm
+			 , (SELECT CompyNm FROM TB_Org  WHERE OrgId = B.OrgId) as CompyNm
+			 , C.EndDt
+			 , C.TurnId
+			 , C.PayId
+		FROM
+			TB_Acunt A
+				inner join TB_Persn B on A.UserId = B.PersnId
+				INNER JOIN TB_AnsPrgrs C ON A.AcuntId = C.AcuntId
+		WHERE
+			C.DoneYn = 'Y'
+		  AND C.TurnId = 0
+		ORDER BY
+			C.EndDt DESC
+			LIMIT 5
+	</select>
+
+
+	<!-- 기타 ********************************************************-->
+
+</mapper>
