@@ -27,9 +27,11 @@
 			 , B.RegDt
 		FROM
 			TB_Org A
-				INNER JOIN TB_Acunt B ON A.OrgId = B.UserId
+			INNER JOIN TB_Acunt B ON A.OrgId = B.UserId
 		WHERE
 			B.UserType = 'C00101'
+		ORDER BY
+			B.RegDt DESC
 		LIMIT 5
 	</select>
 
