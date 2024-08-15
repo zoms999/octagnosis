@@ -40,11 +40,19 @@ public class PaymentController {
     @PostMapping("/payment/updateStatus/{payId}")
     public ResponseEntity<String> updatePaymentStatus(@PathVariable Long payId, @RequestBody Map<String, String> status) {
         String newStatus = status.get("status");
-        if (newStatus.equals("SUCCESS") || newStatus.equals("FAIL")) {
-            paymentMapper.updatePaymentStatus(payId, newStatus);
-            return ResponseEntity.ok("Payment status updated successfully.");
+        String statusValue;
+
+        // SUCCESS일 경우 'Y', FAIL일 경우 'N' 할당
+        if (newStatus.equals("SUCCESS")) {
+            statusValue = "Y";
+        } else if (newStatus.equals("FAIL")) {
+            statusValue = "N";
         } else {
             return ResponseEntity.badRequest().body("Invalid status");
         }
+
+        // Status 값을 DB에 업데이트
+        paymentMapper.updatePaymentStatus(payId, statusValue);
+        return ResponseEntity.ok("Payment status updated successfully.");
     }
 }
