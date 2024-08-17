@@ -19,6 +19,8 @@ public class PaymentController {
 
     @PostMapping("/payment/save")
     public ResponseEntity<ProdtPay> savePayment(@RequestBody ProdtPay prodtPay) {
+        Integer turnId = paymentMapper.findNextTurnId(prodtPay.getAcuntId());
+        prodtPay.setTurnId(Long.valueOf(turnId));
         paymentMapper.savePayment(prodtPay);
         return ResponseEntity.ok(prodtPay); // Return the saved ProdtPay object including payId
     }

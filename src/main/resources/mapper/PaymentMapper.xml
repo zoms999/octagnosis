@@ -3,6 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aptit.octagnosis.mapper.PaymentMapper">
 
+    <select id="findNextTurnId" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT COUNT(TurnId) + 1 AS turnId
+        FROM TB_ProdtPay
+        WHERE AcuntId = #{acuntId}
+    </select>
+
     <insert id="savePayment" parameterType="com.aptit.octagnosis.model.ProdtPay" useGeneratedKeys="true" keyProperty="payId">
         INSERT INTO TB_ProdtPay (DutyYn, StudyYn, SubjYn, ImgYn, AcuntId, ProdId, ProdType, Price, PayDt, OrgId, TurnId, PayYn, InsId, InsDt, UptId, UptDt)
         VALUES (#{dutyYn}, #{studyYn}, #{subjYn}, #{imgYn}, #{acuntId}, #{prodId}, #{prodType}, #{price}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{orgId}, #{turnId}, #{payYn}, #{insId}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{uptId}, #{uptDt})
