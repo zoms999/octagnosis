@@ -72,7 +72,7 @@ public interface TestMapper {
     
     List<Map<String, String>> getRsltTndcy1_1(TestParm parm);
     List<Map<String, String>> getRsltTndcy1_2(TestParm parm);
-    
+
     List<Map<String, String>> getRsltTndcy2(TestParm parm);
 
     List<Map<String, String>> getRsltThink_1(TestParm parm);

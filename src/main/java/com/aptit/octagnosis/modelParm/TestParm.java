@@ -30,7 +30,8 @@ public class TestParm {
 
     private long insId;
     private long uptId;
-    
+    private long rank;
+
     private Paging paging;
     
     private String language;

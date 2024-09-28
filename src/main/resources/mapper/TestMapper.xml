@@ -575,70 +575,85 @@
 		)
 		SELECT
 			#{ansPrgrsId}
-			, CASE
-				WHEN Rank = 1 THEN 'C01303'
-				WHEN Rank = 2 THEN 'C01304'
-				ELSE  'C01305'
-			  END AS JobKind
-			, JobCd
-			, ROW_NUMBER() OVER (PARTITION BY Rank ORDER BY rk) AS rej_rank
-			, QuestAttrCd1
-			, 0
-			, #{insId} , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') , null, null
+			 , JobKind
+			 , JobCd
+			 , MIN(rej_rank) AS rej_rank
+			 , QuestAttrCd1
+			 , 0
+			 , #{insId} , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') , null, null
 		FROM
-		    (
+			(
 				SELECT
-					Rank
-					, jm.QuestId
+					CASE
+						WHEN Rank = 1 THEN 'C01303'
+						WHEN Rank = 2 THEN 'C01304'
+						ELSE  'C01305'
+					  END AS JobKind
+					, JobCd
+					, ROW_NUMBER() OVER (PARTITION BY Rank ORDER BY rk) AS rej_rank
 					, QuestAttrCd1
-					, jm.JobCd
-					, ROW_NUMBER() OVER (PARTITION BY Rank ORDER BY Weigt DESC) AS rk
 				FROM
-				    (
-					SELECT
-						sc1.Rank,
-						qu.QuestAttrCd1,
-						qu.QuestId,
-						an.Weigt
-					FROM
-						TB_RsltSum sc1
-						JOIN TB_Quest qu ON qu.QuestAttrCd1 = sc1.QuestAttrCd
-						JOIN
-						    (
+					(
+						SELECT
+							Rank
+							, jm.QuestId
+							, QuestAttrCd1
+							, jm.JobCd
+							, ROW_NUMBER() OVER (PARTITION BY Rank ORDER BY Weigt DESC) AS rk
+						FROM
+							(
 								SELECT
-									A.QuestId
-									, Val1
-									, Val2
-									, IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A.Val1), 0)
-									+ IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A.Val2), 0) AS Weigt
+									sc1.Rank,
+									qu.QuestAttrCd1,
+									qu.QuestId,
+									an.Weigt
 								FROM
-									TB_Ans A
+									TB_RsltSum sc1
+									JOIN TB_Quest qu ON qu.QuestAttrCd1 = sc1.QuestAttrCd
+									JOIN
+										(
+											SELECT
+												A.QuestId
+												, Val1
+												, Val2
+												, IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A.Val1), 0)
+												+ IFNULL((SELECT Weigt FROM TB_QuestItem WHERE ItemId = A.Val2), 0) AS Weigt
+											FROM
+												TB_Ans A
+											WHERE
+												A.AnsPrgrsId = #{ansPrgrsId}
+									) an ON an.QuestId = qu.QuestId
 								WHERE
-									A.AnsPrgrsId = #{ansPrgrsId}
-						) an ON an.QuestId = qu.QuestId
-					WHERE
-						sc1.AnsPrgrsId = #{ansPrgrsId}
-						AND sc1.QuestType = 'C00501'
-						AND <![CDATA[ sc1.Rank <= 3 ]]>
-						AND qu.UseYn = 'Y'
-						AND an.Val1 IN (
-							SELECT
-								B.ItemId
-							FROM
-								TB_Quest A
-								INNER JOIN TB_QuestItem  B ON A.QuestId = B.QuestId
-							WHERE
-								A.QuestType = 'C00501'
-								AND B.Seq = 1
-						)
-					ORDER BY
-						sc1.Rank,
-						an.Weigt DESC
-				) img
-				JOIN TB_ImgJob jm ON jm.QuestId = img.QuestId
-			) t
-		WHERE
-			<![CDATA[ rk <= 5 ]]>
+									sc1.AnsPrgrsId = #{ansPrgrsId}
+									AND sc1.QuestType = 'C00501'
+									AND <![CDATA[ sc1.Rank <= 3 ]]>
+									AND qu.UseYn = 'Y'
+									AND an.Val1 IN (
+										SELECT
+											B.ItemId
+										FROM
+											TB_Quest A
+											INNER JOIN TB_QuestItem  B ON A.QuestId = B.QuestId
+										WHERE
+											A.QuestType = 'C00501'
+											AND B.Seq = 1
+									)
+								ORDER BY
+									sc1.Rank,
+									an.Weigt DESC
+							) img
+							JOIN TB_ImgJob jm ON jm.QuestId = img.QuestId
+					) t
+				WHERE
+					<![CDATA[ rk <= 15 ]]>
+			) A
+		GROUP BY
+			JobKind
+			   , jobCd
+			   , QuestAttrCd1
+		ORDER BY
+			JobKind
+			   , rej_rank
 	</insert>
 
 	<!-- 검사 결과 선호 직업 등록 -->
@@ -1286,57 +1301,29 @@
 
 	<select id="getRsltTndcy1_2" parameterType="map" resultType="hashmap">
 		SELECT
-			1 as Rk
-			, fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm)
-					AS QuestAttrNm
-			, replace(
-					fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl)
-				, '당신', '' || '님') AS Expl
+			rv.Rk as Rk
+			, qa.QuestAttrNm AS QuestAttrNm
+			, replace(qe.Expl, '당신', '' || '님') AS Expl
 		FROM
-			TB_RsltMain rv,
+			(
+				SELECT
+					QuestAttrCd
+					, ROW_NUMBER() OVER (ORDER BY Rank) AS Rk
+				FROM
+					TB_RsltSum
+				WHERE
+					AnsPrgrsId = 68
+					AND QuestType = 'C00504'
+					AND <![CDATA[ Rank <= #{rank} ]]>
+				LIMIT 15
+			) rv,
 			TB_QuestExpl qe,
 			TB_QuestAttr qa
 		WHERE
-			rv.AnsPrgrsId = #{ansPrgrsId}
-		  AND qe.QuestAttrCd = rv.Tedcy1
-		  AND qe.QuestAttrCd = qa.QuestAttrCd
-
-		UNION ALL
-
-		SELECT
-			2 as Rk
-		    , fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm)
-					   AS QuestAttrNm
-		    , replace(
-					fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl)
-				, '당신', '' || '님') AS Expl
-		FROM
-			TB_RsltMain rv,
-			TB_QuestExpl qe,
-			TB_QuestAttr qa
-		WHERE
-			rv.AnsPrgrsId = #{ansPrgrsId}
-		  AND qe.QuestAttrCd = rv.Tedcy2
-		  AND qe.QuestAttrCd = qa.QuestAttrCd
-
-		UNION ALL
-
-		SELECT
-			3 as Rk
-			, fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm)
-							   AS QuestAttrNm
-			, replace(
-					fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl)
-				, '당신', '' || '님') AS Expl
-		FROM
-			TB_RsltMain rv,
-			TB_QuestExpl qe,
-			TB_QuestAttr qa
-		WHERE
-			rv.AnsPrgrsId = #{ansPrgrsId}
-		  AND qe.QuestAttrCd = rv.Tedcy3
-		  and qe.QuestAttrCd = qa.QuestAttrCd
+			qe.QuestAttrCd = rv.QuestAttrCd
+			and qe.QuestAttrCd = qa.QuestAttrCd
 	</select>
+
 
 	<!--성향분석 탭-->
 	<select id="getRsltTndcy2" parameterType="map" resultType="hashmap">
