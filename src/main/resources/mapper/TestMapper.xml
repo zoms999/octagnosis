@@ -1302,8 +1302,8 @@
 	<select id="getRsltTndcy1_2" parameterType="map" resultType="hashmap">
 		SELECT
 			rv.Rk as Rk
-			, qa.QuestAttrNm AS QuestAttrNm
-			, replace(qe.Expl, '당신', '' || '님') AS Expl
+		    , fnGetLang(#{language}, 'TB_QuestAttr', 'QuestAttrNm', qa.LangSeq, qa.QuestAttrNm) AS QuestAttrNm
+			, fnGetLang(#{language}, 'TB_QuestExpl', 'Expl', qe.LangSeq, qe.Expl) AS Expl
 		FROM
 			(
 				SELECT
@@ -1312,7 +1312,7 @@
 				FROM
 					TB_RsltSum
 				WHERE
-					AnsPrgrsId = 68
+					AnsPrgrsId = #{ansPrgrsId}
 					AND QuestType = 'C00504'
 					AND <![CDATA[ Rank <= #{rank} ]]>
 				LIMIT 15
@@ -1322,6 +1322,8 @@
 		WHERE
 			qe.QuestAttrCd = rv.QuestAttrCd
 			and qe.QuestAttrCd = qa.QuestAttrCd
+		ORDER BY
+			rv.Rk
 	</select>
 
 
