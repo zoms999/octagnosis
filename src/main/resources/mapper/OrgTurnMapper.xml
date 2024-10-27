@@ -137,20 +137,20 @@
 
 	<select id="getOrgTurnList" parameterType="map" resultType="hashmap">
 		SELECT
-			TurnId
-			, UseYn
-			, TurnNum
-			, TurnReqCnt
-			, TurnUseCnt
-			, TurnConnCd
-			, ValidEndDt
-			, insDt
+			A.TurnId
+			, A.UseYn
+			, A.TurnNum
+			, A.TurnReqCnt
+			, (SELECT COUNT(*) FROM TB_OrgTurnPersn WHERE OrgId = A.OrgId AND TurnId = A.TurnId ) AS TurnUseCnt
+			, A.TurnConnCd
+			, A.ValidEndDt
+			, A.insDt
 		FROM
-			TB_OrgTurn
+			TB_OrgTurn A
 		WHERE
-			OrgId = #{orgId}
+			A.OrgId = #{orgId}
 		ORDER BY
-			TurnId DESC
+			A.TurnId DESC
 	</select>
 
 	<select id="getOrgTurnPersnTotCnt" parameterType="map" resultType="int">
