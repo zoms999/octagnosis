@@ -45,7 +45,7 @@ public class OrgController {
 
         // "Org" 키로 전달된 값을 Org 객체로 변환
         Org Org = ObjectMapper.convertValue(parm.get("Org"), Org.class);
-        OrgTurn OrgTurn = ObjectMapper.convertValue(parm.get("OrgTurn"), OrgTurn.class);
+        //OrgTurn OrgTurn = ObjectMapper.convertValue(parm.get("OrgTurn"), OrgTurn.class);
         Acunt Acunt = ObjectMapper.convertValue(parm.get("Acunt"), Acunt.class);
 
         String CurDt = CommonLib.getDateStr("YMD"); //  regDt.
@@ -54,14 +54,13 @@ public class OrgController {
         Org.setOrgId(OrgService.getOrgId());
 
         // 기관회차
-        OrgTurn.setOrgId(Org.getOrgId());
+        //OrgTurn.setOrgId(Org.getOrgId());
 
         // 계정
         Acunt.setUserId(Org.getOrgId());
         Acunt.setRegDt(CurDt);
 
         Rtn += OrgService.cretOrg(Org);
-        Rtn += OrgTurnService.cretOrgTurn(OrgTurn);
         Rtn += AcuntService.cretAcunt(Acunt);
 
         return Rtn;

@@ -234,9 +234,9 @@
 					, TurnId
 					, TurnNum
 					, TurnReqCnt
-					, TurnUseCnt
+					, (SELECT COUNT(*) FROM TB_OrgTurnPersn WHERE OrgId = A.OrgId AND TurnId = A.TurnId ) AS TurnUseCnt
 				FROM
-					TB_OrgTurn
+					TB_OrgTurn A
 			)  AS C ON A.OrgId = C.OrgId AND C.RowNum = 1
 		WHERE 1=1
 		  AND (
@@ -281,9 +281,9 @@
 					, TurnId
 					, TurnNum
 					, TurnReqCnt
-					, TurnUseCnt
+					, (SELECT COUNT(*) FROM TB_OrgTurnPersn WHERE OrgId = A.OrgId AND TurnId = A.TurnId ) AS TurnUseCnt
 				FROM
-					TB_OrgTurn
+					TB_OrgTurn A
 			)  AS C ON A.OrgId = C.OrgId AND C.RowNum = 1
 		WHERE 1=1
 		  AND (
