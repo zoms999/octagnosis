@@ -31,7 +31,7 @@
             INNER JOIN TB_Cd c ON p.ProdType = c.Cd
             INNER JOIN TB_Acunt a ON p.AcuntId = a.AcuntId
             INNER JOIN TB_Persn s ON a.UserId = s.PersnId
-        WHERE PayYn = 'y'
+        ORDER BY p.PayDt DESC
     </select>
 
 
